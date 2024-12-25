@@ -59,15 +59,6 @@ bocchama_speed = 5
 gravity = 5
 on_ground = False
 
-# マップ描画関数
-def draw_map(map_data):
-    for row_index, row in enumerate(map_data):
-        for col_index, tile in enumerate(row):
-            if tile == 1:
-                screen.blit(ground_tile, (col_index * TILE_SIZE, row_index * TILE_SIZE))
-            elif tile == 2:
-                screen.blit(underground_tile, (col_index * TILE_SIZE, row_index * TILE_SIZE))
-
 # 接地判定関数
 def check_on_ground(x, y):
     global on_ground
@@ -89,7 +80,17 @@ def check_on_ground(x, y):
     on_ground = False
     return y
 
-# メイン関数
+
+def draw_map(map_data):
+    for row_index, row in enumerate(map_data):
+        for col_index, tile in enumerate(row):
+            if tile == 1:
+                screen.blit(ground_tile, (col_index * TILE_SIZE, row_index * TILE_SIZE))
+            elif tile == 2:
+                screen.blit(underground_tile, (col_index * TILE_SIZE, row_index * TILE_SIZE))
+            elif tile == 0:
+                pass
+
 def main():
     global bocchama_x, bocchama_y, on_ground, bocchama_frame_index, animation_timer
     running = True
