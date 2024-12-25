@@ -73,13 +73,19 @@ def check_on_ground(x, y):
     global on_ground
     foot_x = x // TILE_SIZE
     foot_y = (y + bocchama_height) // TILE_SIZE
-    ground_mid_height = TILE_SIZE // 2
+    ground_mid_height = TILE_SIZE // 2  # タイルの中心を計算
 
     if foot_y < len(map_data) and foot_x < len(map_data[0]):
         tile = map_data[foot_y][foot_x]
+        # タイルが1の場合の処理
         if tile == 1 and y + bocchama_height <= (foot_y * TILE_SIZE + ground_mid_height):
             on_ground = True
             return foot_y * TILE_SIZE + ground_mid_height - bocchama_height
+        # タイルが2の場合の処理
+        elif tile == 2:
+            on_ground = True
+            return foot_y * TILE_SIZE - bocchama_height
+    # 接地していない場合
     on_ground = False
     return y
 
