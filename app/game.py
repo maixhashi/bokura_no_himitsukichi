@@ -117,6 +117,29 @@ def dig_tile(x, y, direction):
     else:
         print(f"Attempting to dig outside of map bounds at ({dig_x}, {dig_y}).")
 
+def check_collision(x, y, direction):
+    """進行方向に衝突するタイルがあるか確認"""
+    top_y = y // TILE_SIZE  # キャラクターの上部タイル
+    bottom_y = (y + bocchama_height - 1) // TILE_SIZE  # キャラクターの下部タイル
+
+    if direction == "left":  # 左方向
+        check_x = (x - bocchama_speed) // TILE_SIZE  # 左方向のタイル
+    elif direction == "right":  # 右方向
+        check_x = (x + bocchama_width + bocchama_speed - 1) // TILE_SIZE  # 右方向のタイル
+    else:
+        return False  # 横方向以外は衝突なしとする
+
+    # 縦方向のタイルをチェック（進行方向のみ判定）
+    for check_y in range(top_y, bottom_y + 1):
+        if 0 <= check_y < len(map_data) and 0 <= check_x < len(map_data[0]):
+            # 接地しているタイルを無視する条件
+            if check_y == bottom_y and map_data[check_y][check_x] == 1:
+                continue  # 足元タイルが tile 1 なら無視
+            if map_data[check_y][check_x] in [1, 2]:  # 衝突対象タイル
+                print(f"Collision detected at ({check_x}, {check_y}) in {direction} direction")
+                return True
+    return False
+
 def main():
     global bocchama_x, bocchama_y, on_ground, bocchama_frame_index, animation_timer
     running = True
