@@ -91,6 +91,32 @@ def draw_map(map_data):
             elif tile == 0:
                 pass
 
+def dig_tile(x, y, direction):
+    global map_data
+    dig_x = (x + bocchama_width // 2) // TILE_SIZE  # キャラクターの中心位置を基準にする
+    dig_y = (y + bocchama_height // 2) // TILE_SIZE  # キャラクターの垂直中央位置
+
+    # 掘削方向ごとにタイルの位置を調整
+    if direction == "right":  # 右方向
+        dig_x = (x + bocchama_width + bocchama_speed) // TILE_SIZE
+    elif direction == "left":  # 左方向
+        dig_x = (x - bocchama_speed) // TILE_SIZE
+    elif direction == "down":  # 下方向
+        dig_y = (y + bocchama_height + bocchama_speed) // TILE_SIZE
+
+    # 掘削範囲がマップ内か確認
+    if 0 <= dig_y < len(map_data) and 0 <= dig_x < len(map_data[0]):
+        print(f"Attempting to dig at ({dig_x}, {dig_y}), tile value: {map_data[dig_y][dig_x]}")
+        if map_data[dig_y][dig_x] in [1, 2]:  # 掘削可能タイル
+            map_data[dig_y][dig_x] = 0
+            print(f"Tile at ({dig_x}, {dig_y}) dug.")
+        # 下方向で最下行の場合、新しい行を追加
+        if direction == "down" and dig_y + 1 >= len(map_data):
+            map_data.append([0] * len(map_data[0]))
+            print("New row added to the map.")
+    else:
+        print(f"Attempting to dig outside of map bounds at ({dig_x}, {dig_y}).")
+
 def main():
     global bocchama_x, bocchama_y, on_ground, bocchama_frame_index, animation_timer
     running = True
