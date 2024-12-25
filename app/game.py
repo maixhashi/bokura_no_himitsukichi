@@ -153,12 +153,25 @@ def main():
 
         keys = pygame.key.get_pressed()
         is_moving = False
-        if keys[pygame.K_LEFT]:
+
+        # 移動処理
+        if keys[pygame.K_LEFT] and not check_collision(bocchama_x, bocchama_y, "left"):
             bocchama_x -= bocchama_speed
             is_moving = True
-        if keys[pygame.K_RIGHT]:
+        if keys[pygame.K_RIGHT] and not check_collision(bocchama_x, bocchama_y, "right"):
             bocchama_x += bocchama_speed
             is_moving = True
+
+        # 掘削方向を指定
+        if keys[pygame.K_RIGHT] and keys[pygame.K_SPACE]:
+            print("Digging to the right")
+            dig_tile(bocchama_x, bocchama_y, "right")
+        elif keys[pygame.K_LEFT] and keys[pygame.K_SPACE]:
+            print("Digging to the left")
+            dig_tile(bocchama_x, bocchama_y, "left")
+        elif keys[pygame.K_DOWN] and keys[pygame.K_SPACE]:
+            print("Digging down")
+            dig_tile(bocchama_x, bocchama_y, "down")
 
         bocchama_y = check_on_ground(bocchama_x, bocchama_y)
         if not on_ground:
