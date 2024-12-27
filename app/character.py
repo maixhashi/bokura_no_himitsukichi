@@ -10,6 +10,9 @@ class Character:
       self.frame_index = 0
       self.animation_timer = 0
       self.on_ground = False
+      self.current_image = self.images[0]  # デフォルトの画像を設定
+      self.width = self.current_image.get_width()  # 画像の幅
+      self.height = self.current_image.get_height()  # 画像の高さ
 
     def draw(self, screen):
       """キャラクターを描画する"""

@@ -2,7 +2,14 @@ import pygame
 
 # タイル画像の読み込み
 ground_tile = pygame.image.load('assets/tiles/ground.png')
+digged_ground_tile = pygame.image.load('assets/tiles/digged_ground.png')
+
 underground_tile = pygame.image.load('assets/tiles/underground.png')
+
+rockceiling_soilwall_rockfloor = pygame.image.load('assets/tiles/rockceiling_soilwall_rockfloor.png')
+rockceiling_soilwall = pygame.image.load('assets/tiles/rockceiling_soilwall.png')
+soilwall_rockfloor = pygame.image.load('assets/tiles/soilwall_rockfloor.png')
+soilwall = pygame.image.load('assets/tiles/soilwall.png')
 
 # タイルサイズ
 TILE_SIZE = 128
@@ -13,32 +20,78 @@ class Map:
         self.tile_size = tile_size
         self.ground_mid_height = tile_size // 2  # タイルの中心を計算
 
-    def draw(self, screen):
+    def draw(self, screen, character_x, character_y, bocchama_width, bocchama_height):
         """マップを描画する"""
         for row_index, row in enumerate(self.map_data):
             for col_index, tile in enumerate(row):
+                tile_x = col_index * self.tile_size
+                tile_y = row_index * self.tile_size
+
                 if tile == 1:
-                    screen.blit(ground_tile, (col_index * TILE_SIZE, row_index * TILE_SIZE))
+                    screen.blit(ground_tile, (tile_x, tile_y))
                 elif tile == 2:
-                    screen.blit(underground_tile, (col_index * TILE_SIZE, row_index * TILE_SIZE))
+                    screen.blit(underground_tile, (tile_x, tile_y))
+                elif tile == 3:
+                    # 上下を確認して背景描画
+                    has_tile_above = (
+                        row_index > 0 and self.map_data[row_index - 1][col_index] in [1, 2, 5]
+                    )
+                    has_tile_below = (
+                        row_index < len(self.map_data) - 1 and self.map_data[row_index + 1][col_index] not in [0, 3]
+                    )
+
+                    if has_tile_above and has_tile_below:
+                        screen.blit(rockceiling_soilwall_rockfloor, (tile_x, tile_y))
+                    elif has_tile_above and not has_tile_below:
+                        screen.blit(rockceiling_soilwall, (tile_x, tile_y))
+                    elif not has_tile_above and has_tile_below:
+                        screen.blit(soilwall_rockfloor, (tile_x, tile_y))
+                    elif not has_tile_above and not has_tile_below:
+                        screen.blit(soilwall, (tile_x, tile_y))
+                elif tile == 4:
+                    screen.blit(digged_ground_tile, (tile_x, tile_y))
+                elif tile == 5:
+                    screen.blit(soilwall_rockfloor, (tile_x, tile_y))
+                elif tile == 7:
+                    screen.blit(soilwall, (tile_x, tile_y))
 
     def dig_tile(self, x, y, direction, bocchama_width, bocchama_height, speed):
         """タイルを掘る"""
-        dig_x = (x + bocchama_width // 2) // TILE_SIZE
-        dig_y = (y + bocchama_height // 2) // TILE_SIZE
+        dig_x = (x + bocchama_width // 2) // self.tile_size
+        dig_y = (y + bocchama_height // 2) // self.tile_size
 
         if direction == "right":
-            dig_x = (x + bocchama_width + speed) // TILE_SIZE
+            dig_x = (x + bocchama_width + speed) // self.tile_size
         elif direction == "left":
-            dig_x = (x - speed) // TILE_SIZE
+            dig_x = (x - speed) // self.tile_size
         elif direction == "down":
-            dig_y = (y + bocchama_height + speed) // TILE_SIZE
+            dig_y = (y + bocchama_height + speed) // self.tile_size
+
+        # tile [0]: 空
+        # tile [1]: ground_tile
+        # tile [2]: underground_tile
+        # tile [3]: underground_tileを掘った後のtile
+        # tile [4]: digged_ground_tile
+        # tile [5]: soilwall_rockfloor (digged_ground_tileの下)
+        # tile [7]: soilwall (残された床)
 
         if 0 <= dig_y < len(self.map_data) and 0 <= dig_x < len(self.map_data[0]):
-            if self.map_data[dig_y][dig_x] in [1, 2]:
-                self.map_data[dig_y][dig_x] = 0
+            if self.map_data[dig_y][dig_x] == 1:
+                # 掘られたground_tileをdigged_ground_tileに変更
+                self.map_data[dig_y][dig_x] = 4
+            elif self.map_data[dig_y][dig_x] == 2:
+                # 地下タイルを掘った場合、背景タイルに変更
+                self.map_data[dig_y][dig_x] = 3
+            elif self.map_data[dig_y][dig_x] == 4 and direction == "down":
+                # 掘られた後のground_tileから地下タイルに変更
+                if dig_y + 1 < len(self.map_data):
+                    self.map_data[dig_y + 1][dig_x] = 5
+            elif self.map_data[dig_y][dig_x] == 5:
+                    print(f"Tile at ({dig_y}, {dig_x}) is 5")
+                    self.map_data[dig_y][dig_x] = 3
         elif direction == "down" and dig_y >= len(self.map_data):
             self.map_data.append([0] * len(self.map_data[0]))
+
 
     def check_collision(self, x, y, bocchama_width, bocchama_height, direction, speed):
         """進行方向に衝突するタイルがあるか確認"""

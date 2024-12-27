@@ -56,7 +56,8 @@ def main():
         bocchama.move(keys, game_map, TILE_SIZE, clock)
         bocchama.dig(keys, game_map)
 
-        game_map.draw(screen)
+        # キャラクターの位置とサイズを取得してマップ描画に渡す
+        game_map.draw(screen, bocchama.x, bocchama.y, bocchama.width, bocchama.height)
         bocchama.draw(screen)
 
         pygame.display.flip()
