@@ -56,6 +56,8 @@ class Map:
                     screen.blit(soilwall, (tile_x, tile_y))
 
     def dig_tile(self, x, y, direction, bocchama_width, bocchama_height, speed):
+        print(f"dig_tile called with direction={direction}, dig_x={x}, dig_y={y}")
+
         """タイルを掘る"""
         dig_x = (x + bocchama_width // 2) // self.tile_size
         dig_y = (y + bocchama_height // 2) // self.tile_size
@@ -88,7 +90,7 @@ class Map:
                     self.map_data[dig_y + 1][dig_x] = 5
             elif self.map_data[dig_y][dig_x] == 5:
                     print(f"Tile at ({dig_y}, {dig_x}) is 5")
-                    self.map_data[dig_y][dig_x] = 3
+                    self.map_data[dig_y][dig_x] = 7
         elif direction == "down" and dig_y >= len(self.map_data):
             self.map_data.append([0] * len(self.map_data[0]))
 
