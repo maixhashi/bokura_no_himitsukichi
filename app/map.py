@@ -13,6 +13,12 @@ soilwall = pygame.image.load('assets/tiles/soilwall.png')
 # タイルサイズ
 TILE_SIZE = 128
 
+# マップデータ
+map_data = (
+    [[0] * 50]
+    + [[1] * 50]
+    + [[2] * 50 for _ in range(10)]
+)
 
 class Map:
     def __init__(self, map_data, tile_size):
