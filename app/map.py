@@ -24,12 +24,10 @@ class Map:
         """カメラ座標に基づいてマップを描画"""
 
         # カメラの範囲に含まれるタイルを計算
-        PADDING = 3  # パディングを追加して描画範囲を広げる
-
-        start_col = max(0, (camera.x // self.tile_size) - PADDING)
-        end_col = min(len(self.map_data[0]), (camera.x + camera.width) // self.tile_size + 1 - PADDING)
-        start_row = max(0, (camera.y // self.tile_size) - PADDING)
-        end_row = min(len(self.map_data), (camera.y + camera.height) // self.tile_size + 1 - PADDING)
+        start_col = max(0, (camera.x // self.tile_size))
+        end_col = min(len(self.map_data[0]), (camera.x + camera.width) // self.tile_size + 1)
+        start_row = max(0, (camera.y // self.tile_size))
+        end_row = min(len(self.map_data), (camera.y + camera.height) // self.tile_size + 1)
 
         # タイルを描画
         for row_index in range(start_row, end_row):
@@ -99,10 +97,15 @@ class Map:
             elif self.map_data[dig_y][dig_x] == 4 and direction == "down":
                 # 掘られた後のground_tileから地下タイルに変更
                 if dig_y + 1 < len(self.map_data):
-                    self.map_data[dig_y + 1][dig_x] = 5
+                    if self.map_data[dig_y + 1][dig_x] == 0:  # 空のタイルを確認
+                        self.map_data[dig_y + 1][dig_x] = 5
             elif self.map_data[dig_y][dig_x] == 5:
-                    print(f"Tile at ({dig_y}, {dig_x}) is 5")
-                    self.map_data[dig_y][dig_x] = 7
+                # soilwall_rockfloor を掘った場合、soilwall に変更
+                print(f"Tile at ({dig_y}, {dig_x}) is 5. Changing to 7.")
+                self.map_data[dig_y][dig_x] = 7
+                # 下に新しい行が必要な場合は追加
+                if dig_y + 1 == len(self.map_data):
+                    self.map_data.append([0] * len(self.map_data[0]))
         elif direction == "down" and dig_y >= len(self.map_data):
             self.map_data.append([0] * len(self.map_data[0]))
 
