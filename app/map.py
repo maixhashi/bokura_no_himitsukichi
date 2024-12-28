@@ -24,10 +24,12 @@ class Map:
         """カメラ座標に基づいてマップを描画"""
 
         # カメラの範囲に含まれるタイルを計算
-        start_col = max(0, camera.x // self.tile_size)
-        end_col = min(len(self.map_data[0]), (camera.x + camera.width) // self.tile_size + 1)
-        start_row = max(0, camera.y // self.tile_size)
-        end_row = min(len(self.map_data), (camera.y + camera.height) // self.tile_size + 1)
+        PADDING = 3  # パディングを追加して描画範囲を広げる
+
+        start_col = max(0, (camera.x // self.tile_size) - PADDING)
+        end_col = min(len(self.map_data[0]), (camera.x + camera.width) // self.tile_size + 1 - PADDING)
+        start_row = max(0, (camera.y // self.tile_size) - PADDING)
+        end_row = min(len(self.map_data), (camera.y + camera.height) // self.tile_size + 1 - PADDING)
 
         # タイルを描画
         for row_index in range(start_row, end_row):
