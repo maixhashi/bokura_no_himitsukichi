@@ -3,7 +3,6 @@ import pygame
 # タイル画像の読み込み
 ground_tile = pygame.image.load('assets/tiles/ground.png')
 digged_ground_tile = pygame.image.load('assets/tiles/digged_ground.png')
-
 underground_tile = pygame.image.load('assets/tiles/underground.png')
 
 rockceiling_soilwall_rockfloor = pygame.image.load('assets/tiles/rockceiling_soilwall_rockfloor.png')
@@ -14,25 +13,34 @@ soilwall = pygame.image.load('assets/tiles/soilwall.png')
 # タイルサイズ
 TILE_SIZE = 128
 
+
 class Map:
     def __init__(self, map_data, tile_size):
         self.map_data = map_data
         self.tile_size = tile_size
         self.ground_mid_height = tile_size // 2  # タイルの中心を計算
 
-    def draw(self, screen, character_x, character_y, bocchama_width, bocchama_height):
-        """マップを描画する"""
-        for row_index, row in enumerate(self.map_data):
-            for col_index, tile in enumerate(row):
-                tile_x = col_index * self.tile_size
-                tile_y = row_index * self.tile_size
+    def draw(self, screen, camera):
+        """カメラ座標に基づいてマップを描画"""
+
+        # カメラの範囲に含まれるタイルを計算
+        start_col = max(0, (camera.x // self.tile_size))
+        end_col = min(len(self.map_data[0]), (camera.x + camera.width) // self.tile_size + 1)
+        start_row = max(0, (camera.y // self.tile_size))
+        end_row = min(len(self.map_data), (camera.y + camera.height) // self.tile_size + 1)
+
+        # タイルを描画
+        for row_index in range(start_row, end_row):
+            for col_index in range(start_col, end_col):
+                tile = self.map_data[row_index][col_index]
+                tile_x = col_index * self.tile_size - camera.x
+                tile_y = row_index * self.tile_size - camera.y
 
                 if tile == 1:
                     screen.blit(ground_tile, (tile_x, tile_y))
                 elif tile == 2:
                     screen.blit(underground_tile, (tile_x, tile_y))
                 elif tile == 3:
-                    # 上下を確認して背景描画
                     has_tile_above = (
                         row_index > 0 and self.map_data[row_index - 1][col_index] in [1, 2, 5]
                     )
@@ -69,6 +77,8 @@ class Map:
         elif direction == "down":
             dig_y = (y + bocchama_height + speed) // self.tile_size
 
+        print(f"tile ID: {self.map_data[dig_y][dig_x]}")
+
         # tile [0]: 空
         # tile [1]: ground_tile
         # tile [2]: underground_tile
@@ -87,10 +97,15 @@ class Map:
             elif self.map_data[dig_y][dig_x] == 4 and direction == "down":
                 # 掘られた後のground_tileから地下タイルに変更
                 if dig_y + 1 < len(self.map_data):
-                    self.map_data[dig_y + 1][dig_x] = 5
+                    if self.map_data[dig_y + 1][dig_x] == 0:  # 空のタイルを確認
+                        self.map_data[dig_y + 1][dig_x] = 5
             elif self.map_data[dig_y][dig_x] == 5:
-                    print(f"Tile at ({dig_y}, {dig_x}) is 5")
-                    self.map_data[dig_y][dig_x] = 7
+                # soilwall_rockfloor を掘った場合、soilwall に変更
+                print(f"Tile at ({dig_y}, {dig_x}) is 5. Changing to 7.")
+                self.map_data[dig_y][dig_x] = 7
+                # 下に新しい行が必要な場合は追加
+                if dig_y + 1 == len(self.map_data):
+                    self.map_data.append([0] * len(self.map_data[0]))
         elif direction == "down" and dig_y >= len(self.map_data):
             self.map_data.append([0] * len(self.map_data[0]))
 
