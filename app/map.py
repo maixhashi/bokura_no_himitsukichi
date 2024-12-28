@@ -16,13 +16,13 @@ soilwall = pygame.image.load('assets/tiles/soilwall.png')
 
 # タイルサイズ
 TILE_SIZE = 128
-MOLE_SPAWN_PROBABILITY = 0.2
+MOLE_SPAWN_PROBABILITY = 0.03
 
 # マップデータ
 map_data = (
     [[0] * 50]
     + [[1] * 50]
-    + [[2] * 50 for _ in range(10)]
+    + [[2] * 50 for _ in range(100)]
 )
 
 class Map:
@@ -81,53 +81,42 @@ class Map:
 
 
     def dig_tile(self, x, y, direction, bocchama_width, bocchama_height, speed):
-        print(f"dig_tile called with direction={direction}, dig_x={x}, dig_y={y}")
+        """タイルを掘る処理"""
+        # デバッグ出力
+        print(f"dig_tile called with direction={direction}, x={x}, y={y}")
 
-        """タイルを掘る"""
-        dig_x = (x + bocchama_width // 2) // self.tile_size
-        dig_y = (y + bocchama_height // 2) // self.tile_size
+        # タイル座標を計算 (明示的に整数化)
+        dig_x = int((x + bocchama_width // 2) // self.tile_size)
+        dig_y = int((y + bocchama_height // 2) // self.tile_size)
 
         if direction == "right":
-            dig_x = (x + bocchama_width + speed) // self.tile_size
+            dig_x = int((x + bocchama_width + speed) // self.tile_size)
         elif direction == "left":
-            dig_x = (x - speed) // self.tile_size
+            dig_x = int((x - speed) // self.tile_size)
         elif direction == "down":
-            dig_y = (y + bocchama_height + speed) // self.tile_size
+            dig_y = int((y + bocchama_height + speed) // self.tile_size)
 
-        print(f"tile ID: {self.map_data[dig_y][dig_x]}")
-
-        # tile [0]: 空
-        # tile [1]: ground_tile
-        # tile [2]: underground_tile
-        # tile [3]: underground_tileを掘った後のtile
-        # tile [4]: digged_ground_tile
-        # tile [5]: soilwall_rockfloor (digged_ground_tileの下)
-        # tile [7]: soilwall (残された床)
-
+        # 範囲チェック
         if 0 <= dig_y < len(self.map_data) and 0 <= dig_x < len(self.map_data[0]):
+            print(f"tile ID before digging: {self.map_data[dig_y][dig_x]}")
+
+            # タイルごとの処理
             if self.map_data[dig_y][dig_x] == 1:
-                # 掘られたground_tileをdigged_ground_tileに変更
                 self.map_data[dig_y][dig_x] = 4
             elif self.map_data[dig_y][dig_x] == 2:
-                # 地下タイルを掘った場合、背景タイルに変更
                 self.map_data[dig_y][dig_x] = 3
-                # 50%の確率でモグラを出現させる
                 if random.random() < MOLE_SPAWN_PROBABILITY:
                     mole_x = dig_x * self.tile_size
                     mole_y = dig_y * self.tile_size
-                    mole = Mole(mole_x, mole_y, speed=2, gravity=0.5)
-                    self.moles.append(mole)  # モグラをリストに追加
+                    mole = Mole(mole_x, mole_y, speed=2, gravity=5)
+                    self.moles.append(mole)
                     print(f"Mole spawned at ({mole_x}, {mole_y})")
             elif self.map_data[dig_y][dig_x] == 4 and direction == "down":
-                # 掘られた後のground_tileから地下タイルに変更
-                if dig_y + 1 < len(self.map_data):
-                    if self.map_data[dig_y + 1][dig_x] == 0:  # 空のタイルを確認
-                        self.map_data[dig_y + 1][dig_x] = 5
+                if dig_y + 1 < len(self.map_data) and self.map_data[dig_y + 1][dig_x] == 0:
+                    self.map_data[dig_y + 1][dig_x] = 5
             elif self.map_data[dig_y][dig_x] == 5:
-                # soilwall_rockfloor を掘った場合、soilwall に変更
-                print(f"Tile at ({dig_y}, {dig_x}) is 5. Changing to 7.")
+                print(f"Tile at ({dig_x}, {dig_y}) is 5. Changing to 7.")
                 self.map_data[dig_y][dig_x] = 7
-                # 下に新しい行が必要な場合は追加
                 if dig_y + 1 == len(self.map_data):
                     self.map_data.append([0] * len(self.map_data[0]))
         elif direction == "down" and dig_y >= len(self.map_data):
@@ -136,20 +125,20 @@ class Map:
 
     def check_collision(self, x, y, bocchama_width, bocchama_height, direction, speed):
         """進行方向に衝突するタイルがあるか確認"""
-        top_y = y // TILE_SIZE  # キャラクターの上部タイル
-        bottom_y = (y + bocchama_height - 1) // TILE_SIZE  # キャラクターの下部タイル
+        top_y = int(y // TILE_SIZE)  # キャラクターの上部タイル
+        bottom_y = int((y + bocchama_height - 1) // TILE_SIZE)  # キャラクターの下部タイル
 
         # 進行方向のタイル位置を計算
         if direction == "left":
-            check_x = (x - speed) // TILE_SIZE  # 左方向
+            check_x = int((x - speed) // TILE_SIZE)  # 左方向
         elif direction == "right":
-            check_x = (x + bocchama_width + speed - 1) // TILE_SIZE  # 右方向
+            check_x = int((x + bocchama_width + speed - 1) // TILE_SIZE)  # 右方向
         else:
             return False  # 上下方向は衝突判定しない
 
-        # 足元のタイルがtile 1かどうかを確認
-        foot_x = x // TILE_SIZE
-        foot_y = (y + bocchama_height) // TILE_SIZE
+        # キャラクターが接地しているかを確認
+        foot_x = int(x // TILE_SIZE)
+        foot_y = int((y + bocchama_height) // TILE_SIZE)
         is_on_tile_1 = (
             0 <= foot_y < len(self.map_data)
             and 0 <= foot_x < len(self.map_data[0])
@@ -165,25 +154,31 @@ class Map:
                     continue
                 if tile in [1, 2]:  # 衝突対象タイル
                     return True
+            else:
+                # マップ外を参照している場合、衝突とみなす
+                return True
 
         # 衝突なし
         return False
 
+
     def is_on_ground(self, x, y, height):
-      """キャラクターが地面に接地しているか確認"""
-      foot_x = x // self.tile_size
-      foot_y = (y + height) // self.tile_size
+        """キャラクターが地面に接地しているか確認"""
+        foot_x = int(x // self.tile_size)
+        foot_y = int((y + height) // self.tile_size)
+        print(f"Debug: foot_x={foot_x}, foot_y={foot_y}, tile_size={self.tile_size}")
 
-      if 0 <= foot_y < len(self.map_data) and 0 <= foot_x < len(self.map_data[0]):
-          tile = self.map_data[foot_y][foot_x]
+        if 0 <= foot_y < len(self.map_data) and 0 <= foot_x < len(self.map_data[0]):
+            tile = self.map_data[foot_y][foot_x]
+            print(f"Debug: tile={tile}")
 
-          # タイルが1の場合の処理
-          if tile == 1 and y + height <= (foot_y * self.tile_size + self.ground_mid_height):
-              return True, foot_y * self.tile_size + self.ground_mid_height - height
+            if tile == 1 and y + height <= (foot_y * self.tile_size + self.ground_mid_height):
+                return True, foot_y * self.tile_size + self.ground_mid_height - height
+            elif tile == 2:
+                return True, foot_y * self.tile_size - height
 
-          # タイルが2の場合の処理
-          elif tile == 2:
-              return True, foot_y * self.tile_size - height
+        return False, y
 
-      # 接地していない場合
-      return False, y
+    def update_moles(self, clock, TILE_SIZE):
+        for mole in self.moles:
+            mole.update(self, clock, TILE_SIZE)  # 各モグラを更新

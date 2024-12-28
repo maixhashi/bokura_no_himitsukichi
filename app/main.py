@@ -5,7 +5,6 @@ import sys
 from map import Map, map_data  # map_data をインポート
 from camera import Camera
 from characters.bocchama import Bocchama
-from characters.mole import Mole
 
 # Pygame初期化
 pygame.init()
@@ -25,7 +24,6 @@ clock = pygame.time.Clock()
 # オブジェクト生成
 game_map = Map(map_data, TILE_SIZE)  # インポートした map_data を利用
 bocchama = Bocchama(x=0, y=TILE_SIZE // 2, speed=5, gravity=5)
-mole = Mole(x=300, y=TILE_SIZE * 3, speed=3, gravity=3)
 
 def main():
     # マップ全体のサイズを基にカメラを初期化
@@ -48,13 +46,19 @@ def main():
         bocchama.move(keys, game_map, TILE_SIZE, clock)
         bocchama.dig(keys, game_map)
 
+        # モグラの更新
+        game_map.update_moles(clock, TILE_SIZE)
+
         # カメラを更新
         camera.update(bocchama, SCREEN_WIDTH, SCREEN_HEIGHT)
 
         # マップとキャラクターの描画
         game_map.draw(screen, camera)
         bocchama.draw(screen, camera)
-        # mole.draw(screen, camera)
+
+        # モグラを描画
+        for mole in game_map.moles:
+            mole.draw(screen, camera)
 
         # 画面更新
         pygame.display.flip()
