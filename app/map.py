@@ -5,6 +5,7 @@ import random
 from characters.mole import Mole  # characters.moleクラスをインポート
 
 # タイル画像の読み込み
+sky_tile = pygame.image.load('assets/tiles/sky.png')
 ground_tile = pygame.image.load('assets/tiles/ground.png')
 digged_ground_tile = pygame.image.load('assets/tiles/digged_ground.png')
 underground_tile = pygame.image.load('assets/tiles/underground.png')
@@ -48,7 +49,9 @@ class Map:
                 tile_x = col_index * self.tile_size - camera.x
                 tile_y = row_index * self.tile_size - camera.y
 
-                if tile == 1:
+                if tile == 0:
+                    screen.blit(sky_tile, (tile_x, tile_y))
+                elif tile == 1:
                     screen.blit(ground_tile, (tile_x, tile_y))
                 elif tile == 2:
                     screen.blit(underground_tile, (tile_x, tile_y))
