@@ -1,4 +1,8 @@
 import pygame
+import random
+
+# クラスのインポート
+from characters.mole import Mole  # characters.moleクラスをインポート
 
 # タイル画像の読み込み
 ground_tile = pygame.image.load('assets/tiles/ground.png')
@@ -12,6 +16,7 @@ soilwall = pygame.image.load('assets/tiles/soilwall.png')
 
 # タイルサイズ
 TILE_SIZE = 128
+MOLE_SPAWN_PROBABILITY = 0.2
 
 # マップデータ
 map_data = (
@@ -25,6 +30,7 @@ class Map:
         self.map_data = map_data
         self.tile_size = tile_size
         self.ground_mid_height = tile_size // 2  # タイルの中心を計算
+        self.moles = []  # モグラのリスト
 
     def draw(self, screen, camera):
         """カメラ座標に基づいてマップを描画"""
@@ -69,6 +75,11 @@ class Map:
                 elif tile == 7:
                     screen.blit(soilwall, (tile_x, tile_y))
 
+        # モグラの描画
+        for mole in self.moles:
+            mole.draw(screen, camera)
+
+
     def dig_tile(self, x, y, direction, bocchama_width, bocchama_height, speed):
         print(f"dig_tile called with direction={direction}, dig_x={x}, dig_y={y}")
 
@@ -100,6 +111,13 @@ class Map:
             elif self.map_data[dig_y][dig_x] == 2:
                 # 地下タイルを掘った場合、背景タイルに変更
                 self.map_data[dig_y][dig_x] = 3
+                # 50%の確率でモグラを出現させる
+                if random.random() < MOLE_SPAWN_PROBABILITY:
+                    mole_x = dig_x * self.tile_size
+                    mole_y = dig_y * self.tile_size
+                    mole = Mole(mole_x, mole_y, speed=2, gravity=0.5)
+                    self.moles.append(mole)  # モグラをリストに追加
+                    print(f"Mole spawned at ({mole_x}, {mole_y})")
             elif self.map_data[dig_y][dig_x] == 4 and direction == "down":
                 # 掘られた後のground_tileから地下タイルに変更
                 if dig_y + 1 < len(self.map_data):
