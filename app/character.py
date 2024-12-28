@@ -13,10 +13,14 @@ class Character:
         self.current_image = self.images[0]  # デフォルトの画像を設定
         self.width = self.current_image.get_width()  # 画像の幅
         self.height = self.current_image.get_height()  # 画像の高さ
+        self.facing_left = False  # 左向きかどうかを記録するフラグ
 
     def draw(self, screen, camera):
         """カメラ座標を考慮してキャラクターを描画する"""
         current_image = self.images[self.frame_index]
+        # 左向きなら画像を反転
+        if self.facing_left:
+            current_image = pygame.transform.flip(current_image, True, False)
         screen.blit(current_image, (self.x - camera.x, self.y - camera.y))
 
     def move(self, keys, map_instance, TILE_SIZE, clock):
@@ -28,6 +32,7 @@ class Character:
             self.x, self.y, self.width, self.height, "left", self.speed
         ):
             self.x -= self.speed
+            self.facing_left = True  # 左向きに設定
             is_moving = True
 
         # 右方向の移動
@@ -35,6 +40,7 @@ class Character:
             self.x, self.y, self.width, self.height, "right", self.speed
         ):
             self.x += self.speed
+            self.facing_left = False  # 右向きに設定
             is_moving = True
 
         # 接地判定と重力
