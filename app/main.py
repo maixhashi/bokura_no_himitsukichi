@@ -48,6 +48,7 @@ def main():
 
         # モグラの更新
         game_map.update_moles(clock, TILE_SIZE)
+        game_map.update_treasures(clock, TILE_SIZE)
 
         # カメラを更新
         camera.update(bocchama, SCREEN_WIDTH, SCREEN_HEIGHT)
