@@ -35,9 +35,15 @@ def main():
     running = True
     while running:
         screen.fill(WHITE)
+        
+        # イベント処理
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            
+            # スペースキーで宝箱を開ける
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                bocchama.open_treasure_box(game_map.treasures)
 
         # キー入力
         keys = pygame.key.get_pressed()
