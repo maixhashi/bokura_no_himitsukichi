@@ -3,6 +3,7 @@ import random
 
 # クラスのインポート
 from characters.mole import Mole  # characters.moleクラスをインポート
+from treasure import Treasure  # characters.moleクラスをインポート
 
 # タイル画像の読み込み
 sky_tile = pygame.image.load('assets/tiles/sky.png')
@@ -18,6 +19,7 @@ soilwall = pygame.image.load('assets/tiles/soilwall.png')
 # タイルサイズ
 TILE_SIZE = 128
 MOLE_SPAWN_PROBABILITY = 0.03
+TREASURE_SPAWN_PROBABILITY = 0.01
 
 # マップデータ
 map_data = (
@@ -32,6 +34,7 @@ class Map:
         self.tile_size = tile_size
         self.ground_mid_height = tile_size // 2  # タイルの中心を計算
         self.moles = []  # モグラのリスト
+        self.treasures = []  # 宝箱のリスト
 
     def draw(self, screen, camera):
         """カメラ座標に基づいてマップを描画"""
@@ -81,6 +84,10 @@ class Map:
         # モグラの描画
         for mole in self.moles:
             mole.draw(screen, camera)
+        # 宝箱の描画
+        for treasure in self.treasures:
+            treasure.draw(screen, camera)
+
 
 
     def dig_tile(self, x, y, direction, bocchama_width, bocchama_height, speed):
@@ -114,6 +121,12 @@ class Map:
                     mole = Mole(mole_x, mole_y, speed=2, gravity=5)
                     self.moles.append(mole)
                     print(f"Mole spawned at ({mole_x}, {mole_y})")
+                if random.random() < TREASURE_SPAWN_PROBABILITY:
+                    treasure_x = dig_x * self.tile_size
+                    treasure_y = dig_y * self.tile_size
+                    treasure = Treasure(treasure_x, treasure_y)
+                    self.treasures.append(treasure)
+                    print(f"Treasure spawned at ({treasure_x}, {treasure_y})")
             elif self.map_data[dig_y][dig_x] == 4 and direction == "down":
                 if dig_y + 1 < len(self.map_data) and self.map_data[dig_y + 1][dig_x] == 0:
                     self.map_data[dig_y + 1][dig_x] = 5

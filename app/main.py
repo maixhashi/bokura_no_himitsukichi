@@ -59,6 +59,9 @@ def main():
         # モグラを描画
         for mole in game_map.moles:
             mole.draw(screen, camera)
+        # 宝箱を描画
+        for treasure in game_map.treasures:
+            treasure.draw(screen, camera)
 
         # 画面更新
         pygame.display.flip()

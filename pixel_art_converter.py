@@ -11,4 +11,4 @@ def image_to_pixel_art(image_path, output_path, target_size=(32, 32)):
     img_pixel_art.save(output_path)
 
 # 使用例
-image_to_pixel_art('input_image.jpg', 'output_pixel_art_128x128.png', target_size=(128, 128))
+image_to_pixel_art('input_image.png', 'output_pixel_art_128x128.png', target_size=(128, 128))
