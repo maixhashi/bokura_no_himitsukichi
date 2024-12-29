@@ -5,6 +5,7 @@ import sys
 from map import Map, map_data  # map_data をインポート
 from camera import Camera
 from characters.bocchama import Bocchama
+from treasure import Treasure
 
 # Pygame初期化
 pygame.init()
@@ -25,6 +26,11 @@ clock = pygame.time.Clock()
 game_map = Map(map_data, TILE_SIZE)  # インポートした map_data を利用
 bocchama = Bocchama(x=0, y=TILE_SIZE // 2, speed=5, gravity=5)
 
+# 宝箱の設定
+treasure = Treasure(300, 100, 5, "assets/rewards/movie_poster.png")
+game_map.treasures.append(treasure)
+collected_rewards = []  # 収集済みアイテム
+
 def main():
     # マップ全体のサイズを基にカメラを初期化
     camera = Camera(
@@ -41,9 +47,12 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             
-            # スペースキーで宝箱を開ける
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                bocchama.open_treasure_box(game_map.treasures)
+                bocchama.open_treasure_box(game_map.treasures, collected_rewards)
+            
+            # 宝箱のイベント処理
+            for treasure in game_map.treasures:
+                treasure.handle_event(event, collected_rewards)
 
         # キー入力
         keys = pygame.key.get_pressed()
@@ -66,9 +75,14 @@ def main():
         # モグラを描画
         for mole in game_map.moles:
             mole.draw(screen, camera)
+        
         # 宝箱を描画
         for treasure in game_map.treasures:
+            treasure.update_blink()
             treasure.draw(screen, camera)
+
+        # 収集済みアイテムを描画
+        Treasure.draw_collected_rewards(screen, collected_rewards)
 
         # 画面更新
         pygame.display.flip()

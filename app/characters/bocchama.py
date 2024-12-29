@@ -1,4 +1,6 @@
 import pygame
+import random
+
 from characters.base.character import Character
 
 class Bocchama(Character):
@@ -22,22 +24,13 @@ class Bocchama(Character):
     def dig(self, keys, map_instance):
         """掘削処理"""
         if keys[pygame.K_RIGHT] and keys[pygame.K_SPACE]:
-            map_instance.dig_tile(self.x, self.y, "right", self.width, self.height, self.speed)
+            map_instance.dig_tile(self.x, self.y, "right", self.width, self.height, self.speed, random.choice(map_instance.reward_images))
         elif keys[pygame.K_LEFT] and keys[pygame.K_SPACE]:
-            map_instance.dig_tile(self.x, self.y, "left", self.width, self.height, self.speed)
+            map_instance.dig_tile(self.x, self.y, "left", self.width, self.height, self.speed, random.choice(map_instance.reward_images))
         elif keys[pygame.K_DOWN] and keys[pygame.K_SPACE]:
-            map_instance.dig_tile(self.x, self.y, "down", self.width, self.height, self.speed)
+            map_instance.dig_tile(self.x, self.y, "down", self.width, self.height, self.speed, random.choice(map_instance.reward_images))
 
-    def open_treasure_box(self, treasures):
-        """宝箱をスペースキーで開く処理"""
+    def open_treasure_box(self, treasures, collected_rewards):
         for treasure in treasures:
-            # 宝箱との衝突判定
-            if (
-                self.x < treasure.x + treasure.width
-                and self.x + self.width > treasure.x
-                and self.y < treasure.y + treasure.height
-                and self.y + self.height > treasure.y
-            ):
-                if not treasure.is_opened:  # 宝箱が既に開いている場合はスキップ
-                    treasure.open()
-                    print("宝箱を開けました！")
+            if not treasure.is_opened:  # 未開封の宝箱を開ける
+                treasure.open(collected_rewards)

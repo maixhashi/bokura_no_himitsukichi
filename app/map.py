@@ -35,6 +35,12 @@ class Map:
         self.ground_mid_height = tile_size // 2  # タイルの中心を計算
         self.moles = []  # モグラのリスト
         self.treasures = []  # 宝箱のリスト
+        self.treasure_tiles = set()  # 宝箱が生成されたタイルを追跡するセット
+        self.reward_images = [
+            "assets/rewards/movie_poster_1.png",
+            "assets/rewards/movie_poster_2.png",
+            "assets/rewards/movie_poster_3.png"
+        ]  # 報酬画像のリスト
 
     def draw(self, screen, camera):
         """カメラ座標に基づいてマップを描画"""
@@ -88,12 +94,8 @@ class Map:
         for treasure in self.treasures:
             treasure.draw(screen, camera)
 
-
-
-    def dig_tile(self, x, y, direction, bocchama_width, bocchama_height, speed):
+    def dig_tile(self, x, y, direction, bocchama_width, bocchama_height, speed, reward_image_path):
         """タイルを掘る処理"""
-        print(f"dig_tile called with direction={direction}, x={x}, y={y}")
-
         dig_x = int((x + bocchama_width // 2) // self.tile_size)
         dig_y = int((y + bocchama_height // 2) // self.tile_size)
 
@@ -120,7 +122,8 @@ class Map:
                 if random.random() < TREASURE_SPAWN_PROBABILITY:
                     treasure_x = dig_x * self.tile_size
                     treasure_y = dig_y * self.tile_size
-                    treasure = Treasure(treasure_x, treasure_y, gravity=5)  # gravityを指定
+                    reward_image = random.choice(self.reward_images)  # 報酬画像をランダム選択
+                    treasure = Treasure(treasure_x, treasure_y, gravity=5, reward_image_path=reward_image)  # gravityを指定
                     self.treasures.append(treasure)
                     print(f"Treasure spawned at ({treasure_x}, {treasure_y})")
             elif self.map_data[dig_y][dig_x] == 4 and direction == "down":
@@ -134,6 +137,22 @@ class Map:
         elif direction == "down" and dig_y >= len(self.map_data):
             self.map_data.append([0] * len(self.map_data[0]))
 
+        tile_coords = (dig_x, dig_y)
+        if (
+            0 <= dig_y < len(self.map_data)
+            and 0 <= dig_x < len(self.map_data[0])
+            and tile_coords not in self.treasure_tiles  # 同じタイルに宝箱がない
+        ):
+            if self.map_data[dig_y][dig_x] == 2:  # 掘削対象が地下の場合
+                self.map_data[dig_y][dig_x] = 3  # 掘削済みのタイルに変更
+                if random.random() < TREASURE_SPAWN_PROBABILITY:
+                    treasure_x = dig_x * self.tile_size
+                    treasure_y = dig_y * self.tile_size
+                    reward_image = random.choice(self.reward_images)  # 報酬画像をランダム選択
+                    treasure = Treasure(treasure_x, treasure_y, gravity=5, reward_image_path=reward_image)
+                    self.treasures.append(treasure)
+                    self.treasure_tiles.add(tile_coords)  # 宝箱生成済みタイルとして記録
+                    print(f"Treasure spawned at ({treasure_x}, {treasure_y}) with reward: {reward_image}")
 
     def check_collision(self, x, y, bocchama_width, bocchama_height, direction, speed):
         """進行方向に衝突するタイルがあるか確認"""
@@ -197,4 +216,4 @@ class Map:
 
     def update_treasures(self, clock, TILE_SIZE):
         for treasure in self.treasures:
-            treasure.update(self, clock, TILE_SIZE)  # 各モグラを更新
+            treasure.update(self, clock, TILE_SIZE)  # 各宝箱を更新
