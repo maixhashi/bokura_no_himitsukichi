@@ -26,13 +26,12 @@ class Treasure:
                 screen.blit(self.image, (self.x - camera.x, self.y - camera.y))
 
     def update(self, map_instance, clock, TILE_SIZE):
-        """宝箱の落下処理"""
-        if not self.on_ground:
-            self.on_ground, new_y = map_instance.is_on_ground(self.x, self.y, self.height)
-            if not self.on_ground:
-                self.y += self.gravity
-            else:
-                self.y = new_y
+        # 重力と地面判定
+        self.on_ground, new_y = map_instance.is_on_ground(self.x, self.y, self.height)
+        if self.on_ground:
+            self.y = new_y
+        else:
+            self.y += self.gravity
 
     def open(self, collected_rewards):
         """宝箱を開ける処理"""

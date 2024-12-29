@@ -147,7 +147,7 @@ class Map:
                 self.map_data[dig_y][dig_x] = 3  # 掘削済みのタイルに変更
                 if random.random() < TREASURE_SPAWN_PROBABILITY:
                     treasure_x = dig_x * self.tile_size
-                    treasure_y = dig_y * self.tile_size
+                    treasure_y = (dig_y - 1) * self.tile_size
                     reward_image = random.choice(self.reward_images)  # 報酬画像をランダム選択
                     treasure = Treasure(treasure_x, treasure_y, gravity=5, reward_image_path=reward_image)
                     self.treasures.append(treasure)
