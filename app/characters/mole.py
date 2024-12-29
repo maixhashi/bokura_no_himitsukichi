@@ -36,7 +36,7 @@ class Mole(Character):
             # 掘る動作を実行
             dig_x = self.x // TILE_SIZE
             dig_y = self.y // TILE_SIZE
-            map_instance.dig_tile(dig_x, dig_y, "down", self.width, self.height, self.speed)
+            # map_instance.dig_tile(dig_x, dig_y, "down", self.width, self.height, self.speed)
 
         # 重力と地面判定
         self.on_ground, new_y = map_instance.is_on_ground(self.x, self.y, self.height)

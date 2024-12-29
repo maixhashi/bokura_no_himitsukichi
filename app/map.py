@@ -19,7 +19,7 @@ soilwall = pygame.image.load('assets/tiles/soilwall.png')
 # タイルサイズ
 TILE_SIZE = 128
 MOLE_SPAWN_PROBABILITY = 0.03
-TREASURE_SPAWN_PROBABILITY = 0.01
+TREASURE_SPAWN_PROBABILITY = 0.5
 
 # マップデータ
 map_data = (

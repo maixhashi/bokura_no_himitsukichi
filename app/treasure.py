@@ -66,7 +66,7 @@ class Treasure:
     @staticmethod
     def draw_collected_rewards(screen, collected_rewards):
         """画面右上に収集済みのアイテムを描画"""
-        x_offset = 10
+        x_offset = 1300
         y_offset = 10
         for idx, reward in enumerate(collected_rewards):
-            screen.blit(reward, (x_offset, y_offset + idx * 50))
+            screen.blit(reward, (x_offset - idx * 5, y_offset + idx * 5))
