@@ -35,9 +35,15 @@ def main():
     running = True
     while running:
         screen.fill(WHITE)
+        
+        # イベント処理
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            
+            # スペースキーで宝箱を開ける
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                bocchama.open_treasure_box(game_map.treasures)
 
         # キー入力
         keys = pygame.key.get_pressed()
@@ -48,6 +54,7 @@ def main():
 
         # モグラの更新
         game_map.update_moles(clock, TILE_SIZE)
+        game_map.update_treasures(clock, TILE_SIZE)
 
         # カメラを更新
         camera.update(bocchama, SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -59,6 +66,9 @@ def main():
         # モグラを描画
         for mole in game_map.moles:
             mole.draw(screen, camera)
+        # 宝箱を描画
+        for treasure in game_map.treasures:
+            treasure.draw(screen, camera)
 
         # 画面更新
         pygame.display.flip()
