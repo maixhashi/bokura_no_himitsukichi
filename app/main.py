@@ -48,12 +48,8 @@ def main():
                 running = False
             
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                bocchama.open_treasure_box(game_map.treasures, collected_rewards)
+                bocchama.open_treasure_box(TILE_SIZE, game_map.treasures, collected_rewards)
             
-            # 宝箱のイベント処理
-            for treasure in game_map.treasures:
-                treasure.handle_event(event, collected_rewards)
-
         # キー入力
         keys = pygame.key.get_pressed()
         

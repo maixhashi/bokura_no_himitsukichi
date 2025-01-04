@@ -30,7 +30,9 @@ class Bocchama(Character):
         elif keys[pygame.K_DOWN] and keys[pygame.K_SPACE]:
             map_instance.dig_tile(self.x, self.y, "down", self.width, self.height, self.speed, random.choice(map_instance.reward_images))
 
-    def open_treasure_box(self, treasures, collected_rewards):
+    def open_treasure_box(self, TILE_SIZE, treasures, collected_rewards):
         for treasure in treasures:
-            if not treasure.is_opened:  # 未開封の宝箱を開ける
+            # Bocchamaの位置と宝箱の位置を比較
+            if abs(self.x - treasure.x) < TILE_SIZE // 2 and abs(self.y - treasure.y) < TILE_SIZE // 2:
+                # 宝箱を開ける処理
                 treasure.open(collected_rewards)
