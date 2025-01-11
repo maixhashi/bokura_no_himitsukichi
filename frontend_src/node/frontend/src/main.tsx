@@ -1,28 +1,15 @@
 import { Map } from "./map";
 import { mapData } from "./mapData";
-
+import { SCREEN_WIDTH, SCREEN_HEIGHT, TILE_SIZE } from "./utils/constants";
+import { tilePaths } from "./utils/image_paths";
 
 const canvas = document.createElement("canvas");
 const ctx = canvas.getContext("2d");
 if (!ctx) throw new Error("Canvas context not supported");
 
-const SCREEN_WIDTH = 1600;
-const SCREEN_HEIGHT = 800;
-const TILE_SIZE = 128;
-
 canvas.width = SCREEN_WIDTH;
 canvas.height = SCREEN_HEIGHT;
 document.body.appendChild(canvas);
-
-const tilePaths = [
-  "./assets/tiles/sky.png",
-  "./assets/tiles/ground.png",
-  "./assets/tiles/underground.png",
-  "./assets/tiles/rockceiling_soilwall_rockfloor.png",
-  "./assets/tiles/digged_ground.png",
-  "./assets/tiles/soilwall_rockfloor.png",
-  "./assets/tiles/soilwall.png",
-];
 
 const gameMap = new Map(mapData, TILE_SIZE, tilePaths);
 
