@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  backend:
+    build:
+      context: ./backend_src
+      dockerfile: ./docker/python/Dockerfile
+    volumes:
+      - ./backend_src/backend:/backend
+    working_dir: /backend
+    command: python3 manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build:
+      context: ./frontend_src
+      dockerfile: docker/node/Dockerfile
+    volumes:
+      - ./frontend_src/node/frontend:/usr/src/app/frontend # 修正
+    command: sh -c "cd /usr/src/app/frontend && yarn dev --host"
+    ports:
+      - "5173:5173"
