@@ -32,31 +32,35 @@ export class Character {
     ctx.drawImage(image, this.x - cameraX, this.y - cameraY);
   }
 
-  move(keys: { [key: string]: boolean }, map: any) {
+  move(keys: { [key: string]: boolean }, map: any): boolean {
+    let isMoving = false;
+
     if (keys["ArrowLeft"]) {
       this.x -= this.speed;
       this.facingLeft = true;
+      isMoving = true;
     }
     if (keys["ArrowRight"]) {
       this.x += this.speed;
       this.facingLeft = false;
+      isMoving = true;
     }
+
     this.y += this.gravity; // 簡易的な重力処理
+    return isMoving;
   }
 
-    updateAnimation(FPS: number) {
-    // 移動中のみアニメーションを更新
-    if (this.isMoving) {
+  updateAnimation(FPS: number, isMoving: boolean) {
+    if (isMoving) {
       this.animationTimer += 1000 / FPS;
-      if (this.animationTimer >= 100) { // フレームごとの切り替えタイミング（調整可能）
+      if (this.animationTimer >= 100) { // フレーム切り替えタイミング
         this.animationTimer = 0;
         this.frameIndex = (this.frameIndex + 1) % this.images.length;
       }
     } else {
-      this.frameIndex = 0; // 移動していないときは初期フレームを表示
+      this.frameIndex = 0; // 移動していないときは初期フレーム
     }
   }
-
 
   flipImage(image: HTMLImageElement): HTMLImageElement {
     // 画像の左右反転処理（詳細は適宜実装）
