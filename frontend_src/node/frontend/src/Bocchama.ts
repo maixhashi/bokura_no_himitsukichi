@@ -14,6 +14,11 @@ export class Bocchama extends Character {
     this.isMoving = false;
   }
 
+  draw(ctx: CanvasRenderingContext2D, cameraX: number, cameraY: number) {
+    super.draw(ctx, cameraX, cameraY);
+  }
+  
+
   move(keys: { [key: string]: boolean }, map: any) {
     // 親クラスの move を呼び出して移動状態を取得
     this.isMoving = super.move(keys, map);

@@ -62,8 +62,21 @@ export class Character {
     }
   }
 
-  flipImage(image: HTMLImageElement): HTMLImageElement {
-    // 画像の左右反転処理（詳細は適宜実装）
-    return image;
+  flipImage(image: HTMLImageElement): HTMLCanvasElement {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    if (!ctx) {
+      throw new Error("Failed to get 2D context");
+    }
+
+    canvas.width = image.width;
+    canvas.height = image.height;
+
+    // 左右反転して描画
+    ctx.translate(image.width, 0);
+    ctx.scale(-1, 1);
+    ctx.drawImage(image, 0, 0);
+
+    return canvas;
   }
 }
