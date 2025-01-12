@@ -86,5 +86,62 @@ export class Map {
   
     return [false, y];
   }
+
+  public checkCollision(
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    direction: "left" | "right",
+    speed: number
+  ): boolean {
+    const topY = Math.floor(y / this.tileSize); // キャラクターの上部タイル
+    const bottomY = Math.floor((y + height - 1) / this.tileSize); // キャラクターの下部タイル
+  
+    // 進行方向のタイル位置を計算
+    let checkX: number;
+    if (direction === "left") {
+      checkX = Math.floor((x - speed) / this.tileSize); // 左方向
+    } else if (direction === "right") {
+      checkX = Math.floor((x + width + speed - 1) / this.tileSize); // 右方向
+    } else {
+      return false; // 上下方向は衝突判定しない
+    }
+  
+    // キャラクターが接地しているかを確認
+    const footX = Math.floor(x / this.tileSize);
+    const footY = Math.floor((y + height) / this.tileSize);
+    const isOnTile1 =
+      footY >= 0 &&
+      footY < this.mapData.length &&
+      footX >= 0 &&
+      footX < this.mapData[0].length &&
+      this.mapData[footY][footX] === 1;
+  
+    // 縦方向のタイルをチェック（進行方向のみ判定）
+    for (let checkY = topY; checkY <= bottomY; checkY++) {
+      if (
+        checkY >= 0 &&
+        checkY < this.mapData.length &&
+        checkX >= 0 &&
+        checkX < this.mapData[0].length
+      ) {
+        const tile = this.mapData[checkY][checkX];
+        // 接地している場合、tile 1 を衝突対象から除外
+        if (isOnTile1 && tile === 1) {
+          continue;
+        }
+        if (tile === 1 || tile === 2) {
+          return true; // 衝突対象タイル
+        }
+      } else {
+        // マップ外を参照している場合、衝突とみなす
+        return true;
+      }
+    }
+  
+    // 衝突なし
+    return false;
+  }
     
 }

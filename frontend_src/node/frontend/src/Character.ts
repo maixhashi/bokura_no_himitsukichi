@@ -65,8 +65,10 @@ export class Character {
   
     let isMoving = false;
   
+    // 左への移動
     if (
-      keys["ArrowLeft"]
+      keys["ArrowLeft"] &&
+      !mapInstance.checkCollision(this.x, this.y, this.width, this.height, "left", this.speed)
     ) {
       this.x -= this.speed;
       this.facingLeft = true;
@@ -74,8 +76,10 @@ export class Character {
       console.log(`Moving left to x: ${this.x}`);
     }
   
+    // 右への移動
     if (
-      keys["ArrowRight"]
+      keys["ArrowRight"] &&
+      !mapInstance.checkCollision(this.x, this.y, this.width, this.height, "right", this.speed)
     ) {
       this.x += this.speed;
       this.facingLeft = false;
