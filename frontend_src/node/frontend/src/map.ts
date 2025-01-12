@@ -29,7 +29,7 @@ export class Map {
     });
   }
 
-  draw(
+  public draw(
     ctx: CanvasRenderingContext2D,
     cameraX: number,
     cameraY: number,
@@ -42,9 +42,15 @@ export class Map {
     }
 
     const startCol = Math.max(0, Math.floor(cameraX / this.tileSize));
-    const endCol = Math.min(this.mapData[0].length, Math.ceil((cameraX + screenWidth) / this.tileSize));
+    const endCol = Math.min(
+      this.mapData[0].length,
+      Math.ceil((cameraX + screenWidth) / this.tileSize)
+    );
     const startRow = Math.max(0, Math.floor(cameraY / this.tileSize));
-    const endRow = Math.min(this.mapData.length, Math.ceil((cameraY + screenHeight) / this.tileSize));
+    const endRow = Math.min(
+      this.mapData.length,
+      Math.ceil((cameraY + screenHeight) / this.tileSize)
+    );
 
     for (let row = startRow; row < endRow; row++) {
       for (let col = startCol; col < endCol; col++) {
@@ -58,4 +64,27 @@ export class Map {
       }
     }
   }
+
+  public isOnGround(x: number, y: number, height: number): [boolean, number] {
+    const footX = Math.floor(x / this.tileSize);
+    const footY = Math.floor((y + height) / this.tileSize);
+  
+    if (
+      footY >= 0 &&
+      footY < this.mapData.length &&
+      footX >= 0 &&
+      footX < this.mapData[0].length
+    ) {
+      const tile = this.mapData[footY][footX];
+  
+      if (tile === 1 && y + height <= (footY * this.tileSize + this.tileSize / 2)) {
+        return [true, footY * this.tileSize + this.tileSize / 2 - height];
+      } else if (tile === 2) {
+        return [true, footY * this.tileSize - height];
+      }
+    }
+  
+    return [false, y];
+  }
+    
 }
