@@ -1,13 +1,19 @@
+import { Mole } from './mole';
+
+const MOLE_SPAWN_PROBABILITY = 0.03;
+
 export class Map {
     private mapData: number[][];
     private tileSize: number;
     private tileImages: { [key: string]: HTMLImageElement } = {};
     private allImagesLoaded: boolean = false;
+    private  moles: Mole[];
   
     constructor(mapData: number[][], tileSize: number) {
       this.mapData = mapData;
       this.tileSize = tileSize;
       this.loadTileImages();
+      this.moles = [];
     }
   
     private loadTileImages(): void {
@@ -211,7 +217,6 @@ export class Map {
       return false; // 衝突なし
     }
 
-    // const MOLE_SPAWN_PROBABILITY = 0.2; // モグラのスポーン確率
     // const TREASURE_SPAWN_PROBABILITY = 0.1; // 宝物のスポーン確率
     
     // const rewardImages = ["path/to/image1.png", "path/to/image2.png"]; // 報酬画像のパスリスト
@@ -249,14 +254,14 @@ export class Map {
           } else if (targetTile === 2) {
             this.mapData[digY][digX] = 3; // 掘削済み地下
       
-            // // モグラをスポーン
-            // if (Math.random() < MOLE_SPAWN_PROBABILITY) {
-            //   const moleX = digX * tileSize;
-            //   const moleY = digY * tileSize;
-            //   const mole = new Mole(moleX, moleY, 2, 5); // speed: 2, gravity: 5
-            //   this.moles.push(mole);
-            //   console.log(`Mole spawned at (${moleX}, ${moleY})`);
-            // }
+            // モグラをスポーン
+            if (Math.random() < MOLE_SPAWN_PROBABILITY) {
+              const moleX = digX * tileSize;
+              const moleY = digY * tileSize;
+              const mole = new Mole(moleX, moleY, 2, 5); // speed: 2, gravity: 5
+              this.moles.push(mole);
+              console.log(`Mole spawned at (${moleX}, ${moleY})`);
+            }
       
             // // 宝物をスポーン
             // if (Math.random() < TREASURE_SPAWN_PROBABILITY) {
@@ -284,7 +289,12 @@ export class Map {
           console.log(`Tile at (${digX}, ${digY}) is not diggable or out of bounds.`);
         }
       }
-                                  
+
+      updateMoles(map: any, clock: number, tileSize: number) {
+        this.moles.forEach((mole: Mole) => {
+          mole.update(map, clock, tileSize);
+        });
+      }                             
       
   }
   

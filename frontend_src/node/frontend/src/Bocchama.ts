@@ -1,4 +1,4 @@
-import { Character } from "./Character";
+import { Character } from "./character";
 import { Map } from "./map"; // マップ関連のクラスをインポート
 
 export class Bocchama extends Character {

@@ -1,31 +1,51 @@
 import { Map } from "./map";
-import { Bocchama } from "./Bocchama";
+// import { Camera } from "./camera";
 import { mapData } from "./mapData";
-import { SCREEN_WIDTH, SCREEN_HEIGHT, TILE_SIZE } from "./utils/constants";
+import { Bocchama } from "./bocchama";
+// import { Treasure } from "./treasure";
+import { Mole } from "./mole";
 import { tilePaths } from "./utils/image_paths";
 
-const canvas = document.createElement("canvas");
-const ctx = canvas.getContext("2d");
-if (!ctx) throw new Error("Canvas context not supported");
 
+// 定数
+const GAME_NAME = "ぼくらのひみつきち";
+const SCREEN_WIDTH = 1600;
+const SCREEN_HEIGHT = 800;
+const TILE_SIZE = 128;
+const WHITE = "#FFFFFF";
+const FPS = 60;
+
+// HTML Canvasの設定
+const canvas = document.createElement("canvas");
+canvas.id = "gameCanvas";
 canvas.width = SCREEN_WIDTH;
 canvas.height = SCREEN_HEIGHT;
 document.body.appendChild(canvas);
 
+const ctx = canvas.getContext("2d");
+if (!ctx) {
+  throw new Error("Canvas context not found");
+}
+
+type KeyState = { [key: string]: boolean };
+const keys: KeyState = {};
+
+// オブジェクト生成
 const gameMap = new Map(mapData, TILE_SIZE, tilePaths);
 const bocchama = new Bocchama(0, TILE_SIZE / 2, 5, 5);
 
-let cameraX = 0;
-let cameraY = 0;
+// 宝箱の設定
+// const treasure = new Treasure(300, 100, 5, "assets/rewards/movie_poster.png");
+// gameMap.addTreasure(treasure);
+// const collectedRewards: any[] = [];
 
-// キーの状態を保持するオブジェクト
-const keys: { [key: string]: boolean } = {};
+// カメラ
+// const camera = new Camera(
+//   gameMap.width * TILE_SIZE,
+//   gameMap.height * TILE_SIZE
+// );
 
-// FPS 設定
-const FPS = 60; // フレームレート
-const frameInterval = 1000 / FPS; // 1フレームあたりのミリ秒
-let lastFrameTime = 0; // 最後のフレーム時間
-
+// イベントリスナー
 // イベントリスナーの追加
 window.addEventListener("keydown", (e) => {
   if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(e.key)) {
@@ -38,25 +58,54 @@ window.addEventListener("keyup", (e) => {
   keys[e.key] = false;
 });
 
-function gameLoop(currentTime: number) {
-  const deltaTime = currentTime - lastFrameTime;
+let cameraX = 0;
+let cameraY = 0;
 
-  if (deltaTime >= frameInterval) {
-    lastFrameTime = currentTime;
+function main() {
+  let lastTime = 0;
 
-    ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+  function gameLoop(time: number) {
+    const deltaTime = time - lastTime;
+    lastTime = time;
 
-    // マップの描画
+    // 画面をクリア
+    ctx.fillStyle = WHITE;
+    ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+    // Bocchamaの動作
+    bocchama.move(keys, gameMap);
+    bocchama.dig(keys, gameMap);
+
+    // モグラの更新
+    gameMap.updateMoles(gameMap, deltaTime, TILE_SIZE);
+    // gameMap.updateTreasures(deltaTime, TILE_SIZE);
+
+    // カメラを更新
+    // camera.update(bocchama, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+    // マップとキャラクターの描画
     gameMap.draw(ctx, cameraX, cameraY, SCREEN_WIDTH, SCREEN_HEIGHT);
-
-    // Bocchamaの移動と描画
-    bocchama.move(keys, gameMap);       // 移動の処理
-    // bocchama.updateAnimation(FPS);      // アニメーションの更新
     bocchama.draw(ctx, cameraX, cameraY); // 描画処理
-    bocchama.dig(keys, gameMap); // 描画処理
+
+    // モグラを描画
+    for (const mole of gameMap.moles) {
+      mole.draw(ctx, cameraX, cameraY);
+    }
+
+    // 宝箱を描画
+    // for (const treasure of gameMap.treasures) {
+    //   treasure.updateBlink();
+    //   treasure.draw(ctx, camera.x, camera.y);
+    // }
+
+    // 収集済みアイテムを描画
+    // Treasure.drawCollectedRewards(ctx, collectedRewards);
+
+    // 次のフレーム
+    requestAnimationFrame(gameLoop);
   }
 
   requestAnimationFrame(gameLoop);
 }
 
-gameLoop(0);
+main();
