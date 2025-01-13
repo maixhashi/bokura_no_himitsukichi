@@ -59,21 +59,23 @@ export class Treasure {
     }
   }
 
-  open(collectedRewards: HTMLImageElement[]): void {
+  // open(collectedRewards: HTMLImageElement[]): void {
+  open(): void {
     if (!this.isOpened) {
       this.isOpened = true;
       this.image = this.imageOpened;
       this.blinkCounter = 30;
-      this.dropReward(collectedRewards);
+      // this.dropReward();
+      // this.dropReward(collectedRewards);
     }
   }
 
-  private dropReward(collectedRewards: HTMLImageElement[]): void {
-    if (!this.rewardDropped) {
-      this.rewardDropped = true;
-      collectedRewards.push(this.rewardImage);
-    }
-  }
+  // private dropReward(collectedRewards: HTMLImageElement[]): void {
+  //   if (!this.rewardDropped) {
+  //     this.rewardDropped = true;
+  //     collectedRewards.push(this.rewardImage);
+  //   }
+  // }
 
   handleEvent(event: MouseEvent, collectedRewards: HTMLImageElement[]): void {
     const mouseX = event.clientX;

@@ -35,9 +35,9 @@ const gameMap = new Map(mapData, TILE_SIZE, tilePaths);
 const bocchama = new Bocchama(0, TILE_SIZE / 2, 5, 5);
 
 // 宝箱の設定
-// const treasure = new Treasure(300, 100, 5, "assets/rewards/movie_poster.png");
-// gameMap.addTreasure(treasure);
-// const collectedRewards: any[] = [];
+const treasure = new Treasure(240, 70, 5, "assets/rewards/movie_poster.png");
+gameMap.treasures.push(treasure);
+const collectedRewards: any[] = [];
 
 // カメラ
 // const camera = new Camera(
@@ -75,6 +75,8 @@ function main() {
     // Bocchamaの動作
     bocchama.move(keys, gameMap);
     bocchama.dig(keys, gameMap);
+    // bocchama.openTreasureBox(keys, TILE_SIZE, gameMap.treasures);
+    bocchama.openTreasureBox(keys, TILE_SIZE, gameMap.treasures);
 
     // モグラの更新
     gameMap.updateMoles(gameMap, deltaTime, TILE_SIZE);

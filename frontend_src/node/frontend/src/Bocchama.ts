@@ -27,26 +27,6 @@ export class Bocchama extends Character {
     super.updateAnimation(FPS, this.isMoving);
   }
 
-  specialAction(
-    keys: { [key: string]: boolean },
-    event: KeyboardEvent,
-    treasures: any[],
-    Map: Map
-  ) {
-    // 特殊ジャンプ
-    if (keys["ArrowUp"] && keys[" "]) {
-      console.log("Bocchama performed a special jump action!");
-    }
-
-    // 宝箱を開ける処理
-    if (event.type === "keydown" && event.key === " ") {
-      // this.openTreasureBox(Map.tileSize, treasures, Map.collectedRewards);
-    }
-
-    // 掘削処理
-    this.dig(keys, Map);
-  }
-
   dig(keys: { [key: string]: boolean }, Map: any) {
     if (keys["ArrowRight"] && keys[" "]) {
       Map.digTile(
@@ -81,15 +61,24 @@ export class Bocchama extends Character {
     }
   }
 
-  // openTreasureBox(tileSize: number, treasures: any[], collectedRewards: any[]) {
-  //   for (const treasure of treasures) {
-  //     // Bocchamaの位置と宝箱の位置を比較
-  //     if (
-  //       Math.abs(this.x - treasure.x) < tileSize / 2 &&
-  //       Math.abs(this.y - treasure.y) < tileSize / 2
-  //     ) {
-  //       treasure.open(collectedRewards);
-  //     }
-  //   }
-  // }
+  // openTreasureBox(keys: { [key: string]: boolean }, tileSize: number, treasures: any[], collectedRewards: any[]) {
+  openTreasureBox(keys: { [key: string]: boolean }, tileSize: number, treasures: Map.treasures) {
+    // 宝箱を開ける処理
+    if (keys[" "]) {
+      for (const treasure of treasures) {
+        // Bocchamaの位置と宝箱の位置を比較
+        if (
+          Math.abs(this.x - treasure.x) < tileSize / 2 &&
+          Math.abs(this.y - treasure.y) < tileSize / 2
+        ) {
+          // treasure.open(collectedRewards);
+          treasure.open();
+          console.log("treasure:", treasure)
+          console.log("treasure.x:", treasure.x)
+          console.log("treasure.y:", treasure.y)
+          console.log("Bocchama.openTreasureBox 発火")
+        }
+      }
+    }
+  }
 }

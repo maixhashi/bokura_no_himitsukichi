@@ -72,7 +72,6 @@ export class Character {
     keys: { [key: string]: boolean },
     mapInstance: Map
   ): void {
-    console.log(`move() called with keys:`, keys); // 呼び出し確認
   
     let isMoving = false;
   
@@ -84,7 +83,6 @@ export class Character {
       this.x -= this.speed;
       this.facingLeft = true;
       isMoving = true;
-      console.log(`Moving left to x: ${this.x}`);
     }
   
     // 右への移動
@@ -95,31 +93,25 @@ export class Character {
       this.x += this.speed;
       this.facingLeft = false;
       isMoving = true;
-      console.log(`Moving right to x: ${this.x}`);
     }
   
     // 接地判定
     const [onGround, newY] = mapInstance.isOnGround(this.x, this.y, this.height);
     this.onGround = onGround;
     if (this.onGround) {
-      console.log(`Character is on the ground. Adjusting y to: ${newY}`);
       this.y = newY;
     } else {
-      console.log(`Character is not on the ground. Applying gravity.`);
       this.y += this.gravity;
     }
   
     // アニメーション更新
     if (isMoving) {
-      console.log(`Character is moving. Updating animation.`);
       this.animationTimer += 1;
       if (this.animationTimer >= 10) {
         this.animationTimer = 0;
         this.frameIndex = (this.frameIndex + 1) % this.images.length;
-        console.log(`Animation frame updated to: ${this.frameIndex}`);
       }
     } else {
-      console.log(`Character is not moving.`);
     }
   }
   

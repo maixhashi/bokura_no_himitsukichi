@@ -59,7 +59,6 @@ export class Map {
       screenHeight: number
     ): void {
       if (!this.allImagesLoaded) {
-        console.log("Images are not fully loaded yet.");
         return;
       }
   
@@ -247,7 +246,6 @@ export class Map {
       
         // 掘削範囲チェック
         if (digY >= 0 && digY < this.mapData.length && digX >= 0 && digX < this.mapData[0].length) {
-          console.log(`Tile ID before digging: ${this.mapData[digY][digX]}`);
       
           // タイル変更ロジック (既存の掘削処理)
           const targetTile = this.mapData[digY][digX];
@@ -262,7 +260,6 @@ export class Map {
               const moleY = digY * tileSize;
               const mole = new Mole(moleX, moleY, 2, 5); // speed: 2, gravity: 5
               this.moles.push(mole);
-              console.log(`Mole spawned at (${moleX}, ${moleY})`);
             }
       
             // 宝物をスポーン
@@ -273,7 +270,6 @@ export class Map {
             //   const treasure = new Treasure(treasureX, treasureY, 5, rewardImage); // gravity: 5
               const treasure = new Treasure(treasureX, treasureY, 5); // gravity: 5
               this.treasures.push(treasure);
-              console.log(`Treasure spawned at (${treasureX}, ${treasureY})`);
             }
           } else if (targetTile === 4 && direction === "down") {
             if (digY + 1 < this.mapData.length && this.mapData[digY + 1][digX] === 0) {
@@ -289,7 +285,6 @@ export class Map {
           // 地図範囲外の場合に新しい行を追加
           this.mapData.push(new Array(this.mapData[0].length).fill(0));
         } else {
-          console.log(`Tile at (${digX}, ${digY}) is not diggable or out of bounds.`);
         }
       }
 
