@@ -1,6 +1,8 @@
 import { Mole } from './mole';
+import { Treasure } from './treasure';
 
 const MOLE_SPAWN_PROBABILITY = 0.03;
+const TREASURE_SPAWN_PROBABILITY = 0.5; // 宝物のスポーン確率
 
 export class Map {
     private mapData: number[][];
@@ -8,12 +10,14 @@ export class Map {
     private tileImages: { [key: string]: HTMLImageElement } = {};
     private allImagesLoaded: boolean = false;
     private  moles: Mole[];
+    private  treasures: Treasure[];
   
     constructor(mapData: number[][], tileSize: number) {
       this.mapData = mapData;
       this.tileSize = tileSize;
       this.loadTileImages();
       this.moles = [];
+      this.treasures = [];
     }
   
     private loadTileImages(): void {
@@ -217,8 +221,6 @@ export class Map {
       return false; // 衝突なし
     }
 
-    // const TREASURE_SPAWN_PROBABILITY = 0.1; // 宝物のスポーン確率
-    
     // const rewardImages = ["path/to/image1.png", "path/to/image2.png"]; // 報酬画像のパスリスト
     
     digTile(
@@ -263,15 +265,16 @@ export class Map {
               console.log(`Mole spawned at (${moleX}, ${moleY})`);
             }
       
-            // // 宝物をスポーン
-            // if (Math.random() < TREASURE_SPAWN_PROBABILITY) {
-            //   const treasureX = digX * tileSize;
-            //   const treasureY = digY * tileSize;
+            // 宝物をスポーン
+            if (Math.random() < TREASURE_SPAWN_PROBABILITY) {
+              const treasureX = digX * tileSize;
+              const treasureY = digY * tileSize;
             //   const rewardImage = rewardImages[Math.floor(Math.random() * rewardImages.length)];
             //   const treasure = new Treasure(treasureX, treasureY, 5, rewardImage); // gravity: 5
-            //   this.treasures.push(treasure);
-            //   console.log(`Treasure spawned at (${treasureX}, ${treasureY})`);
-            // }
+              const treasure = new Treasure(treasureX, treasureY, 5); // gravity: 5
+              this.treasures.push(treasure);
+              console.log(`Treasure spawned at (${treasureX}, ${treasureY})`);
+            }
           } else if (targetTile === 4 && direction === "down") {
             if (digY + 1 < this.mapData.length && this.mapData[digY + 1][digX] === 0) {
               this.mapData[digY + 1][digX] = 5; // 新しいタイルを設定

@@ -2,7 +2,7 @@ import { Map } from "./map";
 // import { Camera } from "./camera";
 import { mapData } from "./mapData";
 import { Bocchama } from "./bocchama";
-// import { Treasure } from "./treasure";
+import { Treasure } from "./treasure";
 import { Mole } from "./mole";
 import { tilePaths } from "./utils/image_paths";
 
@@ -93,10 +93,10 @@ function main() {
     }
 
     // 宝箱を描画
-    // for (const treasure of gameMap.treasures) {
-    //   treasure.updateBlink();
-    //   treasure.draw(ctx, camera.x, camera.y);
-    // }
+    for (const treasure of gameMap.treasures) {
+      treasure.updateBlink();
+      treasure.draw(ctx, cameraX, cameraY);
+    }
 
     // 収集済みアイテムを描画
     // Treasure.drawCollectedRewards(ctx, collectedRewards);
