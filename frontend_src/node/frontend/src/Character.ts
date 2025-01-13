@@ -34,7 +34,18 @@ export class Character {
   }
 
   draw(ctx: CanvasRenderingContext2D, cameraX: number, cameraY: number): void {
+    if (!ctx || !(ctx instanceof CanvasRenderingContext2D)) {
+      console.error("Invalid canvas context provided.");
+      return;
+    }
+  
     const currentImage = this.images[this.frameIndex];
+  
+    if (!currentImage.complete) {
+      console.warn("Image not loaded yet:", currentImage.src);
+      return;
+    }
+  
     if (this.facingLeft) {
       ctx.save();
       ctx.scale(-1, 1);
@@ -56,7 +67,7 @@ export class Character {
       );
     }
   }
-
+  
   move(
     keys: { [key: string]: boolean },
     mapInstance: Map
