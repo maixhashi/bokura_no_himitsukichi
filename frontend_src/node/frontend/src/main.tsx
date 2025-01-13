@@ -40,6 +40,7 @@ const treasureY = bocchama.y *9 /10; // 同じ高さ
 
 const treasure = new Treasure(treasureX, treasureY, 5, "assets/rewards/movie_poster.png");
 gameMap.treasures.push(treasure);
+const collectedRewards: HTMLImageElement[] = [];
 
 // カメラ
 // const camera = new Camera(
@@ -77,8 +78,7 @@ function main() {
     // Bocchamaの動作
     bocchama.move(keys, gameMap);
     bocchama.dig(keys, gameMap);
-    // bocchama.openTreasureBox(keys, TILE_SIZE, gameMap.treasures);
-    bocchama.openTreasureBox(keys, TILE_SIZE, gameMap.treasures);
+    bocchama.openTreasureBox(keys, TILE_SIZE, gameMap.treasures, collectedRewards);
 
     // モグラの更新
     gameMap.updateMoles(gameMap, deltaTime, TILE_SIZE);
@@ -103,7 +103,7 @@ function main() {
     }
 
     // 収集済みアイテムを描画
-    // Treasure.drawCollectedRewards(ctx, collectedRewards);
+    Treasure.drawCollectedRewards(ctx, collectedRewards);
 
     // 次のフレーム
     requestAnimationFrame(gameLoop);

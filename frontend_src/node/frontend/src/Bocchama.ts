@@ -61,8 +61,7 @@ export class Bocchama extends Character {
     }
   }
 
-  // openTreasureBox(keys: { [key: string]: boolean }, tileSize: number, treasures: any[], collectedRewards: any[]) {
-  openTreasureBox(keys: { [key: string]: boolean }, tileSize: number, treasures: Map.treasures) {
+  openTreasureBox(keys: { [key: string]: boolean }, tileSize: number, treasures: any[], collectedRewards: HTMLImageElement[]) {
     // 宝箱を開ける処理
     if (keys[" "]) {
       for (const treasure of treasures) {
@@ -71,8 +70,7 @@ export class Bocchama extends Character {
           Math.abs(this.x - treasure.x) < tileSize / 2 &&
           Math.abs(this.y - treasure.y) < tileSize / 2
         ) {
-          // treasure.open(collectedRewards);
-          treasure.open();
+          treasure.open(collectedRewards);
           console.log("treasure:", treasure)
           console.log("treasure.x:", treasure.x)
           console.log("treasure.y:", treasure.y)

@@ -11,6 +11,8 @@ export class Map {
     private allImagesLoaded: boolean = false;
     private  moles: Mole[];
     private  treasures: Treasure[];
+    private treasureTiles: Set<string>; // 宝箱出現タイルのセット
+    private rewardImages: string[]; // 報酬画像リスト
   
     constructor(mapData: number[][], tileSize: number) {
       this.mapData = mapData;
@@ -18,6 +20,12 @@ export class Map {
       this.loadTileImages();
       this.moles = [];
       this.treasures = [];
+      this.treasureTiles = new Set(); // 初期化
+      this.rewardImages = [
+          "assets/rewards/movie_poster_1.png",
+          "assets/rewards/movie_poster_2.png",
+          "assets/rewards/movie_poster_3.png"
+      ]; // 報酬画像のリスト
     }
   
     private loadTileImages(): void {
@@ -261,15 +269,17 @@ export class Map {
               const mole = new Mole(moleX, moleY, 2, 5); // speed: 2, gravity: 5
               this.moles.push(mole);
             }
-      
-            // 宝物をスポーン
-            if (Math.random() < TREASURE_SPAWN_PROBABILITY) {
-              const treasureX = digX * tileSize;
-              const treasureY = digY * tileSize;
-            //   const rewardImage = rewardImages[Math.floor(Math.random() * rewardImages.length)];
-            //   const treasure = new Treasure(treasureX, treasureY, 5, rewardImage); // gravity: 5
-              const treasure = new Treasure(treasureX, treasureY, 5); // gravity: 5
-              this.treasures.push(treasure);
+
+            // 宝箱の生成
+            const tileCoords = `${digX},${digY}`; // 座標を文字列化
+            if (!this.treasureTiles.has(tileCoords) && Math.random() < TREASURE_SPAWN_PROBABILITY) {
+                const treasureX = digX * this.tileSize;
+                const treasureY = digY * this.tileSize;
+                const rewardImage = this.rewardImages[Math.floor(Math.random() * this.rewardImages.length)]; // ランダム画像
+                const treasure = new Treasure(treasureX, treasureY, 5, rewardImage); // gravity: 5
+                this.treasures.push(treasure);
+                this.treasureTiles.add(tileCoords); // 宝箱タイルを記録
+                console.log(`Treasure spawned at (${digX}, ${digY}) with reward: ${rewardImage}`);
             }
           } else if (targetTile === 4 && direction === "down") {
             if (digY + 1 < this.mapData.length && this.mapData[digY + 1][digX] === 0) {
