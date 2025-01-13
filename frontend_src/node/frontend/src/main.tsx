@@ -51,8 +51,9 @@ function gameLoop(currentTime: number) {
 
     // Bocchamaの移動と描画
     bocchama.move(keys, gameMap);       // 移動の処理
-    bocchama.updateAnimation(FPS);      // アニメーションの更新
+    // bocchama.updateAnimation(FPS);      // アニメーションの更新
     bocchama.draw(ctx, cameraX, cameraY); // 描画処理
+    bocchama.dig(keys, gameMap); // 描画処理
   }
 
   requestAnimationFrame(gameLoop);

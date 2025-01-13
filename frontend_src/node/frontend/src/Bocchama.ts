@@ -1,4 +1,5 @@
 import { Character } from "./Character";
+import { Map } from "./map"; // マップ関連のクラスをインポート
 
 export class Bocchama extends Character {
   isMoving: boolean;
@@ -17,15 +18,78 @@ export class Bocchama extends Character {
   draw(ctx: CanvasRenderingContext2D, cameraX: number, cameraY: number) {
     super.draw(ctx, cameraX, cameraY);
   }
-  
 
   move(keys: { [key: string]: boolean }, map: any) {
-    // 親クラスの move を呼び出して移動状態を取得
     this.isMoving = super.move(keys, map);
   }
 
   updateAnimation(FPS: number) {
-    // 親クラスの共通ロジックを利用
     super.updateAnimation(FPS, this.isMoving);
   }
+
+  specialAction(
+    keys: { [key: string]: boolean },
+    event: KeyboardEvent,
+    treasures: any[],
+    Map: Map
+  ) {
+    // 特殊ジャンプ
+    if (keys["ArrowUp"] && keys[" "]) {
+      console.log("Bocchama performed a special jump action!");
+    }
+
+    // 宝箱を開ける処理
+    if (event.type === "keydown" && event.key === " ") {
+      // this.openTreasureBox(Map.tileSize, treasures, Map.collectedRewards);
+    }
+
+    // 掘削処理
+    this.dig(keys, Map);
+  }
+
+  dig(keys: { [key: string]: boolean }, Map: any) {
+    if (keys["ArrowRight"] && keys[" "]) {
+      Map.digTile(
+        this.x,
+        this.y,
+        "right",
+        this.width,
+        this.height,
+        this.speed,
+        // Map.getRandomRewardImage()
+      );
+    } else if (keys["ArrowLeft"] && keys[" "]) {
+      Map.digTile(
+        this.x,
+        this.y,
+        "left",
+        this.width,
+        this.height,
+        this.speed,
+        // Map.getRandomRewardImage()
+      );
+    } else if (keys["ArrowDown"] && keys[" "]) {
+      Map.digTile(
+        this.x,
+        this.y,
+        "down",
+        this.width,
+        this.height,
+        this.speed,
+        // Map.getRandomRewardImage()
+      );
+    }
+  }
+
+  // openTreasureBox(tileSize: number, treasures: any[], collectedRewards: any[]) {
+  //   for (const treasure of treasures) {
+  //     // Bocchamaの位置と宝箱の位置を比較
+  //     if (
+  //       Math.abs(this.x - treasure.x) < tileSize / 2 &&
+  //       Math.abs(this.y - treasure.y) < tileSize / 2
+  //     ) {
+  //       treasure.open(collectedRewards);
+  //     }
+  //   }
+  // }
 }

@@ -1,82 +1,116 @@
 export class Character {
-  x: number;
-  y: number;
-  speed: number;
-  gravity: number;
-  width: number;
-  height: number;
-  facingLeft: boolean;
-  frameIndex: number;
-  animationTimer: number;
-  images: HTMLImageElement[];
-  currentImage: HTMLImageElement;
+  private images: HTMLImageElement[];
+  private x: number;
+  private y: number;
+  private speed: number;
+  private gravity: number;
+  private frameIndex: number;
+  private animationTimer: number;
+  private onGround: boolean;
+  private currentImage: HTMLImageElement;
+  private width: number;
+  private height: number;
+  private facingLeft: boolean;
 
-  constructor(images: HTMLImageElement[], x: number, y: number, speed: number, gravity: number) {
+  constructor(
+    images: HTMLImageElement[],
+    x: number,
+    y: number,
+    speed: number,
+    gravity: number
+  ) {
     this.images = images;
     this.x = x;
     this.y = y;
     this.speed = speed;
     this.gravity = gravity;
-    this.facingLeft = false;
     this.frameIndex = 0;
     this.animationTimer = 0;
-    this.currentImage = images[0];
+    this.onGround = false;
+    this.currentImage = this.images[0];
     this.width = this.currentImage.width;
     this.height = this.currentImage.height;
+    this.facingLeft = false;
   }
 
-  draw(ctx: CanvasRenderingContext2D, cameraX: number, cameraY: number) {
-    const image = this.facingLeft
-      ? this.flipImage(this.images[this.frameIndex])
-      : this.images[this.frameIndex];
-    ctx.drawImage(image, this.x - cameraX, this.y - cameraY);
+  draw(ctx: CanvasRenderingContext2D, cameraX: number, cameraY: number): void {
+    const currentImage = this.images[this.frameIndex];
+    if (this.facingLeft) {
+      ctx.save();
+      ctx.scale(-1, 1);
+      ctx.drawImage(
+        currentImage,
+        -(this.x + this.width - cameraX),
+        this.y - cameraY,
+        this.width,
+        this.height
+      );
+      ctx.restore();
+    } else {
+      ctx.drawImage(
+        currentImage,
+        this.x - cameraX,
+        this.y - cameraY,
+        this.width,
+        this.height
+      );
+    }
   }
 
-  move(keys: { [key: string]: boolean }, map: any): boolean {
+  move(
+    keys: { [key: string]: boolean },
+    mapInstance: Map
+  ): void {
+    console.log(`move() called with keys:`, keys); // 呼び出し確認
+  
     let isMoving = false;
-
-    if (keys["ArrowLeft"]) {
+  
+    // 左への移動
+    if (
+      keys["ArrowLeft"] &&
+      !mapInstance.checkCollision(this.x, this.y, this.width, this.height, "left", this.speed)
+    ) {
       this.x -= this.speed;
       this.facingLeft = true;
       isMoving = true;
+      console.log(`Moving left to x: ${this.x}`);
     }
-    if (keys["ArrowRight"]) {
+  
+    // 右への移動
+    if (
+      keys["ArrowRight"] &&
+      !mapInstance.checkCollision(this.x, this.y, this.width, this.height, "right", this.speed)
+    ) {
       this.x += this.speed;
       this.facingLeft = false;
       isMoving = true;
+      console.log(`Moving right to x: ${this.x}`);
     }
-
-    this.y += this.gravity; // 簡易的な重力処理
-    return isMoving;
-  }
-
-  updateAnimation(FPS: number, isMoving: boolean) {
+  
+    // 接地判定
+    const [onGround, newY] = mapInstance.isOnGround(this.x, this.y, this.height);
+    this.onGround = onGround;
+    if (this.onGround) {
+      console.log(`Character is on the ground. Adjusting y to: ${newY}`);
+      this.y = newY;
+    } else {
+      console.log(`Character is not on the ground. Applying gravity.`);
+      this.y += this.gravity;
+    }
+  
+    // アニメーション更新
     if (isMoving) {
-      this.animationTimer += 1000 / FPS;
-      if (this.animationTimer >= 100) { // フレーム切り替えタイミング
+      console.log(`Character is moving. Updating animation.`);
+      this.animationTimer += 1;
+      if (this.animationTimer >= 10) {
         this.animationTimer = 0;
         this.frameIndex = (this.frameIndex + 1) % this.images.length;
+        console.log(`Animation frame updated to: ${this.frameIndex}`);
       }
     } else {
-      this.frameIndex = 0; // 移動していないときは初期フレーム
+      console.log(`Character is not moving.`);
     }
   }
-
-  flipImage(image: HTMLImageElement): HTMLCanvasElement {
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-    if (!ctx) {
-      throw new Error("Failed to get 2D context");
-    }
-
-    canvas.width = image.width;
-    canvas.height = image.height;
-
-    // 左右反転して描画
-    ctx.translate(image.width, 0);
-    ctx.scale(-1, 1);
-    ctx.drawImage(image, 0, 0);
-
-    return canvas;
-  }
+  
+  
 }
