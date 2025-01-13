@@ -23,13 +23,13 @@ export class Mole extends Character {
   update(mapInstance: Map, deltaTime: number, tileSize: number) {
     // AI タイマーの更新
     this.aiTimer += deltaTime;
-
+  
     if (this.aiTimer >= 1000) {
       this.aiTimer = 0;
       const actions = ["left", "right", "dig"];
       this.direction = actions[Math.floor(Math.random() * actions.length)];
     }
-
+  
     // 動作の実行
     switch (this.direction) {
       case "left":
@@ -50,15 +50,15 @@ export class Mole extends Character {
         mapInstance.digTile(digX, digY, "down", this.width, this.height, this.speed);
         break;
     }
-
+  
     // 重力の適用と地面の確認
-    const groundCheck = mapInstance.isOnGround(this.x, this.y, this.height);
-    if (groundCheck.isOnGround) {
-      this.y = groundCheck.newY;
+    const [isOnGround, newY] = mapInstance.isOnGround(this.x, this.y, this.height);
+    if (isOnGround) {
+      this.y = newY; // 接地している場合、Y座標を修正
     } else {
-      this.y += this.gravity;
+      this.y += this.gravity; // 重力を適用
     }
-
+  
     // アニメーションの更新
     this.animationTimer += deltaTime;
     if (this.animationTimer >= 60) {
@@ -66,7 +66,7 @@ export class Mole extends Character {
       this.frameIndex = (this.frameIndex + 1) % this.images.length;
     }
   }
-
+  
   draw(ctx: CanvasRenderingContext2D, cameraX: number, cameraY: number) {
     super.draw(ctx, cameraX, cameraY);
   }

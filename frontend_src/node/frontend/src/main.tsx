@@ -77,7 +77,7 @@ function main() {
     bocchama.dig(keys, gameMap);
 
     // モグラの更新
-    gameMap.updateMoles(deltaTime, TILE_SIZE);
+    gameMap.updateMoles(gameMap, deltaTime, TILE_SIZE);
     // gameMap.updateTreasures(deltaTime, TILE_SIZE);
 
     // カメラを更新
