@@ -34,10 +34,12 @@ const keys: KeyState = {};
 const gameMap = new Map(mapData, TILE_SIZE, tilePaths);
 const bocchama = new Bocchama(0, TILE_SIZE / 2, 5, 5);
 
-// 宝箱の設定
-const treasure = new Treasure(240, 70, 5, "assets/rewards/movie_poster.png");
+// Bocchama の初期位置に基づいて宝箱を配置
+const treasureX = bocchama.x + TILE_SIZE; // プレイヤーの右隣
+const treasureY = bocchama.y *9 /10; // 同じ高さ
+
+const treasure = new Treasure(treasureX, treasureY, 5, "assets/rewards/movie_poster.png");
 gameMap.treasures.push(treasure);
-const collectedRewards: any[] = [];
 
 // カメラ
 // const camera = new Camera(
