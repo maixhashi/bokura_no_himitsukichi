@@ -1,6 +1,8 @@
 import { Mole } from './mole';
+import { Treasure } from './treasure';
 
 const MOLE_SPAWN_PROBABILITY = 0.03;
+const TREASURE_SPAWN_PROBABILITY = 0.5; // 宝物のスポーン確率
 
 export class Map {
     private mapData: number[][];
@@ -8,12 +10,14 @@ export class Map {
     private tileImages: { [key: string]: HTMLImageElement } = {};
     private allImagesLoaded: boolean = false;
     private  moles: Mole[];
+    private  treasures: Treasure[];
   
     constructor(mapData: number[][], tileSize: number) {
       this.mapData = mapData;
       this.tileSize = tileSize;
       this.loadTileImages();
       this.moles = [];
+      this.treasures = [];
     }
   
     private loadTileImages(): void {
@@ -55,7 +59,6 @@ export class Map {
       screenHeight: number
     ): void {
       if (!this.allImagesLoaded) {
-        console.log("Images are not fully loaded yet.");
         return;
       }
   
@@ -217,8 +220,6 @@ export class Map {
       return false; // 衝突なし
     }
 
-    // const TREASURE_SPAWN_PROBABILITY = 0.1; // 宝物のスポーン確率
-    
     // const rewardImages = ["path/to/image1.png", "path/to/image2.png"]; // 報酬画像のパスリスト
     
     digTile(
@@ -245,7 +246,6 @@ export class Map {
       
         // 掘削範囲チェック
         if (digY >= 0 && digY < this.mapData.length && digX >= 0 && digX < this.mapData[0].length) {
-          console.log(`Tile ID before digging: ${this.mapData[digY][digX]}`);
       
           // タイル変更ロジック (既存の掘削処理)
           const targetTile = this.mapData[digY][digX];
@@ -260,18 +260,17 @@ export class Map {
               const moleY = digY * tileSize;
               const mole = new Mole(moleX, moleY, 2, 5); // speed: 2, gravity: 5
               this.moles.push(mole);
-              console.log(`Mole spawned at (${moleX}, ${moleY})`);
             }
       
-            // // 宝物をスポーン
-            // if (Math.random() < TREASURE_SPAWN_PROBABILITY) {
-            //   const treasureX = digX * tileSize;
-            //   const treasureY = digY * tileSize;
+            // 宝物をスポーン
+            if (Math.random() < TREASURE_SPAWN_PROBABILITY) {
+              const treasureX = digX * tileSize;
+              const treasureY = digY * tileSize;
             //   const rewardImage = rewardImages[Math.floor(Math.random() * rewardImages.length)];
             //   const treasure = new Treasure(treasureX, treasureY, 5, rewardImage); // gravity: 5
-            //   this.treasures.push(treasure);
-            //   console.log(`Treasure spawned at (${treasureX}, ${treasureY})`);
-            // }
+              const treasure = new Treasure(treasureX, treasureY, 5); // gravity: 5
+              this.treasures.push(treasure);
+            }
           } else if (targetTile === 4 && direction === "down") {
             if (digY + 1 < this.mapData.length && this.mapData[digY + 1][digX] === 0) {
               this.mapData[digY + 1][digX] = 5; // 新しいタイルを設定
@@ -286,13 +285,17 @@ export class Map {
           // 地図範囲外の場合に新しい行を追加
           this.mapData.push(new Array(this.mapData[0].length).fill(0));
         } else {
-          console.log(`Tile at (${digX}, ${digY}) is not diggable or out of bounds.`);
         }
       }
 
       updateMoles(map: any, clock: number, tileSize: number) {
         this.moles.forEach((mole: Mole) => {
           mole.update(map, clock, tileSize);
+        });
+      }                             
+      updateTreasures(map: any) {
+        this.treasures.forEach((treasure: Treasure) => {
+          treasure.update(map);
         });
       }                             
       
