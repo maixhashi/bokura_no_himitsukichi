@@ -78,7 +78,7 @@ function main() {
 
     // モグラの更新
     gameMap.updateMoles(gameMap, deltaTime, TILE_SIZE);
-    // gameMap.updateTreasures(deltaTime, TILE_SIZE);
+    gameMap.updateTreasures(gameMap);
 
     // カメラを更新
     // camera.update(bocchama, SCREEN_WIDTH, SCREEN_HEIGHT);

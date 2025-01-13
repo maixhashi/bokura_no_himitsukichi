@@ -298,6 +298,11 @@ export class Map {
           mole.update(map, clock, tileSize);
         });
       }                             
+      updateTreasures(map: any) {
+        this.treasures.forEach((treasure: Treasure) => {
+          treasure.update(map);
+        });
+      }                             
       
   }
   

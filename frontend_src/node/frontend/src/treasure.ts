@@ -3,9 +3,7 @@
 //   y: number;
 // }
 
-interface MapInstance {
-  isOnGround(x: number, y: number, height: number): [boolean, number];
-}
+import { Map } from "./map";
 
 export class Treasure {
   private x: number;
@@ -52,14 +50,12 @@ export class Treasure {
     }
   }
 
-  update(mapInstance: MapInstance): void {
-    const [onGround, newY] = mapInstance.isOnGround(this.x, this.y, this.height);
-    this.onGround = onGround;
-
-    if (this.onGround) {
-      this.y = newY;
+  update(mapInstance: Map): void {
+    const [isOnGround, newY] = mapInstance.isOnGround(this.x, this.y, this.height);
+    if (isOnGround) {
+      this.y = newY; // 接地している場合、Y座標を修正
     } else {
-      this.y += this.gravity;
+      this.y += this.gravity; // 重力を適用
     }
   }
 
