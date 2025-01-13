@@ -42,11 +42,11 @@ export class Treasure {
     return img;
   }
 
-  // draw(context: CanvasRenderingContext2D, camera: Camera): void {
-  draw(context: CanvasRenderingContext2D): void {
+  draw(context: CanvasRenderingContext2D, camera: Camera): void {
+  // draw(context: CanvasRenderingContext2D): void {
     if (!this.isOpened || (this.isOpened && this.blinkCounter % 10 < 5)) {
-      // context.drawImage(this.image, this.x - camera.x, this.y - camera.y);
-      context.drawImage(this.image, this.x, this.y);
+      context.drawImage(this.image, this.x - camera.x, this.y - camera.y);
+      // context.drawImage(this.image, this.x, this.y);
     }
   }
 

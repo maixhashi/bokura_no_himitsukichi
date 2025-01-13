@@ -1,8 +1,9 @@
 import { Mole } from './mole';
 import { Treasure } from './treasure';
+import { TILE_SIZE } from './utils/constants';
 
 const MOLE_SPAWN_PROBABILITY = 0.03;
-const TREASURE_SPAWN_PROBABILITY = 0.5; // 宝物のスポーン確率
+const TREASURE_SPAWN_PROBABILITY = 0.05; // 宝物のスポーン確率
 
 export class Map {
     private mapData: number[][];
@@ -13,6 +14,8 @@ export class Map {
     private  treasures: Treasure[];
     private treasureTiles: Set<string>; // 宝箱出現タイルのセット
     private rewardImages: string[]; // 報酬画像リスト
+    public width: number;
+    public height: number;
   
     constructor(mapData: number[][], tileSize: number) {
       this.mapData = mapData;
@@ -26,6 +29,9 @@ export class Map {
           "assets/rewards/movie_poster_2.png",
           "assets/rewards/movie_poster_3.png"
       ]; // 報酬画像のリスト
+      // マップデータの幅と高さを計算
+      this.width = mapData[0]?.length * TILE_SIZE || 0; // 横方向のタイル数
+      this.height = mapData.length * TILE_SIZE || 0;    // 縦方向のタイル数
     }
   
     private loadTileImages(): void {

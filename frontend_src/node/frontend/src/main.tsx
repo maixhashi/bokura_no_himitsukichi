@@ -1,5 +1,5 @@
 import { Map } from "./map";
-// import { Camera } from "./camera";
+import { Camera } from "./camera";
 import { mapData } from "./mapData";
 import { Bocchama } from "./bocchama";
 import { Treasure } from "./treasure";
@@ -42,12 +42,11 @@ const treasure = new Treasure(treasureX, treasureY, 5, "assets/rewards/movie_pos
 gameMap.treasures.push(treasure);
 const collectedRewards: HTMLImageElement[] = [];
 
-// カメラ
-// const camera = new Camera(
-//   gameMap.width * TILE_SIZE,
-//   gameMap.height * TILE_SIZE
-// );
-
+// カメラの初期化
+const camera = new Camera(
+  gameMap.width,
+  gameMap.height
+);
 // イベントリスナー
 // イベントリスナーの追加
 window.addEventListener("keydown", (e) => {
@@ -61,8 +60,6 @@ window.addEventListener("keyup", (e) => {
   keys[e.key] = false;
 });
 
-let cameraX = 0;
-let cameraY = 0;
 
 function main() {
   let lastTime = 0;
@@ -85,8 +82,10 @@ function main() {
     gameMap.updateTreasures(gameMap);
 
     // カメラを更新
-    // camera.update(bocchama, SCREEN_WIDTH, SCREEN_HEIGHT);
+    camera.update(bocchama, SCREEN_WIDTH, SCREEN_HEIGHT);
 
+    // カメラ座標の取得
+    const { x: cameraX, y: cameraY } = camera.getPosition();
     // マップとキャラクターの描画
     gameMap.draw(ctx, cameraX, cameraY, SCREEN_WIDTH, SCREEN_HEIGHT);
     bocchama.draw(ctx, cameraX, cameraY); // 描画処理
@@ -99,7 +98,7 @@ function main() {
     // 宝箱を描画
     for (const treasure of gameMap.treasures) {
       treasure.updateBlink();
-      treasure.draw(ctx, cameraX, cameraY);
+      treasure.draw(ctx, camera);
     }
 
     // 収集済みアイテムを描画
