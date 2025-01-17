@@ -1,0 +1,34 @@
+header {
+  width: 100%;
+  background: #f4f4f4;
+  padding: 1rem;
+  box-sizing: border-box;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between; /* 左右に要素を配置 */
+  align-items: center; /* 縦方向に中央揃え */
+}
+
+.HeaderLogo {
+  margin-right: auto; /* 左端に配置 */
+}
+
+.logo-image {
+  height: 100px;
+  width: auto;
+  cursor: pointer;
+}
+
+.HeaderLinks {
+  display: flex;
+  gap: 20px; /* リンク間のスペース */
+}
+
+.HeaderLinks a {
+  text-decoration: none;
+  color: #007bff;
+  font-size: 16px;
+}
