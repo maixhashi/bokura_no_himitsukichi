@@ -1,126 +1,40 @@
-// import { Map } from "./map";
-// import { Camera } from "./camera";
-// import { mapData } from "./mapData";
-// import { Bocchama } from "./bocchama";
-// import { Treasure } from "./treasure";
-// import { Mole } from "./mole";
-// import { tilePaths } from "./utils/image_paths";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
+type PageData = {
+  message: string;
+};
 
-// // 定数
-// const GAME_NAME = "ぼくらのひみつきち";
-// const SCREEN_WIDTH = 1600;
-// const SCREEN_HEIGHT = 800;
-// const TILE_SIZE = 128;
-// const WHITE = "#FFFFFF";
-// const FPS = 60;
+const TopPage: React.FC = () => {
+  const [data, setData] = useState<PageData | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-// // HTML Canvasの設定
-// const canvas = document.createElement("canvas");
-// canvas.id = "gameCanvas";
-// canvas.width = SCREEN_WIDTH;
-// canvas.height = SCREEN_HEIGHT;
-// document.body.appendChild(canvas);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get<PageData>('http://localhost:8000/api/pages/', {
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //       });
+  //       setData(response.data);
+  //     } catch (error: any) {
+  //       setError(error.response?.data?.message || error.message || 'Unknown error occurred');
+  //     }
+  //   };
 
-// const ctx = canvas.getContext("2d");
-// if (!ctx) {
-//   throw new Error("Canvas context not found");
-// }
+  //   fetchData();
+  // }, []);
 
-// type KeyState = { [key: string]: boolean };
-// const keys: KeyState = {};
+  return (
+    <div>
+      <h1>React with Django</h1>
+      <h1>I am topPage</h1>
+      {/* {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+      {data ? <p>{data.message}</p> : <p>Loading...</p>} */}
+    </div>
+  );
+};
 
-// // オブジェクト生成
-// const gameMap = new Map(mapData, TILE_SIZE, tilePaths);
-// const bocchama = new Bocchama(0, TILE_SIZE / 2, 5, 5);
-
-// // Bocchama の初期位置に基づいて宝箱を配置
-// const treasureX = bocchama.x + TILE_SIZE; // プレイヤーの右隣
-// const treasureY = bocchama.y *9 /10; // 同じ高さ
-
-// const treasure = new Treasure(treasureX, treasureY, 5, "assets/rewards/movie_poster.png");
-// gameMap.treasures.push(treasure);
-// const collectedRewards: HTMLImageElement[] = [];
-
-// // カメラの初期化
-// const camera = new Camera(
-//   gameMap.width,
-//   gameMap.height
-// );
-// // イベントリスナー
-// // イベントリスナーの追加
-// window.addEventListener("keydown", (e) => {
-//   if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(e.key)) {
-//     e.preventDefault();
-//   }
-//   keys[e.key] = true;
-// });
-
-// window.addEventListener("keyup", (e) => {
-//   keys[e.key] = false;
-// });
-
-
-// function main() {
-//   let lastTime = 0;
-
-//   function gameLoop(time: number) {
-//     const deltaTime = time - lastTime;
-//     lastTime = time;
-
-//     // 画面をクリア
-//     ctx.fillStyle = WHITE;
-//     ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-
-//     // Bocchamaの動作
-//     bocchama.move(keys, gameMap);
-//     bocchama.dig(keys, gameMap);
-//     bocchama.openTreasureBox(keys, TILE_SIZE, gameMap.treasures, collectedRewards);
-
-//     // モグラの更新
-//     gameMap.updateMoles(gameMap, deltaTime, TILE_SIZE);
-//     gameMap.updateTreasures(gameMap);
-
-//     // カメラを更新
-//     camera.update(bocchama, SCREEN_WIDTH, SCREEN_HEIGHT);
-
-//     // カメラ座標の取得
-//     const { x: cameraX, y: cameraY } = camera.getPosition();
-//     // マップとキャラクターの描画
-//     gameMap.draw(ctx, cameraX, cameraY, SCREEN_WIDTH, SCREEN_HEIGHT);
-//     bocchama.draw(ctx, cameraX, cameraY); // 描画処理
-
-//     // モグラを描画
-//     for (const mole of gameMap.moles) {
-//       mole.draw(ctx, cameraX, cameraY);
-//     }
-
-//     // 宝箱を描画
-//     for (const treasure of gameMap.treasures) {
-//       treasure.updateBlink();
-//       treasure.draw(ctx, camera);
-//     }
-
-//     // 収集済みアイテムを描画
-//     Treasure.drawCollectedRewards(ctx, collectedRewards);
-
-//     // 次のフレーム
-//     requestAnimationFrame(gameLoop);
-//   }
-
-//   requestAnimationFrame(gameLoop);
-// }
-
-// main();
-
-// frontend_src/node/frontend/src/main.tsx
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
-import './index.css';
-
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+export default TopPage;
+    

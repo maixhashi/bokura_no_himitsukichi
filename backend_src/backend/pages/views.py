@@ -1,6 +1,4 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
+from django.views.generic import TemplateView
 
-class PageView(APIView):
-    def get(self, request):
-        return Response({"message": "Hello, this is a page!"})
+class MainEntryView(TemplateView):
+    template_name = "pages/main.html"  # templates/pages/top_page.html を指定
