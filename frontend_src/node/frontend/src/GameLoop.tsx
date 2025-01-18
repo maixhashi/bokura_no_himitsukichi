@@ -42,14 +42,23 @@ export const startGameLoop = () => {
 
   // オブジェクトの初期化
   const gameMap = new Map(mapData, TILE_SIZE, tilePaths);
-  const bocchama = new Bocchama(0, TILE_SIZE / 2, 5, 5);
-  const treasureX = bocchama.x + TILE_SIZE;
-  const treasureY = (bocchama.y * 9) / 10;
+
+  // Bocchamaの初期位置を定義
+  const initialBocchamaX = TILE_SIZE / 2;
+  const initialBocchamaY = TILE_SIZE / 2;
+  const bocchama = new Bocchama(initialBocchamaX, initialBocchamaY, 5, 5);
+
+  // Treasureの初期位置をBocchamaの位置に基づいて設定
+  const treasureX = TILE_SIZE * 2;
+  const treasureY = TILE_SIZE / 2;
   const treasure = new Treasure(treasureX, treasureY, 5, "assets/rewards/movie_poster.png");
   gameMap.treasures.push(treasure);
 
   const collectedRewards: HTMLImageElement[] = [];
   const camera = new Camera(gameMap.width, gameMap.height);
+
+  // 初期フレームでカメラを更新
+  camera.update(bocchama, SCREEN_WIDTH, SCREEN_HEIGHT);
 
   let lastTime = 0;
 
@@ -98,5 +107,6 @@ export const startGameLoop = () => {
     requestAnimationFrame(gameLoop);
   }
 
+  // 初回ゲームループの開始
   requestAnimationFrame(gameLoop);
 };
