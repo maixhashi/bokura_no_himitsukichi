@@ -15,7 +15,10 @@ def reward_images(request):
         data = [
             {
                 "id": reward.id,
-                "pixel_art_image": reward.pixel_art_image.url if reward.pixel_art_image else None,  # 修正箇所
+                # 余計なディレクトリを除去してパスを加工
+                "pixel_art_image": f"/public/assets/rewards/{reward.pixel_art_image.name.split('/')[-1]}"
+                if reward.pixel_art_image
+                else None,
                 "title": reward.title,
             }
             for reward in rewards

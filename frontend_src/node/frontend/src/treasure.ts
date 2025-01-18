@@ -20,14 +20,14 @@ export class Treasure {
   private rewardDropped: boolean;
   private blinkCounter: number;
 
-  constructor(x: number, y: number, gravity: number, rewardImagePath: string) {
+  constructor(x: number, y: number, gravity: number, rewardImage: HTMLImageElement) {
     this.x = x;
     this.y = y;
     this.gravity = gravity;
     this.imageClosed = this.loadImage("assets/treasures/treasure_box.png");
     this.imageOpened = this.loadImage("assets/treasures/treasure_box_opened.png");
     this.image = this.imageClosed;
-    this.rewardImage = this.loadImage(rewardImagePath);
+    this.rewardImage = rewardImage;
     this.onGround = false;
     this.width = this.imageClosed.width;
     this.height = this.imageClosed.height;
@@ -68,13 +68,18 @@ export class Treasure {
     }
   }
 
-  dropReward(collectedRewards: HTMLImageElement[]): void {
+  dropReward(collectedRewards?: HTMLImageElement[]): void {
+    if (!collectedRewards) {
+      console.warn("collectedRewards is undefined. Cannot drop reward.");
+      return;
+    }
+  
     if (!this.rewardDropped) {
       this.rewardDropped = true;
       collectedRewards.push(this.rewardImage);
     }
   }
-
+  
   handleEvent(event: MouseEvent, collectedRewards: HTMLImageElement[]): void {
     const mouseX = event.clientX;
     const mouseY = event.clientY;
@@ -113,8 +118,8 @@ export class Treasure {
       const baseX = 10; // 描画開始位置（X座標）
       const baseY = 10; // 描画開始位置（Y座標）
       const size = 100; // 画像サイズ（幅と高さ）
-      const offsetX = -10; // 各アイテム間のX方向のオフセット
-      const offsetY = 20;  // 各アイテム間のY方向のオフセット
+      const offsetX = 5; // 各アイテム間のX方向のオフセット
+      const offsetY = 5;  // 各アイテム間のY方向のオフセット
     
       collectedRewards.forEach((reward, index) => {
         if (reward && reward.complete && reward.naturalWidth > 0) {
