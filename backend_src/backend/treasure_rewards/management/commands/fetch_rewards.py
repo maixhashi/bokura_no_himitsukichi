@@ -2,10 +2,6 @@ import sys
 import os
 import requests
 from urllib.parse import urlparse
-
-# プロジェクトのルートディレクトリをパスに追加
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from django.core.files import File
 from django.core.management.base import BaseCommand
 from treasure_rewards.models import RewardImage
@@ -18,6 +14,13 @@ def extract_tmdb_id(url):
     filename = os.path.basename(parsed_url.path)
     tmdb_id = os.path.splitext(filename)[0]
     return tmdb_id
+
+# プロジェクトルートから新しい保存先ディレクトリを設定
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../.."))
+NEW_SAVE_DIR = os.path.join(BASE_DIR, "frontend_src/node/frontend/public/assets/rewards")
+
+# デバッグ出力で確認
+print(f"NEW_SAVE_DIR: {NEW_SAVE_DIR}")
 
 class Command(BaseCommand):
     help = "Fetch and process movie posters as rewards"
@@ -40,9 +43,9 @@ class Command(BaseCommand):
                 self.stderr.write(f"Error extracting TMDB ID: {e}")
                 continue
 
-            # ファイルパスを生成
-            local_original_path = f"media/original/{tmdb_id}.jpg"
-            local_pixel_path = f"media/pixel_art/pixelized_{tmdb_id}.png"
+            # 新しい保存先パスを生成
+            local_original_path = os.path.join(NEW_SAVE_DIR, f"original/{tmdb_id}.jpg")
+            local_pixel_path = os.path.join(NEW_SAVE_DIR, f"pixelized_{tmdb_id}.png")  # 修正
 
             # オリジナルポスターをダウンロード
             try:
@@ -55,7 +58,7 @@ class Command(BaseCommand):
 
             # ピクセルアートに変換
             try:
-                os.makedirs(os.path.dirname(local_pixel_path), exist_ok=True)
+                os.makedirs(NEW_SAVE_DIR, exist_ok=True)  # 修正: ピクセルアートは rewards/ 直下
                 convert_to_pixel_art(local_original_path, local_pixel_path)
             except Exception as e:
                 self.stderr.write(f"Error converting to pixel art: {e}")
@@ -73,11 +76,10 @@ class Command(BaseCommand):
                     saved_filename = f"pixelized_{tmdb_id}.png"
                     self.stdout.write(f"Saving file with name: {saved_filename}")
                     
-                    reward.pixel_art_image.save(saved_filename, File(pixel_file))
+                    reward.pixel_art_image.name = f"rewards/{saved_filename}"  # 修正: 直接パスを指定
                     reward.save()
                     
                     # 保存後の実際のファイルパスを出力
                     self.stdout.write(f"Saved file: {reward.pixel_art_image.name}")
             except Exception as e:
                 self.stderr.write(f"Error saving to database: {e}")
-  

@@ -7,6 +7,7 @@ services:
       dockerfile: ./docker/python/Dockerfile
     volumes:
       - ./backend_src/backend:/backend
+      - ./frontend_src/node/frontend/public/assets:/frontend_src/node/frontend/public/assets
     working_dir: /backend
     command: python3 manage.py runserver 0.0.0.0:8000
     ports:

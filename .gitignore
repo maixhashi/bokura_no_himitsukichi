@@ -3,5 +3,9 @@ __pycache__/
 *.pyc
 .gitkeep
 .env
-/backend_src/backend/media/original/
-/backend_src/backend/media/pixel_art/
+# /backend_src/backend/media/original/
+# /backend_src/backend/media/pixel_art/
+backend_src/backend/treasure_rewards/management/frontend_src/*
+frontend_src/node/frontend/public/assets/rewards/*
+backend_src/backend/db.sqlite3
+backend_src/backend/media/
