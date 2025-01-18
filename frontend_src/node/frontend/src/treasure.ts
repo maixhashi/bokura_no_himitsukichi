@@ -126,7 +126,6 @@ export class Treasure {
     
           // 描画
           ctx.drawImage(reward, x, y, size, size);
-          console.log(`Drawing reward at: (${x}, ${y}), Image: ${imageName}`);
         } else {
           console.warn(
             `Reward image is not ready to draw or is undefined: ${reward?.src || "undefined"}`

@@ -71,10 +71,6 @@ export class Bocchama extends Character {
           Math.abs(this.y - treasure.y) < tileSize / 2
         ) {
           treasure.open(collectedRewards);
-          console.log("treasure:", treasure)
-          console.log("treasure.x:", treasure.x)
-          console.log("treasure.y:", treasure.y)
-          console.log("Bocchama.openTreasureBox 発火")
         }
       }
     }

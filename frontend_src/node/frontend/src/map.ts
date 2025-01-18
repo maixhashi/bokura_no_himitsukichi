@@ -46,11 +46,9 @@ export class Map {
         img.src = encodeURI(normalizedSrc);
     
         img.onload = () => {
-          console.log(`Image loaded successfully: ${img.src}`);
           resolve(img);
         };
         img.onerror = () => {
-          console.error(`Failed to load image: ${img.src}`);
           reject(new Error(`Failed to load image: ${img.src}`));
         };
       });
@@ -74,11 +72,9 @@ export class Map {
         });
     
         const loadedImages = await Promise.all(imagePromises);
-        console.log("Loaded reward images:", loadedImages);
     
         this.rewardImages = loadedImages;
       } catch (error) {
-        console.error("Reward画像のロードに失敗:", error);
       }
     }
                                       
@@ -333,7 +329,6 @@ export class Map {
                 const treasure = new Treasure(treasureX, treasureY, 5, rewardImage); // gravity: 5
                 this.treasures.push(treasure);
                 this.treasureTiles.add(tileCoords); // 宝箱タイルを記録
-                console.log(`Treasure spawned at (${digX}, ${digY}) with reward: ${rewardImage}`);
             }
           } else if (targetTile === 4 && direction === "down") {
             if (digY + 1 < this.mapData.length && this.mapData[digY + 1][digX] === 0) {
@@ -372,12 +367,10 @@ export class Map {
         if (!this.collectedRewards.some((collected) => collected.src === reward.src)) {
           if (reward.complete && reward.naturalWidth > 0) {
             this.collectedRewards.push(reward);
-            console.log("Collected reward:", reward.src);
           } else {
             console.warn("Attempted to collect an incomplete or invalid reward:", reward.src);
           }
         } else {
-          console.log("Reward already collected:", reward.src);
         }
       }
               
@@ -391,7 +384,6 @@ export class Map {
             const y = 10 + index * 20;
       
             ctx.drawImage(reward, x, y, 100, 100);
-            console.log(`Drawing reward: ${reward.src}`);
           } else {
             console.warn(
               `Reward image is not ready to draw or is undefined: ${reward?.src || "undefined"}`
