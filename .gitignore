@@ -2,3 +2,6 @@ app/myenv/
 __pycache__/
 *.pyc
 .gitkeep
+.env
+/backend_src/backend/media/original/
+/backend_src/backend/media/pixel_art/

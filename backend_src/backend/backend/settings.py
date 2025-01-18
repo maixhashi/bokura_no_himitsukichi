@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'pages',
+    'treasure_rewards',
 ]
 
 MIDDLEWARE = [
@@ -119,9 +120,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ja'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tokyo'
 
 USE_I18N = True
 
@@ -129,6 +130,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+# デフォルトのエンコーディング設定
+DEFAULT_CHARSET = 'utf-8'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
@@ -145,3 +148,9 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:5173',
     'http://127.0.0.1:5173',
 ]
+
+import os
+
+# MEDIA URLとROOTを設定
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

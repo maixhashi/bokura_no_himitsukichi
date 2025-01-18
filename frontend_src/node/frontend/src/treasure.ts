@@ -95,14 +95,44 @@ export class Treasure {
     }
   }
 
-  static drawCollectedRewards(
-    context: CanvasRenderingContext2D,
-    collectedRewards: HTMLImageElement[]
-  ): void {
-    const xOffset = 1300;
-    const yOffset = 10;
-    collectedRewards.forEach((reward, idx) => {
-      context.drawImage(reward, xOffset - idx * 5, yOffset + idx * 5);
-    });
-  }
+  // static drawCollectedRewards(
+  //   context: CanvasRenderingContext2D,
+  //   collectedRewards: HTMLImageElement[]
+  // ): void {
+    //   const xOffset = 1300;
+    //   const yOffset = 10;
+    //   collectedRewards.forEach((reward, idx) => {
+      //     context.drawImage(reward, xOffset - idx * 5, yOffset + idx * 5);
+      //   });
+      // }
+
+    public drawCollectedRewards(
+      ctx: CanvasRenderingContext2D,
+      collectedRewards: HTMLImageElement[]
+    ): void {
+      const baseX = 10; // 描画開始位置（X座標）
+      const baseY = 10; // 描画開始位置（Y座標）
+      const size = 100; // 画像サイズ（幅と高さ）
+      const offsetX = -10; // 各アイテム間のX方向のオフセット
+      const offsetY = 20;  // 各アイテム間のY方向のオフセット
+    
+      collectedRewards.forEach((reward, index) => {
+        if (reward && reward.complete && reward.naturalWidth > 0) {
+          const x = baseX + index * offsetX; // 左方向にずらす
+          const y = baseY + index * offsetY; // 下方向にずらす
+    
+          // 画像のファイル名を取得
+          const imageName = reward.src.split('/').pop() || "Unknown";
+    
+          // 描画
+          ctx.drawImage(reward, x, y, size, size);
+          console.log(`Drawing reward at: (${x}, ${y}), Image: ${imageName}`);
+        } else {
+          console.warn(
+            `Reward image is not ready to draw or is undefined: ${reward?.src || "undefined"}`
+          );
+        }
+      });
+    }
+      
 }

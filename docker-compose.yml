@@ -1,5 +1,7 @@
 services:
   backend:
+    environment:
+      - PYTHONPATH=/backend
     build:
       context: ./backend_src
       dockerfile: ./docker/python/Dockerfile

@@ -1,9 +1,9 @@
-import { Mole } from './mole';
+  import { Mole } from './mole';
 import { Treasure } from './treasure';
 import { TILE_SIZE } from './utils/constants';
 
 const MOLE_SPAWN_PROBABILITY = 0.03;
-const TREASURE_SPAWN_PROBABILITY = 0.05; // 宝物のスポーン確率
+const TREASURE_SPAWN_PROBABILITY = 0.5  ; // 宝物のスポーン確率
 
 export class Map {
     private mapData: number[][];
@@ -13,7 +13,8 @@ export class Map {
     private  moles: Mole[];
     private  treasures: Treasure[];
     private treasureTiles: Set<string>; // 宝箱出現タイルのセット
-    private rewardImages: string[]; // 報酬画像リスト
+    private rewardImages: HTMLImageElement[] = []; // 報酬画像リスト
+    public collectedRewards: HTMLImageElement[] = []; // 集めた報酬画像
     public width: number;
     public height: number;
   
@@ -24,16 +25,63 @@ export class Map {
       this.moles = [];
       this.treasures = [];
       this.treasureTiles = new Set(); // 初期化
+      this.loadRewardImages(); // 報酬画像をロード
       this.rewardImages = [
-          "assets/rewards/movie_poster_1.png",
-          "assets/rewards/movie_poster_2.png",
-          "assets/rewards/movie_poster_3.png"
+          // "assets/rewards/movie_poster_1.png",
+          // "assets/rewards/movie_poster_2.png",
+          // "assets/rewards/movie_poster_3.png"
       ]; // 報酬画像のリスト
       // マップデータの幅と高さを計算
       this.width = mapData[0]?.length * TILE_SIZE || 0; // 横方向のタイル数
       this.height = mapData.length * TILE_SIZE || 0;    // 縦方向のタイル数
     }
-  
+
+                                  
+    private createRewardImage(src: string): Promise<HTMLImageElement> {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+    
+        // URLを正規化してエンコード
+        const normalizedSrc = src.replace(/([^:]\/)\/+/g, "$1");
+        img.src = encodeURI(normalizedSrc);
+    
+        img.onload = () => {
+          console.log(`Image loaded successfully: ${img.src}`);
+          resolve(img);
+        };
+        img.onerror = () => {
+          console.error(`Failed to load image: ${img.src}`);
+          reject(new Error(`Failed to load image: ${img.src}`));
+        };
+      });
+    }
+    
+    private async loadRewardImages(): Promise<void> {
+      try {
+        const response = await fetch("http://localhost:8000/api/reward-images/");
+        if (!response.ok) {
+          throw new Error(`APIリクエスト失敗: ステータス ${response.status}`);
+        }
+    
+        const data = await response.json();
+        const BASE_URL = "http://localhost:8000";
+    
+        const validPaths = data.filter((item: { pixel_art_image: string }) => item.pixel_art_image);
+    
+        const imagePromises = validPaths.map((item: { pixel_art_image: string }) => {
+          const imagePath = item.pixel_art_image.replace(/^\/media\/media\//, "/media/");
+          return this.createRewardImage(`${BASE_URL}${imagePath}`);
+        });
+    
+        const loadedImages = await Promise.all(imagePromises);
+        console.log("Loaded reward images:", loadedImages);
+    
+        this.rewardImages = loadedImages;
+      } catch (error) {
+        console.error("Reward画像のロードに失敗:", error);
+      }
+    }
+                                      
     private loadTileImages(): void {
       const tilePaths: { [key: string]: string } = {
         sky: "assets/tiles/sky.png",
@@ -313,7 +361,43 @@ export class Map {
         this.treasures.forEach((treasure: Treasure) => {
           treasure.update(map);
         });
-      }                             
+      }    
       
-  }
+      public collectReward(reward: HTMLImageElement | undefined): void {
+        if (!reward) {
+          console.warn("Attempted to collect an undefined reward.");
+          return;
+        }
+      
+        if (!this.collectedRewards.some((collected) => collected.src === reward.src)) {
+          if (reward.complete && reward.naturalWidth > 0) {
+            this.collectedRewards.push(reward);
+            console.log("Collected reward:", reward.src);
+          } else {
+            console.warn("Attempted to collect an incomplete or invalid reward:", reward.src);
+          }
+        } else {
+          console.log("Reward already collected:", reward.src);
+        }
+      }
+              
+      public drawCollectedRewards(
+        ctx: CanvasRenderingContext2D,
+        collectedRewards: HTMLImageElement[]
+      ): void {
+        collectedRewards.forEach((reward, index) => {
+          if (reward && reward.complete && reward.naturalWidth > 0) {
+            const x = 10 + index * -10;
+            const y = 10 + index * 20;
+      
+            ctx.drawImage(reward, x, y, 100, 100);
+            console.log(`Drawing reward: ${reward.src}`);
+          } else {
+            console.warn(
+              `Reward image is not ready to draw or is undefined: ${reward?.src || "undefined"}`
+            );
+          }
+        });
+      }
+}
   

@@ -54,7 +54,7 @@ export const startGameLoop = () => {
   const treasure = new Treasure(treasureX, treasureY, 5, "assets/rewards/movie_poster.png");
   gameMap.treasures.push(treasure);
 
-  const collectedRewards: HTMLImageElement[] = [];
+  const collectedRewards = [] || gameMap.collectRewards
   const camera = new Camera(gameMap.width, gameMap.height);
 
   // 初期フレームでカメラを更新
@@ -101,7 +101,8 @@ export const startGameLoop = () => {
     }
 
     // 収集済みアイテムを描画
-    Treasure.drawCollectedRewards(ctx, collectedRewards);
+    gameMap.drawCollectedRewards(ctx, collectedRewards);
+    console.log("collectedRewards:", collectedRewards)
 
     // 次のフレーム
     requestAnimationFrame(gameLoop);
