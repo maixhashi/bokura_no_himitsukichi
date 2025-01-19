@@ -1,7 +1,6 @@
 from django.urls import path
-from .views import MainEntryView
-
+from . import views
 
 urlpatterns = [
-    # path('pages/', MainEntryView.as_view(), name='page-list'),  # 必要に応じて名前を変更
+    path('reward-images/', views.reward_images, name='reward-images'),  # 正しく定義
 ]
