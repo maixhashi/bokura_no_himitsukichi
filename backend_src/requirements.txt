@@ -4,3 +4,4 @@ django-cors-headers==3.2.1
 requests>=2.0.0
 Pillow
 python-dotenv
+djoser

@@ -9,6 +9,8 @@ urlpatterns = [
     path('api/', include('pages.urls')),    
     path('', MainEntryView.as_view(), name='main-entry'),  # ルートのルーティングを追加
     path('reward-images/', reward_images, name='reward-images'),  # 修正: 正しく動作するはず
+    path('api/auth/', include('djoser.urls')),
+    path('api/auth/', include('djoser.urls.authtoken')),
 ]
 
 # 開発環境でのみ静的ファイルを提供
