@@ -7,6 +7,9 @@ ENV PYTHONUNBUFFERED 1
 RUN mkdir /backend
 WORKDIR /backend
 
+# 必要なライブラリのインストール
+RUN pip install --upgrade pip setuptools
+
 # 必要な依存関係をインストール
 ADD requirements.txt /backend/
 RUN pip install -r requirements.txt
