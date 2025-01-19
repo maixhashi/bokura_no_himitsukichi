@@ -32,3 +32,7 @@ header {
   color: #007bff;
   font-size: 16px;
 }
+
+.username-on-HeaderLinks {
+  margin-right: 20px;
+}

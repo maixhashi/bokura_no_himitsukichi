@@ -2,13 +2,15 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Layout from './Layout';
 import { useNavigate } from 'react-router-dom';
-import './AccountRegisterPage.css'; // 同じCSSファイルを使用
+import { useDispatch } from 'react-redux';
+import { fetchCurrentUser } from './features/authSlice';
 
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -21,6 +23,10 @@ const LoginPage: React.FC = () => {
       const { auth_token } = response.data;
       localStorage.setItem('authToken', auth_token);
       alert('ログインに成功しました！');
+
+      // ユーザー情報を取得
+      dispatch(fetchCurrentUser());
+
       navigate('/');
     } catch (error) {
       setErrorMessage('ログインに失敗しました。もう一度お試しください。');
