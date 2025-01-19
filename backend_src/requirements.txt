@@ -5,3 +5,4 @@ requests>=2.0.0
 Pillow
 python-dotenv
 djoser
+djangorestframework-simplejwt
