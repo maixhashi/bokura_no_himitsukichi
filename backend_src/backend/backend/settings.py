@@ -65,6 +65,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://frontend:5173",  # Docker内部のフロントエンド
 ]
 
+# 認証のCookieを送信するための設定
+CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'backend.urls'
 
@@ -154,3 +156,9 @@ import os
 # MEDIA URLとROOTを設定
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# CSRF Cookieの設定
+CSRF_COOKIE_HTTPONLY = True
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",  # ReactのURL
+]
