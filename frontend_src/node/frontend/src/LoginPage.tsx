@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Layout from "./Layout";
+import { Link, useNavigate } from "react-router-dom";
+
 import "./Form.css";
 
 const LoginPage: React.FC = () => {
@@ -8,6 +10,8 @@ const LoginPage: React.FC = () => {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [success, setSuccess] = useState("");
+
+  const navigate = useNavigate(); // useNavigateを初期化
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,6 +35,11 @@ const LoginPage: React.FC = () => {
 
       setSuccess("ログイン成功しました！");
       console.log(response.data.message);
+
+      // トップページに遷移
+      navigate("/"); // "/" をトップページのパスに変更
+      // ページをリロード
+      window.location.reload();
     } catch (err: any) {
       setErrorMessage(err.response?.data?.error || "ログインに失敗しました");
     }

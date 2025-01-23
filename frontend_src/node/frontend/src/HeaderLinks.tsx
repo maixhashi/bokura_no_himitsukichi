@@ -1,73 +1,31 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchCurrentUser, logout } from './features/auth/authSlice';
+import { RootState, AppDispatch } from './store';
 import { Link, useNavigate } from "react-router-dom";
+
 import "./Header.css";
 
 const HeaderLinks = () => {
-  const [currentUser, setCurrentUser] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [success, setSuccess] = useState(null);
   const navigate = useNavigate(); // ページ遷移用フック
 
+  const dispatch: AppDispatch = useDispatch();
+  const { currentUser, status } = useSelector((state: RootState) => state.auth);
+
   // ログイン中のユーザー情報を取得
   useEffect(() => {
-    const fetchCurrentUser = async () => {
-      try {
-        const csrfResponse = await axios.get("http://localhost:8000/api/csrf/", {
-          withCredentials: true,
-        });
-        axios.defaults.headers.common["X-CSRFToken"] = csrfResponse.data.csrfToken;
-
-        const response = await axios.get("http://localhost:8000/api/current-user/", {
-          withCredentials: true,
-        });
-        setCurrentUser(response.data);
-      } catch (error) {
-        console.error("Error fetching current user:", error);
-        setCurrentUser(null);
-      }
-    };
-
-    fetchCurrentUser();
-  }, []);
-
-  const handleLogout = async (e) => {
-    e.preventDefault();
-    setErrorMessage("");
-    setSuccess("");
-
-    try {
-      const csrfResponse = await axios.get("http://localhost:8000/api/csrf/", {
-        withCredentials: true,
-      });
-
-      const csrfToken = csrfResponse.data?.csrfToken;
-
-      if (!csrfToken) {
-        throw new Error("CSRFトークンの取得に失敗しました");
-      }
-
-      axios.defaults.headers.common["X-CSRFToken"] = csrfToken;
-
-      const response = await axios.post(
-        "http://localhost:8000/api/logout/",
-        {},
-        { withCredentials: true }
-      );
-
-      setSuccess("ログアウトしました");
-      setCurrentUser(null); // ユーザー情報をリセット
-      console.log(response.data.message);
-
-      // ログインページにリダイレクト
-      navigate("/login");
-    } catch (err) {
-      console.error("ログアウトエラー:", err);
-
-      setErrorMessage(
-        err.response?.data?.error || err.message || "ログアウトに失敗しました"
-      );
+    if (status === 'idle') {
+      dispatch(fetchCurrentUser());
     }
+  }, [dispatch, status]);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    // ログアウト処理をサーバーに送信
+    axios.post("http://localhost:8000/api/logout/", {}, { withCredentials: true });
   };
 
   return (
