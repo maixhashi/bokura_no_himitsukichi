@@ -1,0 +1,37 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.layout-container {
+  /* width: 100%; 親要素の幅を全体に広げる */
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --header-height: 150px;
+  --footer-height: 100px;
+}
+
+main {
+  /* width: 100%; */
+  /* flex: 1; */
+  padding-top: var(--header-height);
+  padding-bottom: var(--footer-height);
+  box-sizing: border-box;
+}
+
+@font-face {
+  font-family: 'PixelFont';
+  src: url('/public/fonts/misaki_gothic.ttf') format('truetype');
+}
+
+.pixel-font {
+  font-family: 'PixelFont';
+  font-size: 16px; /* 必要に応じてサイズを調整 */
+  line-height: 1.2;
+}
