@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import TopPage from './TopPage';
+import { Provider } from 'react-redux'; // Redux の Provider をインポート
+import { store } from './store'; // Redux ストアをインポート
+import TopPage from './topPage';
 import AboutPage from './AboutPage';
 import NotFoundPage from './NotFoundPage';
 import LoginPage from './LoginPage';
@@ -9,12 +11,9 @@ import AccountRegisterPage from './AccountRegisterPage';
 import GamePage from './GamePage';
 import './index.css';
 
-import { Provider } from 'react-redux';
-import store from './store';
-
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <Provider store={store}>
+    <Provider store={store}> {/* Redux Provider でラップ */}
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<TopPage />} />

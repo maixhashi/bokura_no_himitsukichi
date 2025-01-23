@@ -24,15 +24,46 @@ header {
 
 .HeaderLinks {
   display: flex;
-  gap: 20px; /* リンク間のスペース */
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+}
+
+.HeaderLinks span {
+  margin-right: 10px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.logout-button {
+  background-color: #dc3545; /* ログアウトボタンの色 */
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background-color: #c82333;
 }
 
 .HeaderLinks a {
+  margin-left: 10px;
   text-decoration: none;
   color: #007bff;
-  font-size: 16px;
+  font-size: 14px;
 }
 
-.username-on-HeaderLinks {
-  margin-right: 20px;
+.error-message {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.success-message {
+  color: #28a745;
+  font-size: 12px;
+  margin-top: 5px;
 }

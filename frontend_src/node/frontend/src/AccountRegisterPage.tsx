@@ -1,48 +1,36 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Layout from './Layout';
-import { useNavigate } from 'react-router-dom';
-import './AccountRegisterPage.css';
+import './Form.css';
 
 const AccountRegisterPage: React.FC = () => {
   const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const navigate = useNavigate();
 
-  const handleRegister = async (event: React.FormEvent) => {
-    event.preventDefault();
-
-    if (password !== confirmPassword) {
-      setErrorMessage('Passwords do not match');
-      return;
-    }
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setMessage('');
+    setErrorMessage('');
 
     try {
-      const response = await axios.post('http://localhost:8000/api/auth/users/', {
+      const response = await axios.post('http://localhost:8000/api/register/', {
         username,
-        email,
         password,
       });
-      alert('Account created successfully!');
-      navigate('/');
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Error response:', errorData); // ここでエラー詳細を出力
-      }
-    } catch (error) {
-      setErrorMessage('Failed to create account. Please try again.');
-      console.error('Request failed:', error);
+      setMessage(response.data.message);
+      setUsername('');
+      setPassword('');
+    } catch (err: any) {
+      setErrorMessage(err.response?.data?.error || 'An unexpected error occurred.');
     }
   };
 
   return (
     <Layout>
-      <div className="container-account-register-page">
-        <div className="account-register-page">
+      <div className="page-container">
+        <div className="form">
           <h2>アカウントを作成</h2>
           <form onSubmit={handleRegister}>
             <div>
@@ -56,32 +44,12 @@ const AccountRegisterPage: React.FC = () => {
               />
             </div>
             <div>
-              <label>メールアドレス</label>
-              <input
-                type="email"
-                value={email}
-                placeholder="メールアドレスを入力してください"
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div>
               <label>パスワード</label>
               <input
                 type="password"
                 value={password}
                 placeholder="パスワードを入力してください"
                 onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <label>パスワードの確認</label>
-              <input
-                type="password"
-                value={confirmPassword}
-                placeholder='パスワードを入力してください'
-                onChange={(e) => setConfirmPassword(e.target.value)}
                 required
               />
             </div>
