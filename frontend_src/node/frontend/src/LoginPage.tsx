@@ -36,46 +36,6 @@ const LoginPage: React.FC = () => {
     }
   };
 
-  const handleLogout = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrorMessage(""); // エラーメッセージをリセット
-    setSuccess(""); // 成功メッセージをリセット
-  
-    try {
-      // CSRFトークン取得
-      const csrfResponse = await axios.get("http://localhost:8000/api/csrf/", {
-        withCredentials: true, // Cookieを使用
-      });
-  
-      const csrfToken = csrfResponse.data?.csrfToken;
-  
-      if (!csrfToken) {
-        throw new Error("CSRFトークンの取得に失敗しました");
-      }
-  
-      // CSRFトークンをリクエストヘッダーに設定
-      axios.defaults.headers.common["X-CSRFToken"] = csrfToken;
-  
-      // ログアウトリクエスト
-      const response = await axios.post(
-        "http://localhost:8000/api/logout/",
-        {},
-        { withCredentials: true } // Cookieを使用
-      );
-  
-      setSuccess("ログアウトしました");
-      console.log(response.data.message);
-    } catch (err: any) {
-      console.error("ログアウトエラー:", err);
-  
-      setErrorMessage(
-        err.response?.data?.error ||
-        err.message ||
-        "ログアウトに失敗しました"
-      );
-    }
-  };
-    
   return (
     <Layout>
       <div className="page-container">
