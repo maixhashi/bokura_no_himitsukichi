@@ -29,9 +29,19 @@ main {
   font-family: 'PixelFont';
   src: url('/public/fonts/misaki_gothic.ttf') format('truetype');
 }
+@font-face {
+  font-family: 'PixelFont-ShapeBit';
+  src: url('/public/fonts/Shape Bit.otf') format('truetype');
+}
 
 .pixel-font {
   font-family: 'PixelFont';
+  font-size: 16px; /* 必要に応じてサイズを調整 */
+  line-height: 1.2;
+}
+
+.pixel-font-shape-bit {
+  font-family: 'PixelFont-ShapeBit';
   font-size: 16px; /* 必要に応じてサイズを調整 */
   line-height: 1.2;
 }

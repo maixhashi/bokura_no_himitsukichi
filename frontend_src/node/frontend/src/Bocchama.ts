@@ -1,8 +1,11 @@
-import { Character } from "./character";
+import { Character } from "./Character";
 import { Map } from "./map"; // マップ関連のクラスをインポート
 
 export class Bocchama extends Character {
   isMoving: boolean;
+  width: number;
+  height: number;
+  startX: number;
 
   constructor(x: number, y: number, speed: number, gravity: number) {
     const images = [
@@ -13,10 +16,31 @@ export class Bocchama extends Character {
     images[1].src = "assets/characters/bocchama_running_end.png";
     super(images, x, y, speed, gravity);
     this.isMoving = false;
+    this.isMoving = false;
+    this.width = 0;
+    this.height = 0;
+    this.startX = 0;
+
+  }
+
+  updatePosition(canvasWidth: number) {
+    // 横に走る
+    this.x += this.speed;
+
+    // 画面外に出たらスタート地点に戻す
+    if (this.x > canvasWidth) {
+      this.x = -this.width; // スタート地点の反対側から登場
+    }
   }
 
   draw(ctx: CanvasRenderingContext2D, cameraX: number, cameraY: number) {
     super.draw(ctx, cameraX, cameraY);
+  }
+  draw_on_toppage(ctx: CanvasRenderingContext2D, cameraX: number, cameraY: number) {
+    super.draw(ctx, cameraX, cameraY);
+    this.isMoving = true
+    this.width = 390;
+    this.height = 390;
   }
 
   move(keys: { [key: string]: boolean }, map: any) {

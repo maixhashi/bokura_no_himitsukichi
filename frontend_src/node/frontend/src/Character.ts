@@ -114,6 +114,16 @@ export class Character {
     } else {
     }
   }
-  
-  
+
+  updateAnimation(FPS: number, isMoving: boolean): void {
+    if (isMoving) {
+      this.animationTimer += 1;
+      if (this.animationTimer >= FPS / 6) { // 6 FPS のアニメーション速度
+        this.animationTimer = 0;
+        this.frameIndex = (this.frameIndex + 1) % this.images.length;
+      }
+    } else {
+      this.frameIndex = 0; // 動いていない場合は静止状態のフレームに戻す
+    }
+  }
 }
