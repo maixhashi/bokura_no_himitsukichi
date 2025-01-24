@@ -109,7 +109,7 @@ export class Map {
     screenHeight: number
   ): void {
     if (!this.allImagesLoaded) {
-      return;
+      return; 
     }
 
     const startCol = Math.max(0, Math.floor(cameraX / this.tileSize));

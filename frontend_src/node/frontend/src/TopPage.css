@@ -1,0 +1,48 @@
+/* トップページの全体スタイル */
+.container-toppage {
+  position: relative; /* ボタンをCanvasの上に配置するためにrelative指定 */
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center; /* ボタンを中央に配置 */
+  align-items: center;
+  z-index: 2; /* ボタンを最前面に配置 */
+}
+
+.game-title {
+  font-size: 36pt;
+  text-align: center;
+  margin-right: 20pt;
+}
+
+/* ボタンスタイル */
+.button-game-start {
+  font-family: 'PixelFont', sans-serif;
+  font-size: 24px;
+  padding: 15px 30px;
+  background-color: #ffd700;
+  border: 3px solid #000;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px; /* アイコンとテキストの間隔 */
+  z-index: 2; /* 最前面 */
+}
+
+/* ボタンアイコンのスタイル */
+.button-icon {
+  width: 32px;
+  height: 32px;
+}
+
+/* Canvasスタイル */
+.canvas-toppage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1; /* Canvasを背面に配置 */
+  background-color: #add8e6; /* 背景色（青空イメージ） */
+}
