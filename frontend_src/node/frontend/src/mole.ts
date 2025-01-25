@@ -1,21 +1,17 @@
+// Mole.ts
 import { Character } from "./character";
 import { Map } from "./map";
 
 export class Mole extends Character {
-  private digTimer: number;
   private aiTimer: number;
   private direction: string;
 
   constructor(x: number, y: number, speed: number, gravity: number) {
-    const images = [
-      new Image(),
-      new Image(),
-    ];
+    const images = [new Image(), new Image()];
     images[0].src = "assets/characters/mole_running_start.png";
     images[1].src = "assets/characters/mole_running_end.png";
     super(images, x, y, speed, gravity);
 
-    this.digTimer = 0;
     this.aiTimer = 0;
     this.direction = Math.random() > 0.5 ? "left" : "right";
   }
@@ -23,13 +19,13 @@ export class Mole extends Character {
   update(mapInstance: Map, deltaTime: number, tileSize: number) {
     // AI タイマーの更新
     this.aiTimer += deltaTime;
-  
+
     if (this.aiTimer >= 1000) {
       this.aiTimer = 0;
-      const actions = ["left", "right", "dig"];
+      const actions = ["left", "right"]; // "dig" を削除
       this.direction = actions[Math.floor(Math.random() * actions.length)];
     }
-  
+
     // 動作の実行
     switch (this.direction) {
       case "left":
@@ -44,13 +40,8 @@ export class Mole extends Character {
           this.facingLeft = false;
         }
         break;
-      case "dig":
-        const digX = Math.floor(this.x / tileSize);
-        const digY = Math.floor(this.y / tileSize);
-        mapInstance.digTile(digX, digY, "down", this.width, this.height, this.speed);
-        break;
     }
-  
+
     // 重力の適用と地面の確認
     const [isOnGround, newY] = mapInstance.isOnGround(this.x, this.y, this.height);
     if (isOnGround) {
@@ -58,7 +49,7 @@ export class Mole extends Character {
     } else {
       this.y += this.gravity; // 重力を適用
     }
-  
+
     // アニメーションの更新
     this.animationTimer += deltaTime;
     if (this.animationTimer >= 60) {
@@ -66,8 +57,14 @@ export class Mole extends Character {
       this.frameIndex = (this.frameIndex + 1) % this.images.length;
     }
   }
-  
+
   draw(ctx: CanvasRenderingContext2D, cameraX: number, cameraY: number) {
     super.draw(ctx, cameraX, cameraY);
+  }
+
+  draw_on_toppage(ctx: CanvasRenderingContext2D, x: number, y: number) {
+    this.width = 500
+    this.height = 500
+    super.draw(ctx, x, y, this.width, this.height);
   }
 }
