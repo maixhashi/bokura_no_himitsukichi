@@ -50,6 +50,29 @@ export class Treasure {
     }
   }
 
+  draw_on_toppage(context: CanvasRenderingContext2D, x: number, y: number): void {
+    this.x = x; // クリック判定のためにx座標を更新
+    this.y = y; // クリック判定のためにy座標を更新
+
+    this.width = 500
+    this.height = 500
+  
+    context.save(); // 現在の描画状態を保存
+  
+    // 描画位置を基準にスケールを反転（-1で反転）
+    context.translate(x + this.width / 2, y + this.height / 2); // 中心点に移動
+    context.scale(-1, 1); // X軸方向に反転
+    context.translate(-(x + this.width / 2), -(y + this.height / 2)); // 元の位置に戻す
+  
+    if (!this.isOpened) {
+      context.drawImage(this.image, x, y, this.width, this.height);
+    } else {
+      context.drawImage(this.imageOpened, x, y, this.width, this.height);
+    }
+  
+    context.restore(); // 描画状態を元に戻す
+  }
+    
   update(mapInstance: Map): void {
     const [isOnGround, newY] = mapInstance.isOnGround(this.x, this.y, this.height);
     if (isOnGround) {
