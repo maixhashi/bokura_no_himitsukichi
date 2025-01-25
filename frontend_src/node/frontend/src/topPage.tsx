@@ -6,7 +6,7 @@ import { Bocchama } from './Bocchama';
 import './TopPage.css';
 
 const TopPage: React.FC = () => {
-  const TILE_SIZE = 510;
+  const TILE_SIZE = 500;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const bocchamaRef = useRef<Bocchama | null>(null);
 

@@ -1,36 +1,138 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import Layout from './Layout';
-import './Form.css';
+import React, { useEffect, useRef, useState } from "react";
+import axios from "axios";
+import Layout from "./Layout";
+import { Treasure } from "./treasure";
+import { Map } from "./map";
+import "./Form.css";
+
+const SCREEN_WIDTH = 1600;
+const SCREEN_HEIGHT = 800;
+
+const mapData = [
+  [5, 5],
+];
+
+const TILE_SIZE = 800;
 
 const AccountRegisterPage: React.FC = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [treasure, setTreasure] = useState<Treasure | null>(null);
+  const [collectedRewards, setCollectedRewards] = useState<HTMLImageElement[]>(
+    []
+  );
+  const [gameMap, setGameMap] = useState<Map | null>(null);
+
+  // マップと宝箱の初期化
+  useEffect(() => {
+    if (canvasRef.current) {
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext("2d");
+
+      if (ctx) {
+        // マップの初期化
+        const newMap = new Map(mapData, TILE_SIZE);
+        setGameMap(newMap);
+
+        // 宝箱の初期化
+        const rewardImage = new Image();
+        rewardImage.src = "public/assets/rewards/movie_poster.png";
+
+        rewardImage.onload = () => {
+          console.log("Reward image loaded");
+          const newTreasure = new Treasure(150, 100, 0, rewardImage);
+          setTreasure(newTreasure); // 宝箱を設定
+        };
+
+        rewardImage.onerror = () => {
+          console.error("Failed to load reward image");
+        };
+      }
+    }
+  }, []);
+
+  // 描画ループ
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (canvas && gameMap && treasure) {
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      const draw = () => {
+        ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT); // 画面クリア
+
+        // 背景タイルを描画
+        gameMap.draw(ctx, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+        // 宝箱の点滅状態を更新
+        treasure.updateBlink();
+
+        // 宝箱と収集アイテムを描画
+        treasure.draw_on_toppage(ctx, 1000, 200);
+        treasure.drawCollectedRewards(ctx, collectedRewards);
+
+        // 次のフレームを描画
+        requestAnimationFrame(draw);
+      };
+
+      draw(); // 描画ループ開始
+    }
+  }, [gameMap, treasure, collectedRewards]);
+
+  // クリックイベントの追加
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (canvas && treasure) {
+      const handleClick = (e: MouseEvent) => {
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        // 宝箱のクリック判定
+        if (
+          mouseX >= treasure.x &&
+          mouseX <= treasure.x + treasure.width &&
+          mouseY >= treasure.y &&
+          mouseY <= treasure.y + treasure.height
+        ) {
+          console.log("Treasure clicked!");
+          treasure.open(collectedRewards);
+          setCollectedRewards([...collectedRewards]);
+        }
+      };
+
+      canvas.addEventListener("click", handleClick);
+      return () => {
+        canvas.removeEventListener("click", handleClick);
+      };
+    }
+  }, [treasure, collectedRewards]);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    setMessage('');
-    setErrorMessage('');
+    setMessage("");
+    setErrorMessage("");
 
     try {
-      const response = await axios.post('http://localhost:8000/api/register/', {
+      const response = await axios.post("http://localhost:8000/api/register/", {
         username,
         password,
       });
       setMessage(response.data.message);
-      setUsername('');
-      setPassword('');
+      setUsername("");
+      setPassword("");
     } catch (err: any) {
-      setErrorMessage(err.response?.data?.error || 'An unexpected error occurred.');
+      setErrorMessage(err.response?.data?.error || "An unexpected error occurred.");
     }
   };
 
   return (
     <Layout>
-      <div className="page-container">
-        <div className="form">
+      <div className="account-register-page-container">
+        <div className="form pixel-font">
           <h2>アカウントを作成</h2>
           <form onSubmit={handleRegister}>
             <div>
@@ -54,8 +156,17 @@ const AccountRegisterPage: React.FC = () => {
               />
             </div>
             {errorMessage && <p className="error-message">{errorMessage}</p>}
-            <button type="submit">登録</button>
+            <button type="submit">作成</button>
           </form>
+        </div>
+        <div className="canvas-container">
+          <canvas
+            className="canvas-account-register-page"
+            ref={canvasRef}
+            width={SCREEN_WIDTH}
+            height={SCREEN_HEIGHT}
+            style={{ border: "1px solid black" }}
+          ></canvas>
         </div>
       </div>
     </Layout>
