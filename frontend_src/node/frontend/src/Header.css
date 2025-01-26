@@ -10,6 +10,7 @@ header {
   display: flex;
   justify-content: space-between; /* 左右に要素を配置 */
   align-items: center; /* 縦方向に中央揃え */
+  position: relative; /* 中央配置のために必要 */
 }
 
 .HeaderLogo {
@@ -20,6 +21,17 @@ header {
   height: 100px;
   width: auto;
   cursor: pointer;
+}
+
+.HeaderGameTitle {
+  font-size: 26px;
+  position: absolute; /* 中央配置のために必要 */
+  left: 50%; /* 水平方向の中央に配置 */
+  transform: translateX(-50%); /* 中央揃えの補正 */
+}
+
+.HeaderGameTitle a {
+  color: black;
 }
 
 .HeaderLinks {
@@ -52,7 +64,7 @@ header {
 .HeaderLinks a {
   margin-left: 10px;
   text-decoration: none;
-  color: #007bff;
+  color: black;
   font-size: 14px;
 }
 

@@ -6,7 +6,7 @@ import { Map } from "./map";
 import "./Form.css";
 
 const SCREEN_WIDTH = 1600;
-const SCREEN_HEIGHT = 800;
+const SCREEN_HEIGHT = 750;
 
 const mapData = [
   [5, 5],
@@ -21,9 +21,6 @@ const AccountRegisterPage: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [treasure, setTreasure] = useState<Treasure | null>(null);
-  const [collectedRewards, setCollectedRewards] = useState<HTMLImageElement[]>(
-    []
-  );
   const [gameMap, setGameMap] = useState<Map | null>(null);
 
   // マップと宝箱の初期化
@@ -43,7 +40,7 @@ const AccountRegisterPage: React.FC = () => {
 
         rewardImage.onload = () => {
           console.log("Reward image loaded");
-          const newTreasure = new Treasure(150, 100, 0, rewardImage);
+          const newTreasure = new Treasure(100, 300, 0, rewardImage);
           setTreasure(newTreasure); // 宝箱を設定
         };
 
@@ -70,9 +67,8 @@ const AccountRegisterPage: React.FC = () => {
         // 宝箱の点滅状態を更新
         treasure.updateBlink();
 
-        // 宝箱と収集アイテムを描画
+        // 宝箱を描画
         treasure.draw_on_toppage(ctx, 1000, 200);
-        treasure.drawCollectedRewards(ctx, collectedRewards);
 
         // 次のフレームを描画
         requestAnimationFrame(draw);
@@ -80,7 +76,7 @@ const AccountRegisterPage: React.FC = () => {
 
       draw(); // 描画ループ開始
     }
-  }, [gameMap, treasure, collectedRewards]);
+  }, [gameMap, treasure]);
 
   // クリックイベントの追加
   useEffect(() => {
@@ -99,8 +95,7 @@ const AccountRegisterPage: React.FC = () => {
           mouseY <= treasure.y + treasure.height
         ) {
           console.log("Treasure clicked!");
-          treasure.open(collectedRewards);
-          setCollectedRewards([...collectedRewards]);
+          treasure.open(); // 宝箱を開く動作のみ実行
         }
       };
 
@@ -109,7 +104,7 @@ const AccountRegisterPage: React.FC = () => {
         canvas.removeEventListener("click", handleClick);
       };
     }
-  }, [treasure, collectedRewards]);
+  }, [treasure]);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();

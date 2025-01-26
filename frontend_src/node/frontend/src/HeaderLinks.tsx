@@ -41,8 +41,8 @@ const HeaderLinks = () => {
       ) : (
         // 未ログイン
         <>
-          <Link to="/login">ログイン</Link>
-          <Link to="/account-register">アカウントを登録</Link>
+          <Link to="/login" className="pixel-font">ログイン</Link>
+          <Link to="/account-register" className="pixel-font">アカウントを登録</Link>
         </>
       )}
       {errorMessage && <p className="error-message">{errorMessage}</p>}

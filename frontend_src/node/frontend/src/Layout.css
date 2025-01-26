@@ -10,6 +10,8 @@ body, html {
   /* width: 100%; 親要素の幅を全体に広げる */
   margin: 0;
   padding: 0;
+  position: fixed;
+  top: 0;
 }
 
 :root {
@@ -42,6 +44,6 @@ main {
 
 .pixel-font-shape-bit {
   font-family: 'PixelFont-ShapeBit';
-  font-size: 16px; /* 必要に応じてサイズを調整 */
+  /* font-size: 16px; 必要に応じてサイズを調整 */
   line-height: 1.2;
 }

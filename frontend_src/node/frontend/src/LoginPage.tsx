@@ -57,7 +57,7 @@ const LoginPage: React.FC = () => {
 
         // モグラの更新と描画
         mole.update(gameMap, 16, TILE_SIZE);
-        mole.draw_on_toppage(ctx, -75, 200);
+        mole.draw_on_toppage(ctx, -75, 275);
 
         // 次のフレームを描画
         requestAnimationFrame(draw);
@@ -121,7 +121,6 @@ const LoginPage: React.FC = () => {
             ref={canvasRef}
             width={SCREEN_WIDTH}
             height={SCREEN_HEIGHT}
-            style={{ border: "1px solid black" }}
           ></canvas>
         </div>
       </div>
