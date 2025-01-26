@@ -88,11 +88,11 @@ export const startGameLoop = () => {
 
     // マップとキャラクターの描画
     gameMap.draw(ctx, cameraX, cameraY, SCREEN_WIDTH, SCREEN_HEIGHT);
-    bocchama.draw(ctx, cameraX, cameraY);
+    bocchama.draw_on_game(ctx, cameraX, cameraY);
 
     // モグラを描画
     for (const mole of gameMap.moles) {
-      mole.draw(ctx, cameraX, cameraY);
+      mole.draw_on_game(ctx, cameraX, cameraY);
     }
 
     // 宝箱を描画

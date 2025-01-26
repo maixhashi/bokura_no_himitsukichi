@@ -14,6 +14,8 @@ export class Mole extends Character {
 
     this.aiTimer = 0;
     this.direction = Math.random() > 0.5 ? "left" : "right";
+    this.width = images[0].width;
+    this.height = images[0].height;
   }
 
   update(mapInstance: Map, deltaTime: number, tileSize: number) {
@@ -58,13 +60,16 @@ export class Mole extends Character {
     }
   }
 
-  draw(ctx: CanvasRenderingContext2D, cameraX: number, cameraY: number) {
-    super.draw(ctx, cameraX, cameraY);
+
+  draw_on_game(ctx: CanvasRenderingContext2D, cameraX: number, cameraY: number) {
+    const width = this.images[0].width
+    const height = this.images[0].height
+    super.draw(ctx, cameraX, cameraY, width, height);
   }
 
   draw_on_toppage(ctx: CanvasRenderingContext2D, x: number, y: number) {
-    this.width = 500
-    this.height = 500
-    super.draw(ctx, x, y, this.width, this.height);
+    const width = 500
+    const height = 500
+    super.draw(ctx, x, y, width, height);
   }
 }

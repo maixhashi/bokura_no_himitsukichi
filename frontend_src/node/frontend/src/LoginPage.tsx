@@ -1,9 +1,10 @@
-// LoginPage.tsx
 import React, { useEffect, useRef, useState } from "react";
-import axios from "axios";
-import Layout from "./Layout";
 import { Mole } from "./mole";
 import { Map } from "./map";
+import axios from "axios";
+import Layout from "./Layout";
+import { Link, useNavigate } from "react-router-dom";
+
 import "./Form.css";
 
 const SCREEN_WIDTH = 1600;
@@ -15,10 +16,14 @@ const mapData = [
 
 const TILE_SIZE = 800;
 
+
 const LoginPage: React.FC = () => {
+  const navigate = useNavigate(); // useNavigateを初期化
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [success, setSuccess] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [mole, setMole] = useState<Mole | null>(null);
@@ -67,21 +72,36 @@ const LoginPage: React.FC = () => {
     }
   }, [gameMap, mole]);
 
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setMessage("");
-    setErrorMessage("");
+    setErrorMessage(""); // エラーメッセージをリセット
+    setSuccess(""); // 成功メッセージをリセット
 
     try {
-      const response = await axios.post("http://localhost:8000/api/login/", {
-        username,
-        password,
-      });
-      setMessage(response.data.message);
-      setUsername("");
-      setPassword("");
+      // CSRFトークンが必要であればリクエストに含める
+      const csrfResponse = await axios.get("http://localhost:8000/api/csrf/");
+      axios.defaults.headers.common["X-CSRFToken"] = csrfResponse.data.csrfToken;
+
+      // Djangoのログインエンドポイントにリクエストを送信
+      const response = await axios.post(
+        "http://localhost:8000/api/login/",
+        {
+          username,
+          password,
+        },
+        { withCredentials: true } // Cookieを使用
+      );
+
+      setSuccess("ログイン成功しました！");
+      console.log(response.data.message);
+
+      // トップページに遷移
+      navigate("/"); // "/" をトップページのパスに変更
+      // ページをリロード
+      window.location.reload();
     } catch (err: any) {
-      setErrorMessage(err.response?.data?.error || "An unexpected error occurred.");
+      setErrorMessage(err.response?.data?.error || "ログインに失敗しました");
     }
   };
 
