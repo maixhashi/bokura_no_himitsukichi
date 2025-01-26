@@ -17,8 +17,8 @@ export class Bocchama extends Character {
     super(images, x, y, speed, gravity);
     this.isMoving = false;
     this.isMoving = false;
-    this.width = 0;
-    this.height = 0;
+    this.width = images[0].width;
+    this.height = images[0].height;
     this.startX = 0;
 
   }
@@ -33,14 +33,15 @@ export class Bocchama extends Character {
     }
   }
 
-  draw(ctx: CanvasRenderingContext2D, cameraX: number, cameraY: number) {
-    super.draw(ctx, cameraX, cameraY);
+  draw_on_game(ctx: CanvasRenderingContext2D, cameraX: number, cameraY: number) {
+    super.draw(ctx, cameraX, cameraY, this.width, this.height);
   }
+
   draw_on_toppage(ctx: CanvasRenderingContext2D, cameraX: number, cameraY: number) {
-    super.draw(ctx, cameraX, cameraY);
-    this.isMoving = true
     this.width = 390;
     this.height = 390;
+    super.draw(ctx, cameraX, cameraY, this.width, this.height);
+    this.isMoving = true;
   }
 
   move(keys: { [key: string]: boolean }, map: any) {

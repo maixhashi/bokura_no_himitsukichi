@@ -1,23 +1,23 @@
 export class Character {
-  private images: HTMLImageElement[];
-  private x: number;
-  private y: number;
-  private speed: number;
-  private gravity: number;
-  private frameIndex: number;
-  private animationTimer: number;
-  private onGround: boolean;
-  private currentImage: HTMLImageElement;
-  private width: number;
-  private height: number;
-  private facingLeft: boolean;
+  public images: HTMLImageElement[];
+  public x: number;
+  public y: number;
+  public width: number;
+  public height: number;
+  public speed: number;
+  public gravity: number;
+  public frameIndex: number;
+  public animationTimer: number;
+  public onGround: boolean;
+  public currentImage: HTMLImageElement;
+  public facingLeft: boolean;
 
   constructor(
     images: HTMLImageElement[],
     x: number,
     y: number,
     speed: number,
-    gravity: number
+    gravity: number,
   ) {
     this.images = images;
     this.x = x;
@@ -28,12 +28,12 @@ export class Character {
     this.animationTimer = 0;
     this.onGround = false;
     this.currentImage = this.images[0];
-    this.width = this.currentImage.width;
-    this.height = this.currentImage.height;
     this.facingLeft = false;
+    this.width = this.currentImage.width
+    this.height = this.currentImage.height
   }
 
-  draw(ctx: CanvasRenderingContext2D, cameraX: number, cameraY: number): void {
+  draw(ctx: CanvasRenderingContext2D, cameraX: number, cameraY: number, width?: number, height?: number): void {
     if (!ctx || !(ctx instanceof CanvasRenderingContext2D)) {
       console.error("Invalid canvas context provided.");
       return;
@@ -45,16 +45,19 @@ export class Character {
       console.warn("Image not loaded yet:", currentImage.src);
       return;
     }
+
+    const drawWidth = width || currentImage.width;
+    const drawHeight = height || currentImage.height;
   
     if (this.facingLeft) {
       ctx.save();
       ctx.scale(-1, 1);
       ctx.drawImage(
         currentImage,
-        -(this.x + this.width - cameraX),
+        -(this.x + drawWidth - cameraX),
         this.y - cameraY,
-        this.width,
-        this.height
+        drawWidth,
+        drawHeight,
       );
       ctx.restore();
     } else {
@@ -62,8 +65,8 @@ export class Character {
         currentImage,
         this.x - cameraX,
         this.y - cameraY,
-        this.width,
-        this.height
+        drawWidth,
+        drawHeight,
       );
     }
   }

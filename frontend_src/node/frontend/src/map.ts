@@ -2,8 +2,8 @@ import { Mole } from './mole';
 import { Treasure } from './treasure';
 import { TILE_SIZE } from './utils/constants';
 
-const MOLE_SPAWN_PROBABILITY = 0.03;
-const TREASURE_SPAWN_PROBABILITY = 0.5;
+const MOLE_SPAWN_PROBABILITY = 0.5;
+const TREASURE_SPAWN_PROBABILITY = 0.03;
 
 export class Map {
   private mapData: number[][];
