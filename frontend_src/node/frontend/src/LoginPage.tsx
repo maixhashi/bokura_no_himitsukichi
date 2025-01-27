@@ -4,6 +4,7 @@ import { Map } from "./map";
 import axios from "axios";
 import Layout from "./Layout";
 import { Link, useNavigate } from "react-router-dom";
+import axiosInstance from "./utils/axiosInstance";
 
 import "./Form.css";
 
@@ -77,25 +78,21 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
     setErrorMessage(""); // エラーメッセージをリセット
     setSuccess(""); // 成功メッセージをリセット
-
+  
     try {
-      // CSRFトークンが必要であればリクエストに含める
-      const csrfResponse = await axios.get("http://localhost:8000/api/csrf/");
-      axios.defaults.headers.common["X-CSRFToken"] = csrfResponse.data.csrfToken;
-
       // Djangoのログインエンドポイントにリクエストを送信
-      const response = await axios.post(
-        "http://localhost:8000/api/login/",
+      const response = await axiosInstance.post(
+        "/login/", // ベースURLはaxiosInstanceに設定済み
         {
           username,
           password,
         },
         { withCredentials: true } // Cookieを使用
       );
-
+  
       setSuccess("ログイン成功しました！");
       console.log(response.data.message);
-
+  
       // トップページに遷移
       navigate("/"); // "/" をトップページのパスに変更
       // ページをリロード
@@ -104,7 +101,7 @@ const LoginPage: React.FC = () => {
       setErrorMessage(err.response?.data?.error || "ログインに失敗しました");
     }
   };
-
+  
   return (
     <Layout>
       <div className="login-page-container">
