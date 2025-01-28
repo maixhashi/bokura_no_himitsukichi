@@ -2,8 +2,8 @@ import { Mole } from './mole';
 import { Treasure } from './treasure';
 import { TILE_SIZE } from './utils/constants';
 
-const MOLE_SPAWN_PROBABILITY = 0.5;
-const TREASURE_SPAWN_PROBABILITY = 0.03;
+const MOLE_SPAWN_PROBABILITY = 0.03;
+const TREASURE_SPAWN_PROBABILITY = 0.5;
 
 export class Map {
   private mapData: number[][];
@@ -50,8 +50,8 @@ export class Map {
       const BASE_URL = 'http://localhost:5173';
 
       // APIレスポンスから画像をロード
-      const imagePromises = data.map((item: { pixel_art_image: string }) =>
-        this.createRewardImage(`${BASE_URL}${item.pixel_art_image}`)
+      const imagePromises = data.map((item: { pixel_art_image_path: string }) =>
+        this.createRewardImage(`${BASE_URL}${item.pixel_art_image_path}`)
       );
 
       const loadedImages = await Promise.all(imagePromises);

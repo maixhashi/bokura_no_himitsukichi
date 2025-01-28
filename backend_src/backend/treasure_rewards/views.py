@@ -8,7 +8,7 @@ def reward_images(request):
             {
                 "id": reward.id,
                 "title": reward.title,
-                "pixel_art_image": reward.pixel_art_image.url if reward.pixel_art_image else None,
+                "pixel_art_image_path": reward.pixel_art_image_path.url if reward.pixel_art_image_path else None,
             }
             for reward in rewards
         ]
