@@ -59,9 +59,9 @@ def fetch_random_movie_posters():
             "poster_url": f"https://image.tmdb.org/t/p/w500{movie['poster_path']}"
         })
     
-    # シャッフルして20件を返す
+    # シャッフルして100件を返す
     random.shuffle(posters)
-    return posters[:20]
+    return posters[:100]
 
 # 実行例
 if __name__ == "__main__":

@@ -16,8 +16,8 @@ def reward_images(request):
             {
                 "id": reward.id,
                 # 余計なディレクトリを除去してパスを加工
-                "pixel_art_image": f"/public/assets/rewards/{reward.pixel_art_image.name.split('/')[-1]}"
-                if reward.pixel_art_image
+                "pixel_art_image_path": f"/public/assets/movie_posters/{reward.pixel_art_image_path.name.split('/')[-1]}"
+                if reward.pixel_art_image_path
                 else None,
                 "title": reward.title,
             }
