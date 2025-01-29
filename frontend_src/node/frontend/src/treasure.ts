@@ -1,9 +1,7 @@
-// interface Camera {
-//   x: number;
-//   y: number;
-// }
-
 import { Map } from "./map";
+import axiosInstance from "./utils/axiosInstance";
+import { store } from './store'; // Reduxストアをインポート
+import { fetchCurrentUser } from './features/auth/authSlice';
 
 export class Treasure {
   private x: number;
@@ -82,11 +80,50 @@ export class Treasure {
     }
   }
 
-  open(collectedRewards: HTMLImageElement[]): void {
+  async open(collectedRewards: HTMLImageElement[]): Promise<void> {
     if (!this.isOpened) {
       this.isOpened = true;
       this.image = this.imageOpened;
       this.blinkCounter = 30;
+  
+      // Reduxストアの状態を直接取得
+      let currentUser = store.getState().auth.currentUser;
+  
+      // currentUserがnullの場合、fetchCurrentUserを実行
+      if (!currentUser) {
+        console.warn("User is not logged in. Attempting to fetch user...");
+        const result = await store.dispatch(fetchCurrentUser() as any); // 型アサーションが必要
+        if (result.meta.requestStatus === 'fulfilled') {
+          currentUser = store.getState().auth.currentUser; // 状態を更新
+        } else {
+          console.error("Failed to fetch user.");
+          return;
+        }
+      }
+  
+      const userId = currentUser.id;
+  
+      // RewardImageからmovie_poster_idを取得
+      const moviePosterId = this.rewardImage.dataset.moviePosterId;
+  
+      if (moviePosterId) {
+        try {
+          const response = await axiosInstance.post("/rewards/collect", {
+            movie_poster_id: moviePosterId,
+            user_id: userId,
+          });
+  
+          if (response.status === 200) {
+            console.log(response.data.message);
+            collectedRewards.push(this.rewardImage);
+          } else {
+            console.error("Failed to collect reward");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+  
       this.dropReward(collectedRewards);
     }
   }

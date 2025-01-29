@@ -45,31 +45,36 @@ export class Map {
       if (!response.ok) {
         throw new Error(`APIリクエスト失敗: ステータス ${response.status}`);
       }
-
+  
       const data = await response.json();
       const BASE_URL = 'http://localhost:5173';
-
+  
       // APIレスポンスから画像をロード
-      const imagePromises = data.map((item: { pixel_art_image_path: string }) =>
-        this.createRewardImage(`${BASE_URL}${item.pixel_art_image_path}`)
+      const imagePromises = data.map(
+        (item: { pixel_art_image_path: string; movie_poster_id: string }) =>
+          this.createRewardImage(`${BASE_URL}${item.pixel_art_image_path}`, item.movie_poster_id)
       );
-
+  
       const loadedImages = await Promise.all(imagePromises);
       this.rewardImages = loadedImages;
     } catch (error) {
       console.error('報酬画像のロード中にエラーが発生しました:', error);
     }
   }
-
-  private createRewardImage(src: string): Promise<HTMLImageElement> {
+  
+  private createRewardImage(src: string, moviePosterId: string): Promise<HTMLImageElement> {
     return new Promise((resolve, reject) => {
       const img = new Image();
       img.src = src;
+  
+      // dataset に movie_poster_id を付与
+      img.dataset.moviePosterId = moviePosterId;
+  
       img.onload = () => resolve(img);
       img.onerror = () => reject(new Error(`Failed to load image: ${src}`));
     });
   }
-
+  
   private loadTileImages(): void {
     const tilePaths: { [key: string]: string } = {
       sky: 'assets/tiles/sky.png',

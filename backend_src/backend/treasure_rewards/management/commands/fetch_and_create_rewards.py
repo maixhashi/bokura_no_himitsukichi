@@ -31,7 +31,6 @@ def fetch_and_save_movie_posters():
 
 def create_reward_from_movie_poster():
     """MoviePosterからランダムに選択してRewardImageを作成"""
-    # MoviePosterからランダムに50件取得
     posters = MoviePoster.objects.order_by('?')[:50]
     
     if not posters.exists():
@@ -43,17 +42,18 @@ def create_reward_from_movie_poster():
         deleted_count, _ = RewardImage.objects.all().delete()
         print(f"Deleted {deleted_count} existing RewardImages.")
         
-        # 新しいRewardImageを作成（IDを1から50に設定）
+        # 新しいRewardImageを作成
         for index, poster in enumerate(posters, start=1):
             try:
                 reward = RewardImage.objects.create(
                     id=index,  # IDを手動で設定
-                    tmdb_id=poster.tmdb_id,
+                    tmdb_id=poster.tmdb_id,  # TMDB IDを保存
+                    movie_poster_id=poster.id,  # MoviePosterのIDを保存
                     title=poster.title,
                     original_poster_url=poster.poster_url,
                     pixel_art_image_path=poster.pixel_art_image_path
                 )
-                print(f"RewardImage created successfully: ID {reward.id}, TMDB ID {reward.tmdb_id}, Title: {reward.title}")
+                print(f"RewardImage created successfully: ID {reward.id}, MoviePoster ID {poster.id}, Title: {reward.title}")
             
             except Exception as e:
                 print(f"Error creating RewardImage: {e}. Poster info: TMDB ID {poster.tmdb_id}, Title: {poster.title}")
