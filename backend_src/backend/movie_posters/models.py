@@ -1,6 +1,7 @@
 import os
 import requests
 from django.db import models
+from django.contrib.auth.models import User
 from django.conf import settings
 from utils.pixel_art_converter import convert_to_pixel_art
 

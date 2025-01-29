@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'pages',
     'movie_posters',
     'treasure_rewards',
+    'collected_rewards',
     'djoser',
 ]
 

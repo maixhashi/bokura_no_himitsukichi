@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { logout } from './features/authSlice';
+import { logout } from './features/auth/authSlice';
 import './Header.css';
 import HeaderLogo from './HeaderLogo';
 import HeaderGameTitle from './HeaderGameTitle';

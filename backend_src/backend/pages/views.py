@@ -20,6 +20,7 @@ def reward_images(request):
                 if reward.pixel_art_image_path
                 else None,
                 "title": reward.title,
+                "movie_poster_id": reward.movie_poster_id,
             }
             for reward in rewards
         ]
