@@ -8,6 +8,7 @@ import AboutPage from './AboutPage';
 import NotFoundPage from './NotFoundPage';
 import LoginPage from './LoginPage';
 import AccountRegisterPage from './AccountRegisterPage';
+import DashboardPage from './DashboardPage';
 import GamePage from './GamePage';
 import './index.css';
 
@@ -20,6 +21,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           <Route path="/about" element={<AboutPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/account-register" element={<AccountRegisterPage />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/game" element={<GamePage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

@@ -54,6 +54,7 @@ header {
   padding: 8px 12px;
   font-size: 14px;
   border-radius: 4px;
+  margin-left: 10px;
   cursor: pointer;
 }
 

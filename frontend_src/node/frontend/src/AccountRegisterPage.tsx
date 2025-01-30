@@ -34,19 +34,9 @@ const AccountRegisterPage: React.FC = () => {
         const newMap = new Map(mapData, TILE_SIZE);
         setGameMap(newMap);
 
-        // 宝箱の初期化
-        const rewardImage = new Image();
-        rewardImage.src = "public/assets/rewards/movie_poster.png";
+        const newTreasure = new Treasure(100, 300, 0);
+        setTreasure(newTreasure); // 宝箱を設定
 
-        rewardImage.onload = () => {
-          console.log("Reward image loaded");
-          const newTreasure = new Treasure(100, 300, 0, rewardImage);
-          setTreasure(newTreasure); // 宝箱を設定
-        };
-
-        rewardImage.onerror = () => {
-          console.error("Failed to load reward image");
-        };
       }
     }
   }, []);

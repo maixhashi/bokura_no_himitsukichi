@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Mole } from "./mole";
 import { Map } from "./map";
-import axios from "axios";
 import Layout from "./Layout";
 import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "./utils/axiosInstance";
 
 import "./Form.css";
+import "./TopPage.css";
 
 const SCREEN_WIDTH = 1600;
 const SCREEN_HEIGHT = 800;

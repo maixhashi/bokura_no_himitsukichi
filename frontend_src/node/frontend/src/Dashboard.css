@@ -1,34 +1,43 @@
 /* トップページの全体スタイル */
-.container-toppage {
-  position: relative; /* ボタンをCanvasの上に配置するためにrelative指定 */
+.container-dashboard {
+  /* position: relative; ボタンをCanvasの上に配置するためにrelative指定 */
   width: 100vw;
   height: 100vh;
-  display: flex;
-  justify-content: center; /* ボタンを中央に配置 */
+  /* display: flex; */
+  /* justify-content: center; ボタンを中央に配置 */
   align-items: center;
   z-index: 2; /* ボタンを最前面に配置 */
-  bottom: 400px;
-  padding-top: var(--header-height);
+  bottom: 400px;  
+  padding-top: 0;
+  padding-left: 0;
+  background-color: antiquewhite;
 }
-.login-page-container {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center; /* ボタンを中央に配置 */
-  align-items: center;
-  z-index: 2; /* ボタンを最前面に配置 */
-  bottom: 400px;
-  padding-top: 2*var(--header-height);
+
+.dashboard-title {
+  font-size: 26px;
+  text-align: center;
+  margin-bottom: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
-.account-register-page-container {
-  width: 100vw;
-  height: 100vh;
+
+
+.icon-movie-cracker {
+  width: 32px;
+  height: 32px;
+  padding-top: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
+  vertical-align: bottom;
+}
+
+.container-of-collectionRewards{
   display: flex;
-  justify-content: center; /* ボタンを中央に配置 */
-  align-items: center;
-  z-index: 2; /* ボタンを最前面に配置 */
-  bottom: 400px;
-  padding-top: 2*var(--header-height);
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-left: 10px;
+  max-height: 65%; 
+  overflow-y: auto;
 }
 
 .game-title {

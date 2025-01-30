@@ -78,7 +78,7 @@ def main():
             treasure.draw(screen, camera)
 
         # 収集済みアイテムを描画
-        Treasure.draw_collected_rewards(screen, collected_rewards)
+        game_map.draw_collected_rewards(screen, collected_rewards)
 
         # 画面更新
         pygame.display.flip()
