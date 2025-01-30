@@ -1,34 +1,14 @@
 /* トップページの全体スタイル */
-.container-toppage {
-  position: relative; /* ボタンをCanvasの上に配置するためにrelative指定 */
+.container-dashboard {
+  /* position: relative; ボタンをCanvasの上に配置するためにrelative指定 */
   width: 100vw;
   height: 100vh;
-  display: flex;
-  justify-content: center; /* ボタンを中央に配置 */
+  /* display: flex; */
+  /* justify-content: center; ボタンを中央に配置 */
   align-items: center;
   z-index: 2; /* ボタンを最前面に配置 */
-  bottom: 400px;
-  padding-top: var(--header-height);
-}
-.login-page-container {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center; /* ボタンを中央に配置 */
-  align-items: center;
-  z-index: 2; /* ボタンを最前面に配置 */
-  bottom: 400px;
-  padding-top: 2*var(--header-height);
-}
-.account-register-page-container {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center; /* ボタンを中央に配置 */
-  align-items: center;
-  z-index: 2; /* ボタンを最前面に配置 */
-  bottom: 400px;
-  padding-top: 2*var(--header-height);
+  bottom: 400px;  
+  padding-top: 0;
 }
 
 .game-title {

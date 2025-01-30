@@ -217,3 +217,11 @@ class Map:
     def update_treasures(self, clock, TILE_SIZE):
         for treasure in self.treasures:
             treasure.update(self, clock, TILE_SIZE)  # 各宝箱を更新
+
+    @staticmethod
+    def draw_collected_rewards(screen, collected_rewards):
+        """画面右上に収集済みのアイテムを描画"""
+        x_offset = 1300
+        y_offset = 10
+        for idx, reward in enumerate(collected_rewards):
+            screen.blit(reward, (x_offset - idx * 5, y_offset + idx * 5))
