@@ -34,10 +34,10 @@ const HeaderLinks = () => {
         // ログイン中
         <>
           <span className="pixel-font">{currentUser.username}</span>
+          <Link to="/dashboard" className="pixel-font">ダッシュボード</Link>
           <button onClick={handleLogout} className="logout-button pixel-font">
             ログアウト
           </button>
-          <Link to="/dashboard" className="pixel-font">ダッシュボード</Link>
         </>
       ) : (
         // 未ログイン

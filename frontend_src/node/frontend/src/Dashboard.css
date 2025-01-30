@@ -9,6 +9,35 @@
   z-index: 2; /* ボタンを最前面に配置 */
   bottom: 400px;  
   padding-top: 0;
+  padding-left: 0;
+  background-color: antiquewhite;
+}
+
+.dashboard-title {
+  font-size: 26px;
+  text-align: center;
+  margin-bottom: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+
+.icon-movie-cracker {
+  width: 32px;
+  height: 32px;
+  padding-top: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
+  vertical-align: bottom;
+}
+
+.container-of-collectionRewards{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-left: 10px;
+  max-height: 65%; 
+  overflow-y: auto;
 }
 
 .game-title {

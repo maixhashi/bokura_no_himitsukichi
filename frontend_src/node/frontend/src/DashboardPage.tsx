@@ -40,8 +40,20 @@ const DashboardPage = () => {
   return (
     <Layout>
       <div className="container-dashboard">
-        <div>マイコレクション</div>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+        <div className="dashboard-title pixel-font">
+          <img
+            src="/assets/icon_art/movie-cracker.png"
+            alt="Movie Cracker"
+            className="icon-movie-cracker"
+            />
+          あつめたムービー
+          <img
+            src="/assets/icon_art/movie-cracker.png"
+            alt="Movie Cracker"
+            className="icon-movie-cracker"
+          />
+        </div>
+        <div className="container-of-collectionRewards">
           {collectedRewards.length > 0 ? (
             collectedRewards.map((poster) => (
               <div key={poster.id} style={{ width: "100px", textAlign: "center" }}>
