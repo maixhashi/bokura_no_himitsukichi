@@ -185,7 +185,13 @@ ALLOWED_HOSTS = ["*"]
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = '/static/'
+import os
+# フロントエンドの静的ファイルを読み込む
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+
 
 # Heroku の環境変数を考慮
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
