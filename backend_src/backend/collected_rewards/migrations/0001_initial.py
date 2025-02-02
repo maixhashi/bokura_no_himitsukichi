@@ -10,6 +10,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
+        ('movie_posters', '0001_initial'),  # 依存するアプリの初期マイグレーションを指定
     ]
 
     operations = [
