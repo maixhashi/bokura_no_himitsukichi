@@ -1,0 +1,28 @@
+build:
+  docker:
+    backend: backend_src/docker/python/Dockerfile
+    frontend: frontend_src/docker/node/Dockerfile
+  config:
+    NODE_ENV: production
+  buildpacks:
+    - heroku/nodejs
+    - heroku/python
+  steps:
+    - run:
+        command: |
+          cd frontend_src/node/frontend && yarn install && yarn build
+          mkdir -p ../../backend_src/static/frontend
+          mv dist/* ../../backend_src/static/frontend/
+    - run:
+        command: |
+          cd backend_src && pip install -r requirements.txt
+
+
+release:
+  command:
+    - python backend_src/backend/manage.py migrate
+
+run:
+  backend: python backend_src/backend/manage.py runserver 0.0.0.0:8000
+  frontend: yarn --cwd frontend_src/node/frontend dev --host
+
