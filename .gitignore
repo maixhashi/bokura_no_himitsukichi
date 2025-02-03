@@ -1,7 +1,7 @@
 app/myenv/
 __pycache__/
 *.pyc
-.gitkeep
+# .gitkeep
 .env
 backend_src/backend/treasure_rewards/management/frontend_src/*
 frontend_src/node/frontend/public/assets/movie_posters/
