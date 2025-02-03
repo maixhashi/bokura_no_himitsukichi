@@ -6,6 +6,8 @@ Pillow
 python-dotenv
 djoser
 djangorestframework-simplejwt
-gunicorn
+psycopg2
 dj-database-url
-psycopg2-binary
+whitenoise
+gunicorn
+uvicorn
