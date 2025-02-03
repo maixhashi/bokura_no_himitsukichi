@@ -1,8 +1,17 @@
 import axios from "axios";
 
+const isDevelopment = import.meta.env.MODE === 'development'
+const myBaseUrl = isDevelopment ? import.meta.env.VITE_API_BASE_URL_LOCAL : import.meta.env.VITE_API_BASE_URL_DEPLOY
+
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:8000/api", // DjangoのAPIのベースURL
+  // baseURL: "http://localhost:8000/api", // DjangoのAPIのベースURL
+  baseURL: myBaseUrl, // DjangoのAPIのベースURL
+  timeout: 5000,
   withCredentials: true, // CSRFトークンを送信するためにクッキーを有効化
+  headers: {
+    "Content-Type":"application/json",
+    accept: "application/json"
+  }
 });
 
 // CSRFトークンを取得し、Axiosインスタンスのデフォルトヘッダーに設定
@@ -21,3 +30,17 @@ const getCsrfToken = async () => {
 getCsrfToken();
 
 export default axiosInstance;
+
+// const myBaseUrl = 'http://127.0.0.1:8000/';
+
+
+const AxiosInstance = axios.create({
+    baseURL: myBaseUrl,
+    timeout: 5000,
+    headers: {
+        "Content-Type":"application/json",
+        accept: "application/json"
+    }
+});
+
+export default AxiosInstance
