@@ -1,8 +1,7 @@
 import { Map } from "./map";
 import { Camera } from "./camera";
 import { mapData } from "./mapData";
-import { Bocchama } from "./bocchama";
-import { tilePaths } from "./utils/image_paths";
+import { Bocchama } from "./Bocchama";
 
 // 定数
 const SCREEN_WIDTH = 1600;
