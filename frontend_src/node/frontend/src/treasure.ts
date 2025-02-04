@@ -99,7 +99,12 @@ export class Treasure {
         }
       }
   
-      const userId = currentUser.id;
+      // userId の取得時に null チェックを追加
+      const userId = currentUser?.id;
+      if (!userId) {
+        console.error("User ID is missing.");
+        return;
+      }
   
       // RewardImageからmovie_poster_idを取得
       const moviePosterId = this.rewardImage.dataset.moviePosterId;
@@ -125,7 +130,7 @@ export class Treasure {
       this.dropReward(collectedRewards);
     }
   }
-
+  
   dropReward(collectedRewards?: HTMLImageElement[]): void {
     if (!collectedRewards) {
       console.warn("collectedRewards is undefined. Cannot drop reward.");
