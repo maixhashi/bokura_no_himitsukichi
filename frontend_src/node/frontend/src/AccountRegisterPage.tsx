@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Layout from "./Layout";
-import { Treasure } from "./treasure";
+import { EmptyTreasureBox } from "./EmptyTreasureBox";
 import { Map } from "./map";
 import "./Form.css";
 
@@ -20,7 +20,7 @@ const AccountRegisterPage: React.FC = () => {
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [treasure, setTreasure] = useState<Treasure | null>(null);
+  const [treasure, setTreasure] = useState<EmptyTreasureBox | null>(null);
   const [gameMap, setGameMap] = useState<Map | null>(null);
 
   // マップと宝箱の初期化
@@ -34,7 +34,7 @@ const AccountRegisterPage: React.FC = () => {
         const newMap = new Map(mapData, TILE_SIZE);
         setGameMap(newMap);
 
-        const newTreasure = new Treasure(100, 300, 0);
+        const newTreasure = new EmptyTreasureBox(100, 300, 0);
         setTreasure(newTreasure); // 宝箱を設定
 
       }

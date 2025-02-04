@@ -40,7 +40,7 @@ export const startGameLoop = () => {
   });
 
   // オブジェクトの初期化
-  const gameMap = new Map(mapData, TILE_SIZE, tilePaths);
+  const gameMap = new Map(mapData, TILE_SIZE);
   console.log("gameMap.collectedRewards", gameMap.collectedRewards);
 
   // Bocchamaの初期位置を定義
