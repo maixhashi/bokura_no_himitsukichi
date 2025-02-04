@@ -1,3 +1,5 @@
+import { Map } from "./map";
+
 export class Character {
   public images: HTMLImageElement[];
   public x: number;

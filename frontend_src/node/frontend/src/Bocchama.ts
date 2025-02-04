@@ -1,5 +1,4 @@
 import { Character } from "./Character";
-import { Map } from "./map"; // マップ関連のクラスをインポート
 
 export class Bocchama extends Character {
   isMoving: boolean;
@@ -45,9 +44,10 @@ export class Bocchama extends Character {
   }
 
   move(keys: { [key: string]: boolean }, map: any) {
-    this.isMoving = super.move(keys, map);
+    super.move(keys, map);
+    this.isMoving = true;
   }
-
+  
   updateAnimation(FPS: number) {
     super.updateAnimation(FPS, this.isMoving);
   }

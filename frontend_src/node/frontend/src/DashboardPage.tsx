@@ -20,17 +20,18 @@ const DashboardPage = () => {
   useEffect(() => {
     if (!isAuthenticated) return;
 
-    axiosInstance.get("/collected-rewards/")
-      .then((res) => {
-        // `id` をキーにして重複を排除
-        const uniqueRewards = Array.from(
-          new Map(res.data.map((poster: MoviePoster) => [poster.id, poster])).values()
-        );
-        setCollectedRewards(uniqueRewards);
-      })
-      .catch((error) => {
-        console.error("Error fetching rewards:", error);
-      });
+    axiosInstance.get<MoviePoster[]>("/collected-rewards/")
+  .then((res) => {
+    const uniqueRewards = Array.from(
+      new Map(res.data.map((poster) => [poster.id, poster])).values()
+    );
+    setCollectedRewards(uniqueRewards);
+  })
+  .catch((error) => {
+    console.error("Error fetching rewards:", error);
+  });
+
+
   }, [isAuthenticated]);
 
   if (isAuthenticated === null) {
