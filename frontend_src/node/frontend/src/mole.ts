@@ -1,5 +1,5 @@
 // Mole.ts
-import { Character } from "./character";
+import { Character } from "./Character";
 import { Map } from "./map";
 
 export class Mole extends Character {
