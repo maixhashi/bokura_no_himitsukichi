@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "composite": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "target": "ES2020",
     "useDefineForClassFields": true,
@@ -16,6 +17,7 @@
 
     /* Output settings */
     "declaration": true,
+    "declarationMap": true,
     "emitDeclarationOnly": false,
     "outDir": "./dist",
     "rootDir": "./src",
