@@ -71,12 +71,13 @@ const AccountRegisterPage: React.FC = () => {
   // クリックイベントの追加
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (canvas && treasure) {
-      const handleClick = (e: MouseEvent) => {
-        const rect = canvas.getBoundingClientRect();
-        const mouseX = e.clientX - rect.left;
-        const mouseY = e.clientY - rect.top;
-
+    if (!canvas || !treasure) return;
+  
+    const handleClick = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+  
       // 宝箱のクリック判定
       if (
         mouseX >= treasure.getX() &&
@@ -85,16 +86,16 @@ const AccountRegisterPage: React.FC = () => {
         mouseY <= treasure.getY() + treasure.getHeight()
       ) {
         console.log("Treasure clicked!");
-        treasure.open(); // 宝箱を開く動作のみ実行
+        treasure.open();
       }
-
-      canvas.addEventListener("click", handleClick);
-      return () => {
-        canvas.removeEventListener("click", handleClick);
-      };
-    }
+    };
+  
+    canvas.addEventListener("click", handleClick);
+    return () => {
+      canvas.removeEventListener("click", handleClick);
+    };
   }, [treasure]);
-
+  
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage("");
