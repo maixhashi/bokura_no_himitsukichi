@@ -33,7 +33,7 @@ const LoginPage: React.FC = () => {
         const newMap = new Map(mapData, TILE_SIZE);
         setGameMap(newMap);
 
-        const newMole = new Mole(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 2, 0, false);
+        const newMole = new Mole(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 2, 0);
         setMole(newMole);
       }
     }
@@ -49,7 +49,7 @@ const LoginPage: React.FC = () => {
         ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
         gameMap.draw(ctx, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        mole.update(gameMap, 16, TILE_SIZE);
+        mole.update(gameMap, 16);
         mole.draw_on_toppage(ctx, -75, 275);
 
         requestAnimationFrame(draw);
