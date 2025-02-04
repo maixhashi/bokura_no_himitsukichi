@@ -73,7 +73,7 @@ export const startGameLoop = () => {
     // Bocchamaの動作
     bocchama.move(keys, gameMap);
     bocchama.dig(keys, gameMap);
-    bocchama.openTreasureBox(keys, TILE_SIZE, gameMap.treasures, collectedRewards);
+    bocchama.openTreasureBox(keys, TILE_SIZE, gameMap.getTreasures(), collectedRewards);
 
     // モグラの更新
     gameMap.updateMoles(gameMap, deltaTime, TILE_SIZE);
@@ -90,12 +90,12 @@ export const startGameLoop = () => {
     bocchama.draw_on_game(ctx, cameraX, cameraY);
 
     // モグラを描画
-    for (const mole of gameMap.moles) {
+    for (const mole of gameMap.getMoles()) {
       mole.draw_on_game(ctx, cameraX, cameraY);
     }
 
     // 宝箱を描画
-    for (const treasure of gameMap.treasures) {
+    for (const treasure of gameMap.getTreasures()) {
       treasure.updateBlink();
       treasure.draw(ctx, camera);
     }

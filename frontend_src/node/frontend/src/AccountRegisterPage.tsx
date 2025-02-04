@@ -77,17 +77,16 @@ const AccountRegisterPage: React.FC = () => {
         const mouseX = e.clientX - rect.left;
         const mouseY = e.clientY - rect.top;
 
-        // 宝箱のクリック判定
-        if (
-          mouseX >= treasure.x &&
-          mouseX <= treasure.x + treasure.width &&
-          mouseY >= treasure.y &&
-          mouseY <= treasure.y + treasure.height
-        ) {
-          console.log("Treasure clicked!");
-          treasure.open(); // 宝箱を開く動作のみ実行
-        }
-      };
+      // 宝箱のクリック判定
+      if (
+        mouseX >= treasure.getX() &&
+        mouseX <= treasure.getX() + treasure.getWidth() &&
+        mouseY >= treasure.getY() &&
+        mouseY <= treasure.getY() + treasure.getHeight()
+      ) {
+        console.log("Treasure clicked!");
+        treasure.open(); // 宝箱を開く動作のみ実行
+      }
 
       canvas.addEventListener("click", handleClick);
       return () => {

@@ -95,5 +95,23 @@ export class EmptyTreasureBox {
     if (this.isOpened && this.blinkCounter > 0) {
       this.blinkCounter--;
     }
+  }
+
+  // ゲッターを追加
+  getX() {
+    return this.x;
+  }
+
+  getY() {
+    return this.y;
+  }
+
+  getWidth() {
+    return this.width;
+  }
+
+  getHeight() {
+    return this.height;
   }   
+
 }

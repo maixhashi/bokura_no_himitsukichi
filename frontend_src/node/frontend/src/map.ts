@@ -370,4 +370,13 @@ export class Map {
         }
       });
     }
+  
+  // treasures を取得するメソッド
+  getTreasures(): Treasure[] {
+    return this.treasures;
+  }
+  // moles を取得するメソッド
+  getMoles(): Mole[] {
+    return this.moles;
+  }
 }
