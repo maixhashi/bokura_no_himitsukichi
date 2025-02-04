@@ -1,7 +1,7 @@
 set -o errexit
 
 cd backend_src
-pip install -r requirements.txt
+pip install -r requirements_prod.txt
 
 cd backend
 python manage.py collectstatic --no-input

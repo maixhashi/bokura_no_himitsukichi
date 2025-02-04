@@ -11,8 +11,8 @@ WORKDIR /backend
 RUN pip install --upgrade pip setuptools
 
 # 必要な依存関係をインストール
-ADD requirements.txt /backend/
-RUN pip install -r requirements.txt
+ADD requirements_dev.txt /backend/
+RUN pip install -r requirements_dev.txt
 
 # SQLite3 クライアントツールをインストール
 RUN apt-get update && apt-get install -y sqlite3
