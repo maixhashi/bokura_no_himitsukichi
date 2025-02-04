@@ -2,7 +2,6 @@ import { Map } from "./map";
 import { Camera } from "./camera";
 import { mapData } from "./mapData";
 import { Bocchama } from "./bocchama";
-import { Treasure } from "./treasure";
 import { tilePaths } from "./utils/image_paths";
 
 // 定数

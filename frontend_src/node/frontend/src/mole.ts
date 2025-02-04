@@ -18,7 +18,7 @@ export class Mole extends Character {
     this.height = images[0].height;
   }
 
-  update(mapInstance: Map, deltaTime: number, tileSize: number) {
+  update(mapInstance: Map, deltaTime: number) {
     // AI タイマーの更新
     this.aiTimer += deltaTime;
 

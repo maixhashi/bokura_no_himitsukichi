@@ -1,5 +1,4 @@
 import { Character } from "./Character";
-import { Map } from "./map"; // マップ関連のクラスをインポート
 
 export class Bocchama extends Character {
   isMoving: boolean;

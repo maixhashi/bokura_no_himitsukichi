@@ -140,6 +140,7 @@ const AccountRegisterPage: React.FC = () => {
                 required
               />
             </div>
+            {message && <p className="success-message">{message}</p>}
             {errorMessage && <p className="error-message">{errorMessage}</p>}
             <button type="submit">作成</button>
           </form>

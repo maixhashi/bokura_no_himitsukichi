@@ -11,7 +11,6 @@ export class Treasure {
   private imageOpened: HTMLImageElement;
   private image: HTMLImageElement;
   private rewardImage: HTMLImageElement;
-  private onGround: boolean;
   private width: number;
   private height: number;
   private isOpened: boolean;
@@ -26,7 +25,6 @@ export class Treasure {
     this.imageOpened = this.loadImage("assets/treasures/treasure_box_opened.png");
     this.image = this.imageClosed;
     this.rewardImage = rewardImage;
-    this.onGround = false;
     this.width = this.imageClosed.width;
     this.height = this.imageClosed.height;
     this.isOpened = false;
@@ -185,9 +183,6 @@ export class Treasure {
         if (reward && reward.complete && reward.naturalWidth > 0) {
           const x = baseX + index * offsetX; // 左方向にずらす
           const y = baseY + index * offsetY; // 下方向にずらす
-    
-          // 画像のファイル名を取得
-          const imageName = reward.src.split('/').pop() || "Unknown";
     
           // 描画
           ctx.drawImage(reward, x, y, size, size);

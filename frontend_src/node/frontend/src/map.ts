@@ -275,8 +275,6 @@ export class Map {
     return false; // 衝突なし
   }
 
-  // const rewardImages = ["path/to/image1.png", "path/to/image2.png"]; // 報酬画像のパスリスト
-  
   digTile(
       x: number, 
       y: number, 
@@ -284,7 +282,6 @@ export class Map {
       bocchamaWidth: number, 
       bocchamaHeight: number, 
       speed: number, 
-      rewardImagePath: string
     ) {
       const tileSize = this.tileSize; // タイルサイズ
       let digX = Math.floor((x + Math.floor(bocchamaWidth / 2)) / tileSize);

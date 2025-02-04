@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCurrentUser, logout } from './features/auth/authSlice';
@@ -8,8 +8,6 @@ import { Link, useNavigate } from "react-router-dom";
 import "./Header.css";
 
 const HeaderLinks = () => {
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [success, setSuccess] = useState(null);
   const navigate = useNavigate(); // ページ遷移用フック
 
   const dispatch: AppDispatch = useDispatch();
@@ -24,14 +22,18 @@ const HeaderLinks = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    // ログアウト処理をサーバーに送信
-    axios.post("http://localhost:8000/api/logout/", {}, { withCredentials: true });
+    axios.post("http://localhost:8000/api/logout/", {}, { withCredentials: true })
+      .then(() => {
+        navigate("/"); // ログアウト後にログイン画面へ遷移
+      })
+      .catch(error => {
+        console.error("ログアウトに失敗しました:", error);
+      });
   };
 
   return (
     <nav className="HeaderLinks">
       {currentUser ? (
-        // ログイン中
         <>
           <span className="pixel-font">{currentUser.username}</span>
           <Link to="/dashboard" className="pixel-font">ダッシュボード</Link>
@@ -40,14 +42,11 @@ const HeaderLinks = () => {
           </button>
         </>
       ) : (
-        // 未ログイン
         <>
           <Link to="/login" className="pixel-font">ログイン</Link>
           <Link to="/account-register" className="pixel-font">アカウントを登録</Link>
         </>
       )}
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
-      {success && <p className="success-message">{success}</p>}
     </nav>
   );
 };
