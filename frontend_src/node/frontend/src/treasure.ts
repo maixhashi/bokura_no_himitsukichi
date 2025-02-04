@@ -1,4 +1,5 @@
 import { Map } from "./map";
+import { Camera } from "./camera";
 import axiosInstance from "./utils/axiosInstance";
 import { store } from './store'; // Reduxストアをインポート
 import { fetchCurrentUser } from './features/auth/authSlice';
@@ -39,10 +40,8 @@ export class Treasure {
   }
 
   draw(context: CanvasRenderingContext2D, camera: Camera): void {
-  // draw(context: CanvasRenderingContext2D): void {
     if (!this.isOpened || (this.isOpened && this.blinkCounter % 10 < 5)) {
       context.drawImage(this.image, this.x - camera.x, this.y - camera.y);
-      // context.drawImage(this.image, this.x, this.y);
     }
   }
 
@@ -163,39 +162,28 @@ export class Treasure {
     }
   }
 
-  // static drawCollectedRewards(
-  //   context: CanvasRenderingContext2D,
-  //   collectedRewards: HTMLImageElement[]
-  // ): void {
-    //   const xOffset = 1300;
-    //   const yOffset = 10;
-    //   collectedRewards.forEach((reward, idx) => {
-      //     context.drawImage(reward, xOffset - idx * 5, yOffset + idx * 5);
-      //   });
-      // }
-
-    public drawCollectedRewards(
-      ctx: CanvasRenderingContext2D,
-      collectedRewards: HTMLImageElement[]
-    ): void {
-      const baseX = 10; // 描画開始位置（X座標）
-      const baseY = 10; // 描画開始位置（Y座標）
-      const size = 100; // 画像サイズ（幅と高さ）
-      const offsetX = 5; // 各アイテム間のX方向のオフセット
-      const offsetY = 5;  // 各アイテム間のY方向のオフセット
-    
-      collectedRewards.forEach((reward, index) => {
-        if (reward && reward.complete && reward.naturalWidth > 0) {
-          const x = baseX + index * offsetX; // 左方向にずらす
-          const y = baseY + index * offsetY; // 下方向にずらす
-    
-          // 描画
-          ctx.drawImage(reward, x, y, size, size);
-        } else {
-          console.warn(
-            `Reward image is not ready to draw or is undefined: ${reward?.src || "undefined"}`
-          );
-        }
-      });
-    }
+  public drawCollectedRewards(
+    ctx: CanvasRenderingContext2D,
+    collectedRewards: HTMLImageElement[]
+  ): void {
+    const baseX = 10; // 描画開始位置（X座標）
+    const baseY = 10; // 描画開始位置（Y座標）
+    const size = 100; // 画像サイズ（幅と高さ）
+    const offsetX = 5; // 各アイテム間のX方向のオフセット
+    const offsetY = 5;  // 各アイテム間のY方向のオフセット
+  
+    collectedRewards.forEach((reward, index) => {
+      if (reward && reward.complete && reward.naturalWidth > 0) {
+        const x = baseX + index * offsetX; // 左方向にずらす
+        const y = baseY + index * offsetY; // 下方向にずらす
+  
+        // 描画
+        ctx.drawImage(reward, x, y, size, size);
+      } else {
+        console.warn(
+          `Reward image is not ready to draw or is undefined: ${reward?.src || "undefined"}`
+        );
+      }
+    });
+  }
 }
