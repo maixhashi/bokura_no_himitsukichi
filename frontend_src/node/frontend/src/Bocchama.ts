@@ -44,9 +44,10 @@ export class Bocchama extends Character {
   }
 
   move(keys: { [key: string]: boolean }, map: any) {
-    this.isMoving = super.move(keys, map);
+    super.move(keys, map);
+    this.isMoving = true;
   }
-
+  
   updateAnimation(FPS: number) {
     super.updateAnimation(FPS, this.isMoving);
   }
