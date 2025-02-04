@@ -69,7 +69,7 @@ export const startGameLoop = () => {
     bocchama.openTreasureBox(keys, TILE_SIZE, gameMap.getTreasures(), collectedRewards);
 
     // モグラの更新
-    gameMap.updateMoles(gameMap, deltaTime, TILE_SIZE);
+    gameMap.updateMoles(gameMap, deltaTime);
     gameMap.updateTreasures(gameMap);
 
     // カメラの更新
