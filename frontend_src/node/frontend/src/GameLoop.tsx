@@ -47,13 +47,7 @@ export const startGameLoop = () => {
   const initialBocchamaY = TILE_SIZE / 2;
   const bocchama = new Bocchama(initialBocchamaX, initialBocchamaY, 5, 5);
 
-  // Treasureの初期位置をBocchamaの位置に基づいて設定
-  // const treasureX = TILE_SIZE * 2;
-  // const treasureY = TILE_SIZE / 2;
-  // const treasure = new Treasure(treasureX, treasureY, 5, "assets/rewards/movie_poster.png");
-  // gameMap.treasures.push(treasure);
-
-  const collectedRewards = gameMap.collectedRewards
+  const collectedRewards = gameMap.collectedRewards;
   const camera = new Camera(gameMap.width, gameMap.height);
 
   // 初期フレームでカメラを更新
@@ -66,8 +60,8 @@ export const startGameLoop = () => {
     lastTime = time;
 
     // 画面をクリア
-    ctx.fillStyle = WHITE;
-    ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    ctx!.fillStyle = WHITE;
+    ctx!.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
     // Bocchamaの動作
     bocchama.move(keys, gameMap);
@@ -85,23 +79,22 @@ export const startGameLoop = () => {
     const { x: cameraX, y: cameraY } = camera.getPosition();
 
     // マップとキャラクターの描画
-    gameMap.draw(ctx, cameraX, cameraY, SCREEN_WIDTH, SCREEN_HEIGHT);
-    bocchama.draw_on_game(ctx, cameraX, cameraY);
+    gameMap.draw(ctx!, cameraX, cameraY, SCREEN_WIDTH, SCREEN_HEIGHT);
+    bocchama.draw_on_game(ctx!, cameraX, cameraY);
 
     // モグラを描画
     for (const mole of gameMap.getMoles()) {
-      mole.draw_on_game(ctx, cameraX, cameraY);
+      mole.draw_on_game(ctx!, cameraX, cameraY);
     }
 
     // 宝箱を描画
     for (const treasure of gameMap.getTreasures()) {
       treasure.updateBlink();
-      treasure.draw(ctx, camera);
+      treasure.draw(ctx!, camera);
     }
-    
+
     // 収集済みアイテムを描画
-    gameMap.drawCollectedRewards(ctx);
-    // console.log("collectedRewards:", collectedRewards)
+    gameMap.drawCollectedRewards(ctx!);
 
     // 次のフレーム
     requestAnimationFrame(gameLoop);
