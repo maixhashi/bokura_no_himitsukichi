@@ -54,7 +54,6 @@ const TopPage: React.FC = () => {
           bocchama.width,
           bocchama.height,
           bocchama.speed,
-          '' // 報酬画像のパス
         );
       }
   

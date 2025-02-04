@@ -41,7 +41,7 @@ export class Treasure {
 
   draw(context: CanvasRenderingContext2D, camera: Camera): void {
     if (!this.isOpened || (this.isOpened && this.blinkCounter % 10 < 5)) {
-      context.drawImage(this.image, this.x - camera.x, this.y - camera.y);
+      context.drawImage(this.image, this.x - camera.getX(), this.y - camera.getY());
     }
   }
 

@@ -20,5 +20,15 @@ export class Camera {
   public getPosition(): { x: number; y: number } {
     return { x: this.x, y: this.y };
   }
+
+  // ゲッターを追加
+  getX() {
+    return this.x;
+  }
+
+  getY() {
+    return this.y;
+  }
+
 }
 

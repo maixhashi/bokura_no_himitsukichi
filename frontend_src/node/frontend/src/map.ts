@@ -341,9 +341,9 @@ export class Map {
       }
     }
 
-    updateMoles(map: any, clock: number, tileSize: number) {
+    updateMoles(map: any, clock: number) {
       this.moles.forEach((mole: Mole) => {
-        mole.update(map, clock, tileSize);
+        mole.update(map, clock);
       });
     }                             
     updateTreasures(map: any) {
