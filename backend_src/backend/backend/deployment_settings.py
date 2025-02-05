@@ -1,13 +1,21 @@
 import os 
 import dj_database_url
+from pathlib import Path
 from .settings import * 
 from .settings import BASE_DIR
 
-ALLOWED_HOSTS = [os.environ.get('RENDER_EXTERNAL_HOSTNAME')]
-CSRF_TRUSTED_ORIGINS = ['https://'+os.environ.get('RENDER_EXTERNAL_HOSTNAME')]
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 DEBUG = False
-SECRET_KEY = os.environ.get('SECRET_KEY')
+
+ALLOWED_HOSTS = [
+    os.environ.get('RENDER_EXTERNAL_HOSTNAME'),
+    os.environ.get('RENDER_FRONTEND_HOSTNAME'),
+]
+CSRF_TRUSTED_ORIGINS = ['https://'+os.environ.get('RENDER_EXTERNAL_HOSTNAME')]
+CORS_ORIGIN_WHITELIST = [
+    'https://moviedig-frontend.onrender.com',
+]
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -20,6 +28,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ALLOW_ALL_ORIGINS = False
 
 CORS_ALLOWED_ORIGINS = [
     'https://moviedig-frontend.onrender.com'
@@ -42,7 +52,6 @@ DATABASES = {
     )
 }
 
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -60,7 +69,6 @@ LOGGING = {
         },
     },
 }
-
 
 
 ADMINS = [("CBI Analytics", "YOUREMAIL@EMAIL.com")]
