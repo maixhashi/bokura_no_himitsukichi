@@ -21,8 +21,13 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+ALLOWED_HOSTS = [
+    os.environ.get('RENDER_EXTERNAL_HOSTNAME', 'moviedig.onrender.com')
+]
+
+
 CORS_ALLOWED_ORIGINS = [
-    'https://moviedig-frontend.onrender.com/'
+    'https://moviedig-frontend.onrender.com'
 ]
 
 STORAGES = {
