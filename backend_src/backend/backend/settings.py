@@ -144,3 +144,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # CSRF Cookieの設定
 CSRF_COOKIE_HTTPONLY = True
+
+LOGIN_URL = '/api/login/'
