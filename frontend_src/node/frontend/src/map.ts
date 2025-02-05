@@ -1,6 +1,7 @@
 import { Mole } from './mole';
 import { Treasure } from './treasure';
 import { TILE_SIZE } from './utils/constants';
+import axiosInstance from './utils/axiosInstance';
 
 const MOLE_SPAWN_PROBABILITY = 0.03;
 const TREASURE_SPAWN_PROBABILITY = 0.5;
@@ -41,27 +42,22 @@ export class Map {
 
   private async loadRewardImages(): Promise<void> {
     try {
-      const response = await fetch('http://localhost:8000/api/reward-images/');
-      if (!response.ok) {
-        throw new Error(`APIリクエスト失敗: ステータス ${response.status}`);
-      }
+      const response = await axiosInstance.get('/api/reward-images/');
   
-      const data = await response.json();
-      const BASE_URL = 'http://localhost:5173';
+      const BASE_URL = import.meta.env.VITE_BASE_URL || 'http://localhost:5173'; // デフォルト値を設定
   
       // APIレスポンスから画像をロード
-      const imagePromises = data.map(
+      const imagePromises = response.data.map(
         (item: { pixel_art_image_path: string; movie_poster_id: string }) =>
           this.createRewardImage(`${BASE_URL}${item.pixel_art_image_path}`, item.movie_poster_id)
       );
   
-      const loadedImages = await Promise.all(imagePromises);
-      this.rewardImages = loadedImages;
+      this.rewardImages = await Promise.all(imagePromises);
     } catch (error) {
       console.error('報酬画像のロード中にエラーが発生しました:', error);
     }
   }
-  
+    
   private createRewardImage(src: string, moviePosterId: string): Promise<HTMLImageElement> {
     return new Promise((resolve, reject) => {
       const img = new Image();
