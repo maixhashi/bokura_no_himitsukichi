@@ -42,7 +42,7 @@ export class Map {
 
   private async loadRewardImages(): Promise<void> {
     try {
-      const response = await axiosInstance.get('/api/reward-images/');
+      const response = await axiosInstance.get('/reward-images/');
   
       const BASE_URL = import.meta.env.VITE_BASE_URL || 'http://localhost:5173'; // デフォルト値を設定
   

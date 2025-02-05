@@ -1,4 +1,6 @@
 import os 
+print(os.environ)
+
 import dj_database_url
 from pathlib import Path
 from .settings import * 
@@ -9,10 +11,12 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    os.environ.get('RENDER_EXTERNAL_HOSTNAME'),
-    os.environ.get('RENDER_FRONTEND_HOSTNAME'),
+    'https://moviedig.onrender.com',
+    'https://moviedig-frontend.onrender.com'
 ]
-CSRF_TRUSTED_ORIGINS = ['https://'+os.environ.get('RENDER_EXTERNAL_HOSTNAME')]
+CSRF_TRUSTED_ORIGINS = [
+    'https://moviedig-frontend.onrender.com'
+]
 CORS_ORIGIN_WHITELIST = [
     'https://moviedig-frontend.onrender.com',
 ]
