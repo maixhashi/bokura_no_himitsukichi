@@ -11,8 +11,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    'https://moviedig.onrender.com',
-    'https://moviedig-frontend.onrender.com'
+    'moviedig.onrender.com',
+    'moviedig-frontend.onrender.com'
 ]
 CSRF_TRUSTED_ORIGINS = [
     'https://moviedig-frontend.onrender.com'
