@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import axios from "axios";
+import axiosInstance from "./utils/axiosInstance";
 import Layout from "./Layout";
 import { EmptyTreasureBox } from "./EmptyTreasureBox";
 import { Map } from "./map";
@@ -102,7 +102,7 @@ const AccountRegisterPage: React.FC = () => {
     setErrorMessage("");
 
     try {
-      const response = await axios.post("http://localhost:8000/api/register/", {
+      const response = await axiosInstance.post("/register/", {
         username,
         password,
       });

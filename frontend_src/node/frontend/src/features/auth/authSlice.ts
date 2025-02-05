@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axiosInstance from '../../utils/axiosInstance';
 
 // 初期状態
 export interface AuthState {
@@ -19,16 +19,11 @@ export const fetchCurrentUser = createAsyncThunk(
   'auth/fetchCurrentUser',
   async (_, { rejectWithValue }) => {
     try {
-      // CSRF トークンの取得
-      const csrfResponse = await axios.get("http://localhost:8000/api/csrf/", {
-        withCredentials: true,
-      });
-      axios.defaults.headers.common["X-CSRFToken"] = csrfResponse.data.csrfToken;
+      // CSRFトークンの取得（axiosInstanceで自動適用される）
+      await axiosInstance.get("/csrf");
 
       // ユーザー情報の取得
-      const response = await axios.get("http://localhost:8000/api/current-user/", {
-        withCredentials: true,
-      });
+      const response = await axiosInstance.get("/current-user/");
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data || 'エラーが発生しました');
