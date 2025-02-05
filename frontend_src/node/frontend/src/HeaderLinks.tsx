@@ -1,11 +1,11 @@
 import { useEffect } from "react";
-import axios from "axios";
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCurrentUser, logout } from './features/auth/authSlice';
 import { RootState, AppDispatch } from './store';
 import { Link, useNavigate } from "react-router-dom";
 
 import "./Header.css";
+import axiosInstance from "./utils/axiosInstance";
 
 const HeaderLinks = () => {
   const navigate = useNavigate(); // ページ遷移用フック
@@ -22,7 +22,7 @@ const HeaderLinks = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    axios.post("http://localhost:8000/api/logout/", {}, { withCredentials: true })
+    axiosInstance.post("/logout/", {}, { withCredentials: true })
       .then(() => {
         navigate("/"); // ログアウト後にログイン画面へ遷移
       })
