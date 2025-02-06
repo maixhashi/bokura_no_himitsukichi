@@ -17,7 +17,12 @@ CSRF_TRUSTED_ORIGINS = ['https://'+os.environ.get('RENDER_EXTERNAL_HOSTNAME')]
 CORS_ORIGIN_WHITELIST = [
     'https://moviedig-frontend.onrender.com',
 ]
+CSRF_COOKIE_SECURE = os.environ.get('CSRF_COOKIE_SECURE')
 SESSION_COOKIE_SECURE = os.environ.get('SESSION_COOKIE_SECURE')
+
+SESSION_COOKIE_SAMESITE = os.environ.get('SESSION_COOKIE_SAMESITE')
+CSRF_COOKIE_SAMESITE = os.environ.get('CSRF_COOKIE_SAMESITE')
+
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
