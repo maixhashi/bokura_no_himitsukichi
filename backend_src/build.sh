@@ -1,6 +1,7 @@
 set -o errexit
 
 mkdir -p /opt/render/project/src/backend_src/backend/frontend/public/assets
+mkdir -p /opt/render/project/src/backend_src/backend/frontend/public/assets/movie_posters/
 
 cd backend_src
 pip install -r requirements_prod.txt
