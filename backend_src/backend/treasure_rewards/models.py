@@ -6,7 +6,7 @@ def upload_to(instance, filename):
     return f"pixel_art/{filename}"
 
 class RewardImage(models.Model):
-    tmdb_id = models.CharField(max_length=20, unique=True)  # TMDB IDを一意に管理
+    tmdb_id = models.CharField(max_length=255, unique=True)  # TMDB IDを一意に管理
     title = models.CharField(max_length=255)
     original_poster_url = models.URLField()
     pixel_art_image_path = models.ImageField(upload_to=upload_to, null=True, blank=True)  # ピクセルアート画像

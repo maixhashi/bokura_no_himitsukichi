@@ -32,31 +32,35 @@ def fetch_and_save_movie_posters():
 def create_reward_from_movie_poster():
     """MoviePosterからランダムに選択してRewardImageを作成"""
     posters = MoviePoster.objects.order_by('?')[:50]
-    
+
     if not posters.exists():
         print("No MoviePoster records found.")
         return
-    
+
     with transaction.atomic():
-        # 既存のRewardImageを削除
-        deleted_count, _ = RewardImage.objects.all().delete()
-        print(f"Deleted {deleted_count} existing RewardImages.")
-        
-        # 新しいRewardImageを作成
-        for index, poster in enumerate(posters, start=1):
-            try:
-                reward = RewardImage.objects.create(
-                    id=index,  # IDを手動で設定
-                    tmdb_id=poster.tmdb_id,  # TMDB IDを保存
-                    movie_poster_id=poster.id,  # MoviePosterのIDを保存
-                    title=poster.title,
-                    original_poster_url=poster.poster_url,
-                    pixel_art_image_path=poster.pixel_art_image_path
-                )
-                print(f"RewardImage created successfully: ID {reward.id}, MoviePoster ID {poster.id}, Title: {reward.title}")
-            
-            except Exception as e:
-                print(f"Error creating RewardImage: {e}. Poster info: TMDB ID {poster.tmdb_id}, Title: {poster.title}")
+        try:
+            # 既存のRewardImageを削除
+            deleted_count, _ = RewardImage.objects.all().delete()
+            print(f"Deleted {deleted_count} existing RewardImages.")
+        except Exception as e:
+            print(f"Error deleting RewardImages: {e}")
+            return
+
+    # 新しいRewardImageを作成
+    for index, poster in enumerate(posters, start=1):
+        try:
+            reward = RewardImage.objects.create(
+                tmdb_id=poster.tmdb_id,
+                movie_poster_id=poster.id,
+                title=poster.title,
+                original_poster_url=poster.poster_url,
+                pixel_art_image_path=poster.pixel_art_image_path
+            )
+            print(f"RewardImage created successfully: ID {reward.id}, MoviePoster ID {poster.id}, Title: {reward.title}")
+
+        except Exception as e:
+            print(f"Error creating RewardImage: {e}. Poster info: TMDB ID {poster.tmdb_id}, Title: {poster.title}")
+            continue  # エラーが発生した場合はスキップして次のポスターへ
 
 def extract_tmdb_id(url):
     """TMDB IDをURLから抽出"""
