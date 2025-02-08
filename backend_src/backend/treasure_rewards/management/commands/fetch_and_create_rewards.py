@@ -5,13 +5,22 @@ from django.core.management.base import BaseCommand
 from treasure_rewards.models import RewardImage
 from movie_posters.models import MoviePoster
 from utils.tmdb_api import fetch_random_movie_posters
-from utils.pixel_art_converter import convert_to_pixel_art
 from django.db import transaction
 
-# プロジェクトルートから新しい保存先ディレクトリを設定
+# 環境変数 `DJANGO_ENV` を取得
+DJANGO_ENV = os.getenv("DJANGO_ENV", "development")
+
+# 保存ディレクトリの切り替え
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../.."))
-NEW_SAVE_DIR = os.path.join(BASE_DIR, "frontend_src/node/frontend/public/assets/movie_posters")
-REWARD_SAVE_DIR = os.path.join(BASE_DIR, "frontend_src/node/frontend/public/assets/movie_posters")
+
+if DJANGO_ENV == "production":
+    SAVE_DIR = os.path.join(BASE_DIR, "dist", "movie_posters")
+else:
+    SAVE_DIR = os.path.join(BASE_DIR, "frontend_src", "node", "frontend", "public", "assets", "movie_posters")
+
+# ディレクトリが存在しない場合は作成
+os.makedirs(SAVE_DIR, exist_ok=True)
+
 
 def fetch_and_save_movie_posters():
     """TMDBからポスターを取得し、MoviePosterテーブルに保存"""
@@ -28,6 +37,7 @@ def fetch_and_save_movie_posters():
                 print(f"Saved MoviePoster: {poster['title']} ({tmdb_id})")
             except Exception as e:
                 print(f"Failed to save MoviePoster: {poster['title']} ({tmdb_id}). Error: {e}")
+
 
 def create_reward_from_movie_poster():
     """MoviePosterからランダムに選択してRewardImageを作成"""
@@ -54,13 +64,14 @@ def create_reward_from_movie_poster():
                 movie_poster_id=poster.id,
                 title=poster.title,
                 original_poster_url=poster.poster_url,
-                pixel_art_image_path=poster.pixel_art_image_path
+                pixel_art_image_path=os.path.join(SAVE_DIR, f"{poster.tmdb_id}.png")
             )
             print(f"RewardImage created successfully: ID {reward.id}, MoviePoster ID {poster.id}, Title: {reward.title}")
 
         except Exception as e:
             print(f"Error creating RewardImage: {e}. Poster info: TMDB ID {poster.tmdb_id}, Title: {poster.title}")
             continue  # エラーが発生した場合はスキップして次のポスターへ
+
 
 def extract_tmdb_id(url):
     """TMDB IDをURLから抽出"""
