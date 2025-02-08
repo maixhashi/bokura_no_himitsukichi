@@ -9,21 +9,31 @@ class MainEntryView(TemplateView):
 from django.http import JsonResponse
 # from .models import RewardImage 
 
+import os
+from django.http import JsonResponse
+from treasure_rewards.models import RewardImage
+
+# 環境変数 `DJANGO_ENV` を取得
+DJANGO_ENV = os.getenv("DJANGO_ENV", "development")
+
 def reward_images(request):
     try:
         rewards = RewardImage.objects.all()
+
         data = [
             {
                 "id": reward.id,
-                # 余計なディレクトリを除去してパスを加工
-                "pixel_art_image_path": f"/public/assets/movie_posters/{reward.pixel_art_image_path.name.split('/')[-1]}"
-                if reward.pixel_art_image_path
-                else None,
+                "pixel_art_image_path": (
+                    f"/dist/movie_posters/{os.path.basename(reward.pixel_art_image_path.name)}"
+                    if DJANGO_ENV == "production"
+                    else f"/public/assets/movie_posters/{os.path.basename(reward.pixel_art_image_path.name)}"
+                ) if reward.pixel_art_image_path else None,
                 "title": reward.title,
                 "movie_poster_id": reward.movie_poster_id,
             }
             for reward in rewards
         ]
+
         return JsonResponse(data, safe=False)
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
