@@ -5,10 +5,6 @@ from treasure_rewards.models import RewardImage
 class MainEntryView(TemplateView):
     template_name = "pages/main.html"  # templates/pages/top_page.html を指定
 
-# backend/pages/views.py
-from django.http import JsonResponse
-# from .models import RewardImage 
-
 import os
 from django.http import JsonResponse
 from treasure_rewards.models import RewardImage

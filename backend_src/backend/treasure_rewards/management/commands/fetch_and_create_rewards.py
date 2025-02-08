@@ -1,6 +1,4 @@
 import os
-import random
-import requests
 from django.core.management.base import BaseCommand
 from treasure_rewards.models import RewardImage
 from movie_posters.models import MoviePoster
@@ -10,11 +8,11 @@ from django.db import transaction
 # 環境変数 `DJANGO_ENV` を取得
 DJANGO_ENV = os.getenv("DJANGO_ENV", "development")
 
-# 保存ディレクトリの切り替え
+# フロントエンドの dist に保存するためのパス設定
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../.."))
 
 if DJANGO_ENV == "production":
-    SAVE_DIR = os.path.join(BASE_DIR, "dist", "movie_posters")
+    SAVE_DIR = os.path.join(BASE_DIR, "frontend_src", "node", "frontend", "dist", "movie_posters")
 else:
     SAVE_DIR = os.path.join(BASE_DIR, "frontend_src", "node", "frontend", "public", "assets", "movie_posters")
 
@@ -57,7 +55,7 @@ def create_reward_from_movie_poster():
             return
 
     # 新しいRewardImageを作成
-    for index, poster in enumerate(posters, start=1):
+    for poster in posters:
         try:
             reward = RewardImage.objects.create(
                 tmdb_id=poster.tmdb_id,
@@ -70,7 +68,7 @@ def create_reward_from_movie_poster():
 
         except Exception as e:
             print(f"Error creating RewardImage: {e}. Poster info: TMDB ID {poster.tmdb_id}, Title: {poster.title}")
-            continue  # エラーが発生した場合はスキップして次のポスターへ
+            continue  # エラーが発生した場合はスキップ
 
 
 def extract_tmdb_id(url):
@@ -85,7 +83,5 @@ class Command(BaseCommand):
     help = "Fetch movie posters, save to MoviePoster, and create RewardImages"
 
     def handle(self, *args, **kwargs):
-        # MoviePosterを取得して保存
         fetch_and_save_movie_posters()
-        # MoviePosterからランダムに選択してRewardImageを作成
         create_reward_from_movie_poster()

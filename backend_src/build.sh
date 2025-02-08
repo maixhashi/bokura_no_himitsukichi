@@ -1,7 +1,7 @@
 set -o errexit
 
-# 本番環境では `dist/movie_posters` を作成
-mkdir -p /opt/render/project/src/backend_src/backend/dist/movie_posters
+# フロントエンドの dist/movie_posters を作成
+mkdir -p /opt/render/project/src/frontend_src/node/frontend/dist/movie_posters
 
 # Django の `collectstatic` 用のディレクトリも作成
 mkdir -p /opt/render/project/src/backend_src/backend/staticfiles
