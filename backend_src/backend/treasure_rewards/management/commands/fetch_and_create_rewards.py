@@ -4,21 +4,26 @@ from treasure_rewards.models import RewardImage
 from movie_posters.models import MoviePoster
 from utils.tmdb_api import fetch_random_movie_posters
 from django.db import transaction
-                    
-# 環境変数 `DJANGO_ENV` を取得
-DJANGO_ENV = os.environ.get("DJANGO_ENV")
 
-# フロントエンドの dist に保存するためのパス設定
+# 環境変数 `DJANGO_ENV` を取得
+try:
+    DJANGO_ENV = os.environ["DJANGO_ENV"]
+except KeyError:
+    raise RuntimeError("❌ ERROR: DJANGO_ENV is not set! Set it to 'development' or 'production'.")
+
+# プロジェクトルートのパス設定
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../.."))
 
+# 環境ごとの保存ディレクトリを設定
 if DJANGO_ENV == "production":
     SAVE_DIR = os.path.join(BASE_DIR, "frontend_src", "node", "frontend", "dist", "movie_posters")
 else:
     SAVE_DIR = os.path.join(BASE_DIR, "frontend_src", "node", "frontend", "public", "assets", "movie_posters")
 
-# ディレクトリを作成
+# ディレクトリを作成（存在しない場合のみ）
 os.makedirs(SAVE_DIR, exist_ok=True)
 
+# 環境変数と保存先ディレクトリをデバッグログとして出力
 print(f"🌍 DJANGO_ENV: {DJANGO_ENV}")
 print(f"📂 Saving images to: {SAVE_DIR}")
 
@@ -29,6 +34,8 @@ def fetch_and_save_movie_posters():
         tmdb_id = extract_tmdb_id(poster['poster_url'])
         if not MoviePoster.objects.filter(tmdb_id=tmdb_id).exists():
             try:
+                image_path = os.path.join(SAVE_DIR, f"{tmdb_id}.png")
+                print(f"🔄 Downloading poster to: {image_path}")  # どこに保存されるか確認
                 MoviePoster.objects.create(
                     tmdb_id=tmdb_id,
                     title=poster['title'],
