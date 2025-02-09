@@ -91,17 +91,19 @@ export const startGameLoop = () => {
     const clickX = event.clientX - rect.left;
     const clickY = event.clientY - rect.top;
 
-    collectedRewards.forEach((reward, index) => {
+    collectedRewards.map((_, index) => index).forEach((index) => {
       const x = 1300 - index * 1;
       const y = 10 + index * 1;
       const width = 100;
       const height = 100;
-
+   
       if (clickX >= x && clickX <= x + width && clickY >= y && clickY <= y + height) {
         console.log("Collected reward clicked! Navigating to /dashboard");
         window.location.href = "/dashboard";
       }
-    });
+   });
+   
+
   });
 
   // マウスムーブイベント（カーソル変更）
@@ -111,7 +113,8 @@ export const startGameLoop = () => {
     const mouseY = event.clientY - rect.top;
     let hoveringOverReward = false;
 
-    collectedRewards.forEach((reward, index) => {
+    // map でインデックスの配列を作成して処理
+    collectedRewards.map((_, index) => index).forEach((index) => {
       const x = 1300 - index * 1;
       const y = 10 + index * 1;
       const width = 100;
