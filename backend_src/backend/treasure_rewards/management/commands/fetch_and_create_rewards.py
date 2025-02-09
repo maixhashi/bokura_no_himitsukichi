@@ -4,13 +4,9 @@ from treasure_rewards.models import RewardImage
 from movie_posters.models import MoviePoster
 from utils.tmdb_api import fetch_random_movie_posters
 from django.db import transaction
-
+                    
 # 環境変数 `DJANGO_ENV` を取得
 DJANGO_ENV = os.environ.get("DJANGO_ENV")
-
-if DJANGO_ENV is None:
-    print("⚠️ WARNING: DJANGO_ENV is not set! Defaulting to 'development'")
-    DJANGO_ENV = "development"
 
 # フロントエンドの dist に保存するためのパス設定
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../.."))

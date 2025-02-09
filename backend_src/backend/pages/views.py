@@ -10,7 +10,7 @@ from django.http import JsonResponse
 from treasure_rewards.models import RewardImage
 
 # 環境変数 `DJANGO_ENV` を取得
-DJANGO_ENV = os.getenv("DJANGO_ENV", "development")
+DJANGO_ENV = os.environ.get("DJANGO_ENV")
 
 def reward_images(request):
     try:
