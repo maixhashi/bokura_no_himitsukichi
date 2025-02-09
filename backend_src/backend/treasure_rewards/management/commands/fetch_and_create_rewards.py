@@ -2,10 +2,12 @@ import os
 import random
 import requests
 from django.core.management.base import BaseCommand
+from django.conf import settings
 from treasure_rewards.models import RewardImage
 from movie_posters.models import MoviePoster
 from utils.tmdb_api import fetch_random_movie_posters
 from django.db import transaction
+from urllib.parse import urlparse
 
 # 環境変数 `DJANGO_ENV` を取得
 try:
@@ -93,7 +95,6 @@ def create_reward_from_movie_poster():
 
 def extract_tmdb_id(url):
     """TMDB IDをURLから抽出"""
-    from urllib.parse import urlparse
     parsed_url = urlparse(url)
     filename = os.path.basename(parsed_url.path)
     return os.path.splitext(filename)[0]
