@@ -10,7 +10,7 @@ type MoviePoster = {
   title: string;
   image_url: string;
   tmdb_id: string;
-  pixel_art_image_path: string;
+  poster_url: string;
 };
 
 const DashboardPage = () => {
@@ -59,7 +59,7 @@ const DashboardPage = () => {
             collectedRewards.map((poster) => (
               <div key={poster.id} style={{ width: "100px", textAlign: "center" }}>
                 <img 
-                  src={`/assets/${poster.image_url}`} 
+                  src={`${poster.poster_url}`} 
                   alt={poster.title} 
                   style={{ width: "100%", height: "auto" }} 
                 />
