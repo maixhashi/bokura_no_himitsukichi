@@ -16,7 +16,7 @@ from .serializers import MoviePosterSerializer
 # loggerを設定
 logger = logging.getLogger(__name__)
 
-@method_decorator(csrf_exempt, name='dispatch')
+# @method_decorator(csrf_exempt, name='dispatch')
 class CollectRewardView(View):
     def post(self, request):
         logger.info("CollectRewardView received a request")  # 確認用ログ
