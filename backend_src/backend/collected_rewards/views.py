@@ -59,7 +59,7 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from .models import CollectedReward
 
-@login_required
+# @login_required
 def user_collected_rewards(request):
     user = request.user
     rewards = CollectedReward.objects.filter(user=user).select_related('movie_poster')
