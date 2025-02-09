@@ -30,6 +30,12 @@ print(f"📂 Saving images to: {SAVE_DIR}")
 def fetch_and_save_movie_posters():
     """TMDBからポスターを取得し、MoviePosterテーブルに保存"""
     posters = fetch_random_movie_posters()
+    print(f"🔍 Fetched {len(posters)} posters from TMDB API")
+
+    if not posters:
+        print("⚠️ No posters retrieved from API!")
+        return
+
     for poster in posters:
         tmdb_id = extract_tmdb_id(poster['poster_url'])
         if not MoviePoster.objects.filter(tmdb_id=tmdb_id).exists():
@@ -48,32 +54,37 @@ def fetch_and_save_movie_posters():
 def create_reward_from_movie_poster():
     """MoviePosterからランダムに選択してRewardImageを作成"""
     posters = MoviePoster.objects.order_by('?')[:50]
+    print(f"🔍 Found {len(posters)} MoviePosters to create RewardImages")
 
     if not posters.exists():
         print("⚠️ No MoviePoster records found.")
         return
 
-    with transaction.atomic():
-        try:
-            # 既存のRewardImageを削除
-            deleted_count, _ = RewardImage.objects.all().delete()
-            print(f"🗑 Deleted {deleted_count} existing RewardImages.")
-        except Exception as e:
-            print(f"❌ Error deleting RewardImages: {e}")
-            return
+    # 既存のRewardImageを削除（トランザクション外で実行）
+    try:
+        deleted_count, _ = RewardImage.objects.all().delete()
+        print(f"🗑 Deleted {deleted_count} existing RewardImages.")
+    except Exception as e:
+        print(f"❌ Error deleting RewardImages: {e}")
+        return
 
     # 新しいRewardImageを作成
     for poster in posters:
         try:
             image_path = os.path.join(SAVE_DIR, f"{poster.tmdb_id}.png")
-            RewardImage.objects.create(
+
+            print(f"🎥 Creating RewardImage for MoviePoster ID {poster.id} - {poster.title}")
+            print(f"🔗 Original Poster URL: {poster.poster_url}")
+            print(f"🖼 Saving Pixel Art Image Path: {image_path}")
+
+            reward = RewardImage.objects.create(
                 tmdb_id=poster.tmdb_id,
                 movie_poster_id=poster.id,
                 title=poster.title,
                 original_poster_url=poster.poster_url,
                 pixel_art_image_path=image_path
             )
-            print(f"✅ RewardImage created: ID {poster.id}, Image Path: {image_path}")
+            print(f"✅ RewardImage created: ID {reward.id}, Image Path: {image_path}")
 
         except Exception as e:
             print(f"❌ Error creating RewardImage: {e}. TMDB ID: {poster.tmdb_id}")
