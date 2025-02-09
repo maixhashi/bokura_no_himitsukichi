@@ -43,29 +43,27 @@ export class Map {
   private async loadRewardImages(): Promise<void> {
     try {
       const response = await axiosInstance.get('/reward-images/');
-  
-      const BASE_URL = import.meta.env.VITE_BASE_URL || 'http://localhost:5173'; // デフォルト値を設定
-  
+
       // APIレスポンスから画像をロード
       const imagePromises = response.data.map(
-        (item: { pixel_art_image_path: string; movie_poster_id: string }) =>
-          this.createRewardImage(`${BASE_URL}${item.pixel_art_image_path}`, item.movie_poster_id)
+        (item: { poster_url: string; id: string }) =>
+          this.createRewardImage(item.poster_url, item.id)
       );
-  
+
       this.rewardImages = await Promise.all(imagePromises);
     } catch (error) {
       console.error('報酬画像のロード中にエラーが発生しました:', error);
     }
   }
-    
+
   private createRewardImage(src: string, moviePosterId: string): Promise<HTMLImageElement> {
     return new Promise((resolve, reject) => {
       const img = new Image();
       img.src = src;
-  
+
       // dataset に movie_poster_id を付与
       img.dataset.moviePosterId = moviePosterId;
-  
+
       img.onload = () => resolve(img);
       img.onerror = () => reject(new Error(`Failed to load image: ${src}`));
     });
