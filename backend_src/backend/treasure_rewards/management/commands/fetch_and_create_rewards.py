@@ -1,4 +1,6 @@
 import os
+import random
+import requests
 from django.core.management.base import BaseCommand
 from treasure_rewards.models import RewardImage
 from movie_posters.models import MoviePoster
@@ -40,8 +42,6 @@ def fetch_and_save_movie_posters():
         tmdb_id = extract_tmdb_id(poster['poster_url'])
         if not MoviePoster.objects.filter(tmdb_id=tmdb_id).exists():
             try:
-                image_path = os.path.join(SAVE_DIR, f"{tmdb_id}.png")
-                print(f"🔄 Downloading poster to: {image_path}")  # どこに保存されるか確認
                 MoviePoster.objects.create(
                     tmdb_id=tmdb_id,
                     title=poster['title'],
@@ -60,7 +60,7 @@ def create_reward_from_movie_poster():
         print("⚠️ No MoviePoster records found.")
         return
 
-    # 既存のRewardImageを削除（トランザクション外で実行）
+    # 既存のRewardImageを削除
     try:
         deleted_count, _ = RewardImage.objects.all().delete()
         print(f"🗑 Deleted {deleted_count} existing RewardImages.")
@@ -71,7 +71,9 @@ def create_reward_from_movie_poster():
     # 新しいRewardImageを作成
     for poster in posters:
         try:
-            image_path = os.path.join(SAVE_DIR, f"{poster.tmdb_id}.png")
+            # 正しい `pixel_art_image_path` の設定
+            image_filename = f"{poster.tmdb_id}.png"
+            image_path = os.path.join(SAVE_DIR, image_filename)
 
             print(f"🎥 Creating RewardImage for MoviePoster ID {poster.id} - {poster.title}")
             print(f"🔗 Original Poster URL: {poster.poster_url}")
@@ -82,7 +84,7 @@ def create_reward_from_movie_poster():
                 movie_poster_id=poster.id,
                 title=poster.title,
                 original_poster_url=poster.poster_url,
-                pixel_art_image_path=image_path
+                pixel_art_image_path=image_path  # ここが正しく設定されるよう修正
             )
             print(f"✅ RewardImage created: ID {reward.id}, Image Path: {image_path}")
 
