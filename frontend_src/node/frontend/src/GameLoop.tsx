@@ -40,17 +40,13 @@ export const startGameLoop = () => {
 
   // オブジェクトの初期化
   const gameMap = new Map(mapData, TILE_SIZE);
-  console.log("gameMap.collectedRewards", gameMap.collectedRewards);
+  const collectedRewards = gameMap.collectedRewards;
+  const camera = new Camera(gameMap.width, gameMap.height);
 
-  // Bocchamaの初期位置を定義
   const initialBocchamaX = TILE_SIZE / 2;
   const initialBocchamaY = TILE_SIZE / 2;
   const bocchama = new Bocchama(initialBocchamaX, initialBocchamaY, 5, 5);
 
-  const collectedRewards = gameMap.collectedRewards;
-  const camera = new Camera(gameMap.width, gameMap.height);
-
-  // 初期フレームでカメラを更新
   camera.update(bocchama, SCREEN_WIDTH, SCREEN_HEIGHT);
 
   let lastTime = 0;
@@ -59,47 +55,75 @@ export const startGameLoop = () => {
     const deltaTime = time - lastTime;
     lastTime = time;
 
-    // 画面をクリア
     ctx!.fillStyle = WHITE;
     ctx!.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-    // Bocchamaの動作
     bocchama.move(keys, gameMap);
     bocchama.dig(keys, gameMap);
     bocchama.openTreasureBox(keys, TILE_SIZE, gameMap.getTreasures(), collectedRewards);
 
-    // モグラの更新
     gameMap.updateMoles(gameMap, deltaTime);
     gameMap.updateTreasures(gameMap);
 
-    // カメラの更新
     camera.update(bocchama, SCREEN_WIDTH, SCREEN_HEIGHT);
-
-    // カメラ座標の取得
     const { x: cameraX, y: cameraY } = camera.getPosition();
 
-    // マップとキャラクターの描画
     gameMap.draw(ctx!, cameraX, cameraY, SCREEN_WIDTH, SCREEN_HEIGHT);
     bocchama.draw_on_game(ctx!, cameraX, cameraY);
 
-    // モグラを描画
     for (const mole of gameMap.getMoles()) {
       mole.draw_on_game(ctx!, cameraX, cameraY);
     }
 
-    // 宝箱を描画
     for (const treasure of gameMap.getTreasures()) {
       treasure.updateBlink();
       treasure.draw(ctx!, camera);
     }
 
-    // 収集済みアイテムを描画
     gameMap.drawCollectedRewards(ctx!);
 
-    // 次のフレーム
     requestAnimationFrame(gameLoop);
   }
 
-  // 初回ゲームループの開始
+  // クリックイベント
+  canvas.addEventListener("click", (event) => {
+    const rect = canvas.getBoundingClientRect();
+    const clickX = event.clientX - rect.left;
+    const clickY = event.clientY - rect.top;
+
+    collectedRewards.forEach((reward, index) => {
+      const x = 1300 - index * 1;
+      const y = 10 + index * 1;
+      const width = 100;
+      const height = 100;
+
+      if (clickX >= x && clickX <= x + width && clickY >= y && clickY <= y + height) {
+        console.log("Collected reward clicked! Navigating to /dashboard");
+        window.location.href = "/dashboard";
+      }
+    });
+  });
+
+  // マウスムーブイベント（カーソル変更）
+  canvas.addEventListener("mousemove", (event) => {
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+    let hoveringOverReward = false;
+
+    collectedRewards.forEach((reward, index) => {
+      const x = 1300 - index * 1;
+      const y = 10 + index * 1;
+      const width = 100;
+      const height = 100;
+
+      if (mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height) {
+        hoveringOverReward = true;
+      }
+    });
+
+    canvas.style.cursor = hoveringOverReward ? "pointer" : "default";
+  });
+
   requestAnimationFrame(gameLoop);
 };

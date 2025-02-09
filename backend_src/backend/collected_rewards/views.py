@@ -63,5 +63,5 @@ from .models import CollectedReward
 def user_collected_rewards(request):
     user = request.user
     rewards = CollectedReward.objects.filter(user=user).select_related('movie_poster')
-    data = [{"id": reward.movie_poster.id, "title": reward.movie_poster.title, "image_url": reward.movie_poster.pixel_art_image_path} for reward in rewards]
+    data = [{"id": reward.movie_poster.id, "title": reward.movie_poster.title, "poster_url": reward.movie_poster.poster_url} for reward in rewards]
     return JsonResponse(data, safe=False)
