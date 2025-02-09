@@ -1,14 +1,14 @@
 from django.http import JsonResponse
-from .models import RewardImage
+from .models import MoviePoster
 
 def reward_images(request):
     try:
-        rewards = RewardImage.objects.all()
+        rewards = MoviePoster.objects.all()
         data = [
             {
                 "id": reward.id,
                 "title": reward.title,
-                "pixel_art_image_path": reward.pixel_art_image_path.url if reward.pixel_art_image_path else None,
+                "poster_url": reward.poster_url,  # 正しいフィールド名を使用
             }
             for reward in rewards
         ]

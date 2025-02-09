@@ -9,18 +9,15 @@ class MainEntryView(TemplateView):
 from django.http import JsonResponse
 # from .models import RewardImage 
 
+
 def reward_images(request):
     try:
         rewards = RewardImage.objects.all()
         data = [
             {
                 "id": reward.id,
-                # 余計なディレクトリを除去してパスを加工
-                "pixel_art_image_path": f"/public/assets/movie_posters/{reward.pixel_art_image_path.name.split('/')[-1]}"
-                if reward.pixel_art_image_path
-                else None,
                 "title": reward.title,
-                "movie_poster_id": reward.movie_poster_id,
+                "poster_url": reward.poster_url,
             }
             for reward in rewards
         ]
