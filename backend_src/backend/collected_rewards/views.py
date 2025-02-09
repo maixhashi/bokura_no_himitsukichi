@@ -17,6 +17,7 @@ from .serializers import MoviePosterSerializer
 logger = logging.getLogger(__name__)
 
 # @method_decorator(csrf_exempt, name='dispatch')
+@permission_classes([IsAuthenticated])
 class CollectRewardView(View):
     def post(self, request):
         logger.info("CollectRewardView received a request")  # 確認用ログ
@@ -60,6 +61,7 @@ from django.contrib.auth.decorators import login_required
 from .models import CollectedReward
 
 # @login_required
+@permission_classes([IsAuthenticated])
 def user_collected_rewards(request):
     user = request.user
     rewards = CollectedReward.objects.filter(user=user).select_related('movie_poster')
