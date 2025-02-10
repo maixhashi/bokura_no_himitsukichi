@@ -18,6 +18,7 @@ def reward_images(request):
                 "id": reward.id,
                 "title": reward.title,
                 "poster_url": reward.poster_url,
+                "movie_poster_id": reward.movie_poster_id
             }
             for reward in rewards
         ]

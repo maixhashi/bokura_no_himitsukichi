@@ -46,8 +46,8 @@ export class Map {
 
       // APIレスポンスから画像をロード
       const imagePromises = response.data.map(
-        (item: { poster_url: string; id: string }) =>
-          this.createRewardImage(item.poster_url, item.id)
+        (item: { poster_url: string; movie_poster_id: string }) =>
+          this.createRewardImage(item.poster_url, item.movie_poster_id)
       );
 
       this.rewardImages = await Promise.all(imagePromises);
@@ -372,5 +372,8 @@ export class Map {
   // moles を取得するメソッド
   getMoles(): Mole[] {
     return this.moles;
+  }
+  getCollectedRewards(){
+    return this.collectedRewards;
   }
 }
