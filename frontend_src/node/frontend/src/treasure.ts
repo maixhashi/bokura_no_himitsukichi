@@ -5,17 +5,16 @@ import { store } from './store'; // Reduxストアをインポート
 import { fetchCurrentUser } from './features/auth/authSlice';
 
 export class Treasure {
-  private x: number;
-  private y: number;
+  public x: number;
+  public y: number;
   private gravity: number;
   private imageClosed: HTMLImageElement;
   private imageOpened: HTMLImageElement;
   private image: HTMLImageElement;
-  private rewardImage: HTMLImageElement;
+  public rewardImage: HTMLImageElement;
   private width: number;
   private height: number;
   private isOpened: boolean;
-  private rewardDropped: boolean;
   private blinkCounter: number;
 
   constructor(x: number, y: number, gravity: number, rewardImage: HTMLImageElement) {
@@ -29,7 +28,6 @@ export class Treasure {
     this.width = this.imageClosed.width;
     this.height = this.imageClosed.height;
     this.isOpened = false;
-    this.rewardDropped = false;
     this.blinkCounter = 0;
   }
 
@@ -77,7 +75,7 @@ export class Treasure {
     }
   }
 
-  async open(collectedRewards: HTMLImageElement[]): Promise<void> {
+  async open(rewardImage: HTMLImageElement, gameMap: Map): Promise<void> {
     if (!this.isOpened) {
       this.isOpened = true;
       this.image = this.imageOpened;
@@ -106,7 +104,7 @@ export class Treasure {
       }
   
       // RewardImageからmovie_poster_idを取得
-      const moviePosterId = this.rewardImage.dataset.moviePosterId;
+      const moviePosterId = rewardImage.dataset.moviePosterId;
   
       if (moviePosterId) {
         try {
@@ -117,7 +115,7 @@ export class Treasure {
   
           if (response.status === 200) {
             console.log(response.data.message);
-            collectedRewards.push(this.rewardImage);
+            gameMap.getCollectedRewards().push(rewardImage); // ここで Map.collectedRewards に追加
           } else {
             console.error("Failed to collect reward");
           }
@@ -125,37 +123,9 @@ export class Treasure {
           console.error("Error:", error);
         }
       }
-  
-      this.dropReward(collectedRewards);
     }
   }
   
-  dropReward(collectedRewards?: HTMLImageElement[]): void {
-    if (!collectedRewards) {
-      console.warn("collectedRewards is undefined. Cannot drop reward.");
-      return;
-    }
-  
-    if (!this.rewardDropped) {
-      this.rewardDropped = true;
-      collectedRewards.push(this.rewardImage);
-    }
-  }
-  
-  handleEvent(event: MouseEvent, collectedRewards: HTMLImageElement[]): void {
-    const mouseX = event.clientX;
-    const mouseY = event.clientY;
-
-    if (
-      this.x <= mouseX &&
-      mouseX <= this.x + this.width &&
-      this.y <= mouseY &&
-      mouseY <= this.y + this.height
-    ) {
-      this.open(collectedRewards);
-    }
-  }
-
   updateBlink(): void {
     if (this.isOpened && this.blinkCounter > 0) {
       this.blinkCounter--;
@@ -185,5 +155,9 @@ export class Treasure {
         );
       }
     });
+  }
+
+  getRewardImage(){
+    return this.rewardImage;
   }
 }

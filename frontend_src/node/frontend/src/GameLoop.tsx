@@ -60,7 +60,9 @@ export const startGameLoop = () => {
 
     bocchama.move(keys, gameMap);
     bocchama.dig(keys, gameMap);
-    bocchama.openTreasureBox(keys, TILE_SIZE, gameMap.getTreasures(), collectedRewards);
+
+    bocchama.openTreasureBox(keys, TILE_SIZE, gameMap.getTreasures(), gameMap);
+
 
     gameMap.updateMoles(gameMap, deltaTime);
     gameMap.updateTreasures(gameMap);

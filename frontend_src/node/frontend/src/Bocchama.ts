@@ -1,4 +1,6 @@
 import { Character } from "./Character";
+import { Treasure } from "./treasure";
+import { Map } from "./map";
 
 export class Bocchama extends Character {
   isMoving: boolean;
@@ -86,7 +88,7 @@ export class Bocchama extends Character {
     }
   }
 
-  openTreasureBox(keys: { [key: string]: boolean }, tileSize: number, treasures: any[], collectedRewards: HTMLImageElement[]) {
+  openTreasureBox(keys: { [key: string]: boolean }, tileSize: number, treasures: Treasure[], gameMap: Map) {
     // 宝箱を開ける処理
     if (keys[" "]) {
       for (const treasure of treasures) {
@@ -95,7 +97,7 @@ export class Bocchama extends Character {
           Math.abs(this.x - treasure.x) < tileSize / 2 &&
           Math.abs(this.y - treasure.y) < tileSize / 2
         ) {
-          treasure.open(collectedRewards);
+          treasure.open(treasure.rewardImage, gameMap);
         }
       }
     }
