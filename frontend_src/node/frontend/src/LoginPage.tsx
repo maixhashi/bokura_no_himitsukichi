@@ -75,7 +75,7 @@ const LoginPage: React.FC = () => {
       navigate("/");
       window.location.reload();
     } catch (err: any) {
-      setErrorMessage(err.respon  se?.data?.error || "ログインに失敗しました");
+      setErrorMessage(err.response?.data?.error || "ログインに失敗しました");
     }
   };
 
