@@ -70,11 +70,12 @@ const LoginPage: React.FC = () => {
         { withCredentials: true }
       );
 
+      console.log(response.data.message);
 
       navigate("/");
       window.location.reload();
     } catch (err: any) {
-      setErrorMessage(err.response?.data?.error || "ログインに失敗しました");
+      setErrorMessage(err.respon  se?.data?.error || "ログインに失敗しました");
     }
   };
 
