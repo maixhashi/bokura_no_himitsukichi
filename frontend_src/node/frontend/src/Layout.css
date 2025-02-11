@@ -38,7 +38,7 @@ main {
 
 .pixel-font {
   font-family: 'PixelFont';
-  font-size: 16px; /* 必要に応じてサイズを調整 */
+  /* font-size: 16px; 必要に応じてサイズを調整 */
   line-height: 1.2;
 }
 

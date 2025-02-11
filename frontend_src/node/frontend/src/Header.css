@@ -24,35 +24,49 @@ header {
 }
 
 .HeaderGameTitle {
-  font-size: 26px;
   position: absolute; /* 中央配置のために必要 */
   left: 50%; /* 水平方向の中央に配置 */
   transform: translateX(-50%); /* 中央揃えの補正 */
+  font-size: 40px;
 }
 
 .HeaderGameTitle a {
   color: black;
 }
 
+.link-to-dashboard-on-HeaderLinks{
+  font-size: 26px;
+}
+
 .HeaderLinks {
+  font-size: 26px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 10px 20px;
 }
 
+.currentUser-username-on-HeaderLinks {
+  font-size: 26px;
+}
+
 .HeaderLinks span {
+  font-size: 26px;
   margin-right: 10px;
-  font-size: 16px;
   line-height: 1.5;
 }
+
+.link-to-dashboard-on-HeaderLinks {
+  font-size: 20px;
+}
+
 
 .logout-button {
   background-color: #dc3545; /* ログアウトボタンの色 */
   color: #fff;
   border: none;
   padding: 8px 12px;
-  font-size: 14px;
+  font-size: 20px;
   border-radius: 4px;
   margin-left: 10px;
   cursor: pointer;
@@ -66,7 +80,6 @@ header {
   margin-left: 10px;
   text-decoration: none;
   color: black;
-  font-size: 14px;
 }
 
 .error-message {

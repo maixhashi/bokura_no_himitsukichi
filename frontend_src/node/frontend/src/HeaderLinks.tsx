@@ -35,8 +35,8 @@ const HeaderLinks = () => {
     <nav className="HeaderLinks">
       {currentUser ? (
         <>
-          <span className="pixel-font">{currentUser.username}</span>
-          <Link to="/dashboard" className="pixel-font">ダッシュボード</Link>
+          <span className="pixel-font currentUser-username-on-HeaderLinks">{currentUser.username}</span>
+          <Link to="/dashboard" className="pixel-font link-to-dashboard-on-HeaderLinks">ダッシュボード</Link>
           <button onClick={handleLogout} className="logout-button pixel-font">
             ログアウト
           </button>
