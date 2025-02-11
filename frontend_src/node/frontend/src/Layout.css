@@ -34,7 +34,7 @@ main {
 @font-face {
   font-family: 'PixelFont-ShapeBit';
   src: url('/public/fonts/Shape Bit.otf') format('truetype');
-}
+} 
 
 .pixel-font {
   font-family: 'PixelFont';

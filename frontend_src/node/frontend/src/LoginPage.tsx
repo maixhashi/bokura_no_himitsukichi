@@ -70,7 +70,6 @@ const LoginPage: React.FC = () => {
         { withCredentials: true }
       );
 
-      console.log(response.data.message);
 
       navigate("/");
       window.location.reload();

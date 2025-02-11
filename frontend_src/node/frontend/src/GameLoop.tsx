@@ -110,7 +110,6 @@ export const startGameLoop = () => {
       const height = 100;
    
       if (clickX >= x && clickX <= x + width && clickY >= y && clickY <= y + height) {
-        console.log("Collected reward clicked! Navigating to /dashboard");
         window.location.href = "/dashboard";
       }
    });

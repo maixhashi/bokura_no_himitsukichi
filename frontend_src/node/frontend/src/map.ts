@@ -33,7 +33,6 @@ export class Map {
     // 報酬画像をロード
     this.loadRewardImages()
       .then(() => {
-        console.log('Reward images loaded successfully:', this.rewardImages);
       })
       .catch((error) => {
         console.error('Failed to load reward images:', error);
@@ -357,7 +356,6 @@ export class Map {
           const x = 1300 - index * 1; // 右方向に移動
           const y = 10 + index * 1; // 下方向に移動
     
-          console.log(`Drawing reward at (${x}, ${y}):`, reward.src); // ログを追加
           ctx.drawImage(reward, x, y, 100, 100);
         } else {
           console.warn(`Reward image is not ready to draw or is undefined: ${reward?.src || "undefined"}`);

@@ -64,12 +64,8 @@ export class MoleNavigator extends Navigator {
 
     const x = screenWidth - 350;
     const y = screenHeight - 180;
-
-    console.log("Drawing MoleNavigator at", x, y);
     
     ctx.globalCompositeOperation = "source-over"; // 他のオブジェクトより前面に描画
-
-    console.log("Drawing Mole image:", this.images[this.frameIndex].src);
 
     // 向きを考慮して描画
     ctx.save();
@@ -81,7 +77,6 @@ export class MoleNavigator extends Navigator {
     }
     ctx.restore();
 
-    console.log("MoleNavigator drawImage executed");
 
     // 吹き出しを描画
     this.drawSpeechBubble(ctx, x, y);
