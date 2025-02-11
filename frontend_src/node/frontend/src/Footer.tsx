@@ -1,8 +1,11 @@
 import './Footer.css';
 
+const APP_NAME = 'movieDIG!';
+const currentYear = new Date().getFullYear();
+
 const Footer = () => (
   <footer>
-    <p>&copy; 2025 My Website. All rights reserved.</p>
+    <p>&copy; {currentYear} {APP_NAME}. All rights reserved.</p>
   </footer>
 );
 

@@ -58,6 +58,7 @@ def register_view(request):
     return JsonResponse({"message": "User registered successfully"}, status=201)
 
 
+@csrf_exempt  # CSRF保護を適用する場合は外す（推奨は適用）
 def logout_view(request):
     logout(request)
     return JsonResponse({"message": "Logged out successfully"}, status=200)

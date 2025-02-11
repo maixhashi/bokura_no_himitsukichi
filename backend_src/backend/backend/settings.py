@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'treasure_rewards',
     'collected_rewards',
     'djoser',
+    'auth_guest',
 ]
 
 MIDDLEWARE = [

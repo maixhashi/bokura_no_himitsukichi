@@ -1,7 +1,14 @@
 import React, { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import type { AppDispatch } from './store';
+export const useAppDispatch = () => useDispatch<AppDispatch>();
+
+import { useNavigate } from 'react-router-dom';
+import { fetchCurrentUser, fetchIsGuestUser } from './features/auth/authSlice';
+import axiosInstance from "./utils/axiosInstance";
 import Layout from './Layout';
 import { Map } from "./map";
-import { Link } from 'react-router-dom';
 import { Bocchama } from './Bocchama';
 import './TopPage.css';
 
@@ -9,6 +16,9 @@ const TopPage: React.FC = () => {
   const TILE_SIZE = 500;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const bocchamaRef = useRef<Bocchama | null>(null);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const currentUser = useSelector((state: any) => state.auth.currentUser);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -60,7 +70,7 @@ const TopPage: React.FC = () => {
       // Bocchamaを描画
       bocchama.updateAnimation(FPS); // アニメーションの更新
       bocchama.draw_on_toppage(ctx, 0, 0);
-  
+
       animationFrameId = requestAnimationFrame(loop);
     };
     loop();
@@ -70,6 +80,21 @@ const TopPage: React.FC = () => {
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
+
+  const handleGameStart = async () => {
+    if (!currentUser) {
+      try {
+        await axiosInstance.post("/guest-login/");
+        dispatch(fetchCurrentUser());
+        dispatch(fetchIsGuestUser());
+        navigate("/game");
+      } catch (error) {
+        console.error("ゲストログインに失敗しました:", error);
+      }
+    } else {
+      navigate("/game");
+    }
+  };
     
   return (
     <Layout>
@@ -78,22 +103,20 @@ const TopPage: React.FC = () => {
           movieDIG!
         </div>
         <div>
-          <Link to="/game">
-            <button className="button-game-start pixel-font">
-              {/* ボタン内に画像を配置 */}
-              <img
-                src="/assets/icon_art/treasure_box_and_movie_poster.png"
-                alt="Tresure Box and Movie Poster"
-                className="button-icon"
-              />
-              ゲームスタート
-              <img
-                src="/assets/icon_art/scop_and_movie_crapper.png"
-                alt="Scop and Movie Crapper"
-                className="button-icon"
-              />
-            </button>
-          </Link>
+          <button onClick={handleGameStart} className="button-game-start pixel-font">
+            {/* ボタン内に画像を配置 */}
+            <img
+              src="/assets/icon_art/treasure_box_and_movie_poster.png"
+              alt="Treasure Box and Movie Poster"
+              className="button-icon"
+            />
+            ゲームスタート
+            <img
+              src="/assets/icon_art/scop_and_movie_crapper.png"
+              alt="Scop and Movie Crapper"
+              className="button-icon"
+            />
+          </button>
         </div>
       </div>
       <canvas ref={canvasRef} className='canvas-toppage' />

@@ -20,7 +20,6 @@ const getCsrfToken = async () => {
     const response = await axiosInstance.get("/csrf");
     const csrfToken = response.data.csrfToken || response.headers["x-csrftoken"]; // トークン取得 (クッキーまたはヘッダーから取得)
     axiosInstance.defaults.headers.common["X-CSRFToken"] = csrfToken; // Axiosのデフォルトヘッダーに設定
-    console.log("CSRFトークンを取得しました:", csrfToken);
   } catch (error) {
     console.error("CSRFトークンの取得に失敗しました:", error);
   }

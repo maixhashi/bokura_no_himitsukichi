@@ -2,6 +2,8 @@ import { Map } from "./map";
 import { Camera } from "./camera";
 import { mapData } from "./mapData";
 import { Bocchama } from "./Bocchama";
+import { MoleNavigator } from "./MoleNavigator";
+
 
 // 定数
 const SCREEN_WIDTH = 1600;
@@ -15,10 +17,13 @@ export const startGameLoop = () => {
   if (!canvas) {
     throw new Error("Canvas not found. Make sure to include a canvas element in the DOM.");
   }
-
+  
   canvas.width = SCREEN_WIDTH;
   canvas.height = SCREEN_HEIGHT;
-
+  
+  // MoleNavigator の初期位置（右下）
+  const moleNavigator = new MoleNavigator();
+  
   const ctx = canvas.getContext("2d");
   if (!ctx) {
     throw new Error("Canvas context not found");
@@ -84,6 +89,11 @@ export const startGameLoop = () => {
 
     gameMap.drawCollectedRewards(ctx!);
 
+    // MoleNavigator の更新・描画
+    moleNavigator.update(deltaTime);
+    moleNavigator.draw(ctx!, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+
     requestAnimationFrame(gameLoop);
   }
 
@@ -100,7 +110,6 @@ export const startGameLoop = () => {
       const height = 100;
    
       if (clickX >= x && clickX <= x + width && clickY >= y && clickY <= y + height) {
-        console.log("Collected reward clicked! Navigating to /dashboard");
         window.location.href = "/dashboard";
       }
    });
@@ -132,3 +141,8 @@ export const startGameLoop = () => {
 
   requestAnimationFrame(gameLoop);
 };
+
+
+
+
+

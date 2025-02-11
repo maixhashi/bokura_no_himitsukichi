@@ -85,7 +85,6 @@ const AccountRegisterPage: React.FC = () => {
         mouseY >= treasure.getY() &&
         mouseY <= treasure.getY() + treasure.getHeight()
       ) {
-        console.log("Treasure clicked!");
         treasure.open();
       }
     };
